@@ -1,0 +1,15 @@
+repository_type: pipeline
+
+nf_core_version: 3.2.0
+
+lint: {}
+
+template:
+  org: nf-core
+  name: CAPHEINE
+  description: Automated evolutionary annotation of existing datasets using Nextflow
+  author: Hannah Verdonk, Danielle Callan
+  version: 1.0.0dev
+  force: true
+  outdir: .
+  is_nfcore: true
