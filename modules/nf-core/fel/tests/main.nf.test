@@ -1,0 +1,64 @@
+// TODO nf-core: Once you have added the required tests, please run the following command to build this file:
+// nf-core modules test hyphy/fel
+nextflow_process {
+
+    name "Test Process HYPHY_FEL"
+    script "../main.nf"
+    process "HYPHY_FEL"
+
+    tag "modules"
+    tag "modules_"
+    tag "hyphy"
+    tag "hyphy/fel"
+
+    test("FBgn0000055 - fel") {
+
+        when {
+            process {
+                """
+                input[0] = [
+                    meta: [id: 'FBgn0000055'],
+                    alignment: file(params.modules_testdata_base_path + 'tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true),
+                    tree: file(params.modules_testdata_base_path + 'tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+                //TODO nf-core: Add all required assertions to verify the test output.
+                // See https://nf-co.re/docs/contributing/tutorials/nf-test_assertions for more information and examples.
+            )
+        }
+
+    }
+
+    test("FBgn0000055 - fel - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    meta: [id: 'FBgn0000055'],
+                    alignment: file(params.modules_testdata_base_path + 'tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true),
+                    tree: file(params.modules_testdata_base_path + 'tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+
+    }
+
+}

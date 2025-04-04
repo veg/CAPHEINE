@@ -19,6 +19,10 @@ include { CAPHEINE  } from './workflows/capheine'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_capheine_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_capheine_pipeline'
 include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_capheine_pipeline'
+include { FEL } from './modules/nf-core/fel/main.nf'
+// include { MEME } from './modules/nf-core/meme/main.nf'
+// include { PRIME } from './modules/nf-core/prime/main.nf'
+// include { BUSTED } from './modules/nf-core/busted/main.nf'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
