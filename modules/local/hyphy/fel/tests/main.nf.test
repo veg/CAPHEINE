@@ -16,12 +16,18 @@ nextflow_process {
         when {
             process {
                 """
+                // Sample input
                 input[0] = [
                     meta: [id: 'FBgn0000055'],
                     alignment: file(params.modules_testdata_base_path + 'tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true),
                     tree: file(params.modules_testdata_base_path + 'tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
                 ]
                 """
+                input[0] = [
+                    meta: [id: 'FBgn0000055'],
+                    alignment: file(params.modules_testdata_base_path + 'tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true),
+                    tree: file(params.modules_testdata_base_path + 'tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ]
             }
         }
 
@@ -49,6 +55,11 @@ nextflow_process {
                     tree: file(params.modules_testdata_base_path + 'tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
                 ]
                 """
+                input[0] = [
+                    meta: [id: 'FBgn0000055'],
+                    alignment: file(path: 'tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true),
+                    tree: file(path: 'tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ]
             }
         }
 

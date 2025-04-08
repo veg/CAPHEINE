@@ -10,13 +10,14 @@ nextflow_workflow {
     tag "subworkflows_"
     tag "subworkflows/hyphy_analyses"
     // TODO nf-core: Add tags for all modules used within this subworkflow. Example:
-    tag "samtools"
-    tag "samtools/sort"
-    tag "samtools/index"
+    // tag "samtools"
+    // tag "samtools/sort"
+    // tag "samtools/index"
+    tag "fel"
 
 
     // TODO nf-core: Change the test name preferably indicating the test-data and file-format used
-    test("sarscov2 - bam - single_end") {
+    test("hyphy - fel") {
 
         when {
             workflow {
@@ -31,6 +32,18 @@ nextflow_workflow {
                     file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true),
                 ]
                 """
+                input[0] = [
+                    [ id:'test_aln'], // meta map
+                    file('test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true),
+                ]
+                input[1] = [
+                    [ id:'test_tree'], // meta map
+                    file('test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true),
+                ]
+                input[2] = [
+                    [ id:'test_output' ],
+                    file('test_data/test_aln.json', checkIfExists: true),
+                ]
             }
         }
 

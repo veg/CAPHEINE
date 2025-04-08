@@ -1,0 +1,12 @@
+Apr-08 17:21:14.310 [main] INFO  com.askimed.nf.test.App - nf-test 0.9.2
+Apr-08 17:21:14.316 [main] INFO  com.askimed.nf.test.App - Arguments: [test, modules/local/hyphy/fel/main.nf]
+Apr-08 17:21:14.675 [main] INFO  com.askimed.nf.test.App - Nextflow Version: 24.10.5
+Apr-08 17:21:14.676 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Load config from file /Users/hverdonk/nf-core-capheine/nf-test.config...
+Apr-08 17:21:14.851 [main] WARN  com.askimed.nf.test.nextflow.NextflowScript - Module /Users/hverdonk/nf-core-capheine/main.nf: Dependency '/Users/hverdonk/nf-core-capheine/./subworkflows/local/hyphy_fel.nf' not found.
+Apr-08 17:21:14.852 [main] WARN  com.askimed.nf.test.nextflow.NextflowScript - Module /Users/hverdonk/nf-core-capheine/main.nf: Dependency '/Users/hverdonk/nf-core-capheine/./modules/nf-core/meme/main.nf.nf' not found.
+Apr-08 17:21:14.852 [main] WARN  com.askimed.nf.test.nextflow.NextflowScript - Module /Users/hverdonk/nf-core-capheine/main.nf: Dependency '/Users/hverdonk/nf-core-capheine/./modules/nf-core/prime/main.nf.nf' not found.
+Apr-08 17:21:14.852 [main] WARN  com.askimed.nf.test.nextflow.NextflowScript - Module /Users/hverdonk/nf-core-capheine/main.nf: Dependency '/Users/hverdonk/nf-core-capheine/./modules/nf-core/busted/main.nf.nf' not found.
+Apr-08 17:21:14.852 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Loaded 25 files from directory /Users/hverdonk/nf-core-capheine in 0.033 sec
+Apr-08 17:21:14.852 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Found 0 files containing tests.
+Apr-08 17:21:14.852 [main] DEBUG com.askimed.nf.test.lang.dependencies.DependencyResolver - Found files: []
+Apr-08 17:21:14.853 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Found 0 tests to execute.

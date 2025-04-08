@@ -48,11 +48,12 @@ process HYPHY_FEL {
     hyphy FEL \\
         --alignment ${alignment} \\
         --tree ${tree} \\
-        --output ${meta.id}.FEL.json
+        --output ${meta.id}.FEL.json \\
+        ${args}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        hyphy: \$(hyphy --version')
+        hyphy: \$(hyphy --version)
     END_VERSIONS
     """
 
@@ -65,7 +66,7 @@ process HYPHY_FEL {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        hyphy: \$(hyphy --version')
+        hyphy: \$(hyphy --version)
     END_VERSIONS
     """
 }

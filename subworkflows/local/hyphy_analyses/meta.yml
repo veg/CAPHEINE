@@ -1,44 +1,40 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
 name: "hyphy_analyses"
-## TODO nf-core: Add a description of the subworkflow and list keywords
-description: Sort SAM/BAM/CRAM file
+description: Run hyphy analyses on a set of alignment files and their corresponding gene trees
 keywords:
-  - sort
-  - bam
-  - sam
-  - cram
-## TODO nf-core: Add a list of the modules and/or subworkflows used in the subworkflow
+  - hyphy
+  - fel
+  - meme
+  - prime
+  - busted
+## A list of the modules and/or subworkflows used in the subworkflow
 components:
-  - samtools/sort
-  - samtools/index
-## TODO nf-core: List all of the channels used as input with a description and their structure
+  - hyphy/fel
+  - hyphy/meme
+  - hyphy/prime
+  - hyphy/busted
+## List of all the channels used as input with a description and their structure
 input:
-  - ch_bam:
+  - ch_aln:
       type: file
       description: |
-        The input channel containing the BAM/CRAM/SAM files
-        Structure: [ val(meta), path(bam) ]
-      pattern: "*.{bam/cram/sam}"
-## TODO nf-core: List all of the channels used as output with a descriptions and their structure
+        The input channel containing the alignment files
+        Structure: [ val(meta), path(aln) ]
+      pattern: "*.{msa/fasta/nex}"
+  - ch_tree:
+      type: file
+      description: |
+        The input channel containing the gene tree files
+        Structure: [ val(meta), path(tree) ]
+      pattern: "*.{nwk/bestTree/treefile}"
+## List of all the channels used as output with a descriptions and their structure
 output:
-  - bam:
+  - fel_json:
       type: file
       description: |
-        Channel containing BAM files
-        Structure: [ val(meta), path(bam) ]
-      pattern: "*.bam"
-  - bai:
-      type: file
-      description: |
-        Channel containing indexed BAM (BAI) files
-        Structure: [ val(meta), path(bai) ]
-      pattern: "*.bai"
-  - csi:
-      type: file
-      description: |
-        Channel containing CSI files
-        Structure: [ val(meta), path(csi) ]
-      pattern: "*.csi"
+        Channel containing hyphy results json files
+        Structure: [ val(meta), path(json) ]
+      pattern: "*.json"  # TODO: add more outputs later, for other analyses
   - versions:
       type: file
       description: |
