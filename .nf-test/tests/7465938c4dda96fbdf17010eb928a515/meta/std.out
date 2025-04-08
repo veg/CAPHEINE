@@ -1,0 +1,11 @@
+ERROR ~ Script compilation error
+- file : /Users/hverdonk/nf-core-capheine/.nf-test-7465938c4dda96fbdf17010eb928a515.nf
+- cause: Unexpected input: '{' @ line 24, column 10.
+   workflow {
+            ^
+
+1 error
+
+NOTE: If this is the beginning of a process or workflow, there may be a syntax error in the body, such as a missing or extra comma, for which a more specific error message could not be produced.
+
+ -- Check '/Users/hverdonk/nf-core-capheine/.nf-test/tests/7465938c4dda96fbdf17010eb928a515/meta/nextflow.log' file for details

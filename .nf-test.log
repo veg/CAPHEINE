@@ -1,12 +1,100 @@
-Apr-08 17:21:14.310 [main] INFO  com.askimed.nf.test.App - nf-test 0.9.2
-Apr-08 17:21:14.316 [main] INFO  com.askimed.nf.test.App - Arguments: [test, modules/local/hyphy/fel/main.nf]
-Apr-08 17:21:14.675 [main] INFO  com.askimed.nf.test.App - Nextflow Version: 24.10.5
-Apr-08 17:21:14.676 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Load config from file /Users/hverdonk/nf-core-capheine/nf-test.config...
-Apr-08 17:21:14.851 [main] WARN  com.askimed.nf.test.nextflow.NextflowScript - Module /Users/hverdonk/nf-core-capheine/main.nf: Dependency '/Users/hverdonk/nf-core-capheine/./subworkflows/local/hyphy_fel.nf' not found.
-Apr-08 17:21:14.852 [main] WARN  com.askimed.nf.test.nextflow.NextflowScript - Module /Users/hverdonk/nf-core-capheine/main.nf: Dependency '/Users/hverdonk/nf-core-capheine/./modules/nf-core/meme/main.nf.nf' not found.
-Apr-08 17:21:14.852 [main] WARN  com.askimed.nf.test.nextflow.NextflowScript - Module /Users/hverdonk/nf-core-capheine/main.nf: Dependency '/Users/hverdonk/nf-core-capheine/./modules/nf-core/prime/main.nf.nf' not found.
-Apr-08 17:21:14.852 [main] WARN  com.askimed.nf.test.nextflow.NextflowScript - Module /Users/hverdonk/nf-core-capheine/main.nf: Dependency '/Users/hverdonk/nf-core-capheine/./modules/nf-core/busted/main.nf.nf' not found.
-Apr-08 17:21:14.852 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Loaded 25 files from directory /Users/hverdonk/nf-core-capheine in 0.033 sec
-Apr-08 17:21:14.852 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Found 0 files containing tests.
-Apr-08 17:21:14.852 [main] DEBUG com.askimed.nf.test.lang.dependencies.DependencyResolver - Found files: []
-Apr-08 17:21:14.853 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Found 0 tests to execute.
+Apr-08 18:16:27.203 [main] INFO  com.askimed.nf.test.App - nf-test 0.9.2
+Apr-08 18:16:27.209 [main] INFO  com.askimed.nf.test.App - Arguments: [test, modules/local/hyphy/fel]
+Apr-08 18:16:27.577 [main] INFO  com.askimed.nf.test.App - Nextflow Version: 24.10.5
+Apr-08 18:16:27.579 [main] WARN  com.askimed.nf.test.commands.RunTestsCommand - No nf-test config file found.
+Apr-08 18:16:27.629 [main] WARN  com.askimed.nf.test.nextflow.NextflowScript - Module /Users/hverdonk/nf-core-capheine/main.nf: Dependency '/Users/hverdonk/nf-core-capheine/./subworkflows/local/hyphy_fel.nf' not found.
+Apr-08 18:16:27.629 [main] WARN  com.askimed.nf.test.nextflow.NextflowScript - Module /Users/hverdonk/nf-core-capheine/main.nf: Dependency '/Users/hverdonk/nf-core-capheine/./modules/nf-core/meme/main.nf.nf' not found.
+Apr-08 18:16:27.629 [main] WARN  com.askimed.nf.test.nextflow.NextflowScript - Module /Users/hverdonk/nf-core-capheine/main.nf: Dependency '/Users/hverdonk/nf-core-capheine/./modules/nf-core/prime/main.nf.nf' not found.
+Apr-08 18:16:27.629 [main] WARN  com.askimed.nf.test.nextflow.NextflowScript - Module /Users/hverdonk/nf-core-capheine/main.nf: Dependency '/Users/hverdonk/nf-core-capheine/./modules/nf-core/busted/main.nf.nf' not found.
+Apr-08 18:16:27.629 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Loaded 24 files from directory /Users/hverdonk/nf-core-capheine in 0.049 sec
+Apr-08 18:16:27.630 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Found 1 files containing tests.
+Apr-08 18:16:27.630 [main] DEBUG com.askimed.nf.test.lang.dependencies.DependencyResolver - Found files: [/Users/hverdonk/nf-core-capheine/modules/local/hyphy/fel/tests/main.nf.test]
+Apr-08 18:16:27.824 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Found 2 tests to execute.
+Apr-08 18:16:27.824 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Started test plan
+Apr-08 18:16:27.824 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Running testsuite 'Test Process HYPHY_FEL' from file '/Users/hverdonk/nf-core-capheine/modules/local/hyphy/fel/tests/main.nf.test'.
+Apr-08 18:16:27.824 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test '7465938c: FEL sanity check'. type: com.askimed.nf.test.lang.process.ProcessTest
+Apr-08 18:16:29.672 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '7465938c: FEL sanity check' finished. status: FAILED
+org.codehaus.groovy.runtime.powerassert.PowerAssertionError: 2 of 2 assertions failed
+	at com.askimed.nf.test.lang.extensions.GlobalMethods.assertAll(GlobalMethods.java:48)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:107)
+	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:323)
+	at org.codehaus.groovy.runtime.callsite.StaticMetaMethodSite.invoke(StaticMetaMethodSite.java:44)
+	at org.codehaus.groovy.runtime.callsite.StaticMetaMethodSite.callStatic(StaticMetaMethodSite.java:100)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCallStatic(CallSiteArray.java:55)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callStatic(AbstractCallSite.java:217)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callStatic(AbstractCallSite.java:240)
+	at main_nf$_run_closure1$_closure2$_closure5.doCall(main.nf.test:26)
+	at main_nf$_run_closure1$_closure2$_closure5.doCall(main.nf.test)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:107)
+	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:323)
+	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:274)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1030)
+	at groovy.lang.Closure.call(Closure.java:427)
+	at groovy.lang.Closure.call(Closure.java:406)
+	at com.askimed.nf.test.lang.TestCode.execute(TestCode.java:16)
+	at com.askimed.nf.test.lang.process.ProcessTest.execute(ProcessTest.java:171)
+	at com.askimed.nf.test.core.TestExecutionEngine.execute(TestExecutionEngine.java:165)
+	at com.askimed.nf.test.commands.RunTestsCommand.execute(RunTestsCommand.java:298)
+	at com.askimed.nf.test.commands.AbstractCommand.call(AbstractCommand.java:43)
+	at com.askimed.nf.test.commands.AbstractCommand.call(AbstractCommand.java:18)
+	at picocli.CommandLine.executeUserObject(CommandLine.java:1953)
+	at picocli.CommandLine.access$1300(CommandLine.java:145)
+	at picocli.CommandLine$RunLast.executeUserObjectOfLastSubcommandWithSameParent(CommandLine.java:2352)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2346)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2311)
+	at picocli.CommandLine$AbstractParseResultHandler.execute(CommandLine.java:2179)
+	at picocli.CommandLine.execute(CommandLine.java:2078)
+	at com.askimed.nf.test.App.run(App.java:39)
+	at com.askimed.nf.test.App.main(App.java:46)
+Apr-08 18:16:29.674 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test '8ca5dc9e: FBgn0000055 - fel - stub'. type: com.askimed.nf.test.lang.process.ProcessTest
+Apr-08 18:16:31.518 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '8ca5dc9e: FBgn0000055 - fel - stub' finished. status: FAILED
+org.codehaus.groovy.runtime.powerassert.PowerAssertionError: 2 of 2 assertions failed
+	at com.askimed.nf.test.lang.extensions.GlobalMethods.assertAll(GlobalMethods.java:48)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:107)
+	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:323)
+	at org.codehaus.groovy.runtime.callsite.StaticMetaMethodSite.invoke(StaticMetaMethodSite.java:44)
+	at org.codehaus.groovy.runtime.callsite.StaticMetaMethodSite.callStatic(StaticMetaMethodSite.java:100)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCallStatic(CallSiteArray.java:55)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callStatic(AbstractCallSite.java:217)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callStatic(AbstractCallSite.java:240)
+	at main_nf$_run_closure1$_closure3$_closure10.doCall(main.nf.test:51)
+	at main_nf$_run_closure1$_closure3$_closure10.doCall(main.nf.test)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:107)
+	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:323)
+	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:274)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1030)
+	at groovy.lang.Closure.call(Closure.java:427)
+	at groovy.lang.Closure.call(Closure.java:406)
+	at com.askimed.nf.test.lang.TestCode.execute(TestCode.java:16)
+	at com.askimed.nf.test.lang.process.ProcessTest.execute(ProcessTest.java:171)
+	at com.askimed.nf.test.core.TestExecutionEngine.execute(TestExecutionEngine.java:165)
+	at com.askimed.nf.test.commands.RunTestsCommand.execute(RunTestsCommand.java:298)
+	at com.askimed.nf.test.commands.AbstractCommand.call(AbstractCommand.java:43)
+	at com.askimed.nf.test.commands.AbstractCommand.call(AbstractCommand.java:18)
+	at picocli.CommandLine.executeUserObject(CommandLine.java:1953)
+	at picocli.CommandLine.access$1300(CommandLine.java:145)
+	at picocli.CommandLine$RunLast.executeUserObjectOfLastSubcommandWithSameParent(CommandLine.java:2352)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2346)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2311)
+	at picocli.CommandLine$AbstractParseResultHandler.execute(CommandLine.java:2179)
+	at picocli.CommandLine.execute(CommandLine.java:2078)
+	at com.askimed.nf.test.App.run(App.java:39)
+	at com.askimed.nf.test.App.main(App.java:46)
+Apr-08 18:16:31.518 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Testsuite 'Test Process HYPHY_FEL' finished. snapshot file: false, skipped tests: false, failed tests: true
+Apr-08 18:16:31.518 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Executed 2 tests. 2 tests failed. Done!
