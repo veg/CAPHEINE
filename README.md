@@ -19,7 +19,7 @@
 
 ## Introduction
 
-**nf-core/capheine** is a bioinformatics pipeline that ...
+**capheine** is a bioinformatics pipeline that ...
 
 <!-- TODO nf-core:
    Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the

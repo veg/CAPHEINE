@@ -16,7 +16,6 @@ include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
 include { imNotification            } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NFCORE_PIPELINE     } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NEXTFLOW_PIPELINE   } from '../../nf-core/utils_nextflow_pipeline'
-include { FEL                       } from '../../modules/local/fel'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -76,26 +75,26 @@ workflow PIPELINE_INITIALISATION {
     Channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
         .map {
-            meta, alignment, tree ->
-                return [ meta, alignment, tree ]
+            meta, fastq_1, fastq_2 ->
+                if (!fastq_2) {
+                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
+                } else {
+                    return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
+                }
+        }
+        .groupTuple()
+        .map { samplesheet ->
+            validateInputSamplesheet(samplesheet)
+        }
+        .map {
+            meta, fastqs ->
+                return [ meta, fastqs.flatten() ]
         }
         .set { ch_samplesheet }
         // TODO: do an if/else statement to check if the input includes a tree file, or if we should assume the tree is included in the alignment file
         // .map {
-        //     meta, fastq_1, fastq_2 ->
-        //         if (!fastq_2) {
-        //             return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
-        //         } else {
-        //             return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
-        //         }
-        // }
-        // .groupTuple()
-        // .map { samplesheet ->
-        //     validateInputSamplesheet(samplesheet)
-        // }
-        // .map {
-        //     meta, fastqs ->
-        //         return [ meta, fastqs.flatten() ]
+        //     meta, alignment, tree ->
+        //         return [ meta, alignment, tree ]
         // }
         // .set { ch_samplesheet }
 

@@ -3,9 +3,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     nf-core/capheine
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/nf-core/capheine
-    Website: https://nf-co.re/capheine
-    Slack  : https://nfcore.slack.com/channels/capheine
+    Github : https://github.com/hverdonk/capheine
 ----------------------------------------------------------------------------------------
 */
 
@@ -19,7 +17,7 @@ include { CAPHEINE  } from './workflows/capheine'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_capheine_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_capheine_pipeline'
 include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_capheine_pipeline'
-include { FEL } from './modules/nf-core/fel/main.nf'
+include { HYPHY_FEL } from './subworkflows/local/hyphy_fel'
 // include { MEME } from './modules/nf-core/meme/main.nf'
 // include { PRIME } from './modules/nf-core/prime/main.nf'
 // include { BUSTED } from './modules/nf-core/busted/main.nf'
@@ -33,7 +31,7 @@ include { FEL } from './modules/nf-core/fel/main.nf'
 // TODO nf-core: Remove this line if you don't need a FASTA file
 //   This is an example of how to use getGenomeAttribute() to fetch parameters
 //   from igenomes.config using `--genome`
-params.fasta = getGenomeAttribute('fasta')
+// params.fasta = getGenomeAttribute('fasta')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
