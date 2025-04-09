@@ -25,8 +25,8 @@ nextflow_process {
                 { assert path(process.out.fel_json[0][1]).exists() },
                 { assert path(process.out.fel_json[0][1]).text.contains('"analysis"') },
                 { assert path(process.out.fel_json[0][1]).text.contains('"MLE"') },
-                { assert path('versions.yml').exists() },
-                { assert path('versions.yml').text.contains('hyphy:') }
+                { assert path(process.out.versions[0]).exists() },
+                { assert path(process.out.versions[0]).text.contains('hyphy:') }
             )
         }
 
@@ -53,8 +53,8 @@ nextflow_process {
                 { assert process.success },
                 { assert snapshot(process.out).match() },
                 { assert path(process.out.fel_json[0][1]).exists() },
-                { assert path('versions.yml').exists() },
-                { assert path('versions.yml').text.contains('hyphy:') }
+                { assert path(process.out.versions[0]).exists() },
+                { assert path(process.out.versions[0]).text.contains('hyphy:') }
             )
         }
 

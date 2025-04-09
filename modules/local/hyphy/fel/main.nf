@@ -30,6 +30,7 @@ process HYPHY_FEL {
 
     output:
     tuple val(meta), path("${meta.id}.FEL.json"), emit: fel_json
+    path "versions.yml"                         , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
