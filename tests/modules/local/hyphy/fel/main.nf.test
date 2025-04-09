@@ -4,26 +4,61 @@ nextflow_process {
     script "modules/local/hyphy/fel/main.nf"
     process "HYPHY_FEL"
 
-    test("Should run without failures") {
+    test("Testing if FEL generates results") {
 
         when {
-            params {
-                // define parameters here. Example:
-                // outdir = "tests/results"
-            }
             process {
                 """
-                // define inputs of the process here. Example:
-                // input[0] = file("test-file.txt")
+                input[0] = [
+                    [id: 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'],
+                    file(projectDir + '/tests/modules/local/hyphy/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true),           // alignment
+                    file(projectDir + '/tests/modules/local/hyphy/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)   // tree file
+                ]
                 """
             }
         }
 
         then {
-            assert process.success
-            assert snapshot(process.out).match()
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() },
+                { assert path(process.out.fel_json[0][1]).exists() },
+                { assert path(process.out.fel_json[0][1]).text.contains('"analysis"') },
+                { assert path(process.out.fel_json[0][1]).text.contains('"MLE"') },
+                { assert path('versions.yml').exists() },
+                { assert path('versions.yml').text.contains('hyphy:') }
+            )
         }
 
     }
+
+    test("FEL stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'],
+                    file(projectDir + '/tests/modules/local/hyphy/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true),
+                    file(projectDir + '/tests/modules/local/hyphy/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() },
+                { assert path(process.out.fel_json[0][1]).exists() },
+                { assert path('versions.yml').exists() },
+                { assert path('versions.yml').text.contains('hyphy:') }
+            )
+        }
+
+    }
+
 
 }
