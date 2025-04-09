@@ -1,0 +1,59 @@
+nextflow_process {
+
+    name "Test Process HYPHY_PRIME"
+    script "modules/local/hyphy/prime/main.nf"
+    process "HYPHY_PRIME"
+
+    test("Testing if PRIME generates results") {
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'],
+                    file(projectDir + '/tests/modules/local/hyphy/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true),
+                    file(projectDir + '/tests/modules/local/hyphy/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() },
+                { assert path(process.out.prime_json[0][1]).exists() },
+                { assert path(process.out.prime_json[0][1]).text.contains('"analysis"') },
+                { assert path(process.out.versions[0]).exists() },
+                { assert path(process.out.versions[0]).text.contains('hyphy:') }
+            )
+        }
+    }
+
+    test("PRIME stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'],
+                    file(projectDir + '/tests/modules/local/hyphy/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true),
+                    file(projectDir + '/tests/modules/local/hyphy/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() },
+                { assert path(process.out.prime_json[0][1]).exists() },
+                { assert path(process.out.versions[0]).exists() },
+                { assert path(process.out.versions[0]).text.contains('hyphy:') }
+            )
+        }
+    }
+}
