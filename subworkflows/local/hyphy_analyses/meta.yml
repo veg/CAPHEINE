@@ -7,6 +7,9 @@ keywords:
   - meme
   - prime
   - busted
+  - selection
+  - phylogenetics
+  - genomics
 ## A list of the modules and/or subworkflows used in the subworkflow
 components:
   - hyphy/fel
@@ -32,9 +35,27 @@ output:
   - fel_json:
       type: file
       description: |
-        Channel containing hyphy results json files
+        Channel containing FEL (site-specific selection) analysis results
         Structure: [ val(meta), path(json) ]
-      pattern: "*.json"  # TODO: add more outputs later, for other analyses
+      pattern: "*.FEL.json"
+  - meme_json:
+      type: file
+      description: |
+        Channel containing MEME (episodic selection) analysis results
+        Structure: [ val(meta), path(json) ]
+      pattern: "*.MEME.json"
+  - prime_json:
+      type: file
+      description: |
+        Channel containing PRIME (property-informed evolution) analysis results
+        Structure: [ val(meta), path(json) ]
+      pattern: "*.PRIME.json"
+  - busted_json:
+      type: file
+      description: |
+        Channel containing BUSTED (episodic diversifying selection) analysis results
+        Structure: [ val(meta), path(json) ]
+      pattern: "*.BUSTED.json"
   - versions:
       type: file
       description: |
@@ -45,3 +66,4 @@ authors:
   - "@hverdonk"
 maintainers:
   - "@hverdonk"
+  - "@d-callan"

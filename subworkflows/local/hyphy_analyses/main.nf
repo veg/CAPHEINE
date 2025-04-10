@@ -5,11 +5,13 @@
 // TODO nf-core: A subworkflow SHOULD import at least two modules
 
 include { HYPHY_FEL     } from '../../../modules/local/hyphy/fel/main'
+include { HYPHY_MEME    } from '../../../modules/local/hyphy/meme/main'
+include { HYPHY_PRIME   } from '../../../modules/local/hyphy/prime/main'
+include { HYPHY_BUSTED  } from '../../../modules/local/hyphy/busted/main'
 
 workflow HYPHY_ANALYSES {
 
     take:
-    // TODO nf-core: edit input (take) channels
     ch_aln // channel: [ val(meta), [ aln ] ]
     ch_tree // channel: [ val(meta), [ tree ] ]
 
@@ -17,22 +19,39 @@ workflow HYPHY_ANALYSES {
 
     ch_versions = Channel.empty()
 
-    // TODO nf-core: substitute modules here for the modules of your subworkflow
-
+    // Run FEL analysis
     HYPHY_FEL ( 
         alignment: ch_aln
         tree: ch_tree 
     )
     ch_versions = ch_versions.mix(HYPHY_FEL.out.versions.first())
 
-    // SAMTOOLS_INDEX ( SAMTOOLS_SORT.out.bam )
-    // ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
+    // Run MEME analysis
+    HYPHY_MEME (
+        alignment: ch_aln
+        tree: ch_tree
+    )
+    ch_versions = ch_versions.mix(HYPHY_MEME.out.versions.first())
+
+    // Run PRIME analysis
+    HYPHY_PRIME (
+        alignment: ch_aln
+        tree: ch_tree
+    )
+    ch_versions = ch_versions.mix(HYPHY_PRIME.out.versions.first())
+
+    // Run BUSTED analysis
+    HYPHY_BUSTED (
+        alignment: ch_aln
+        tree: ch_tree
+    )
+    ch_versions = ch_versions.mix(HYPHY_BUSTED.out.versions.first())
 
     emit:
     fel_json      = HYPHY_FEL.out.fel_json          // channel: [ val(meta), [ fel_json ] ]
-    // bai      = SAMTOOLS_INDEX.out.bai          // channel: [ val(meta), [ bai ] ]
-    // csi      = SAMTOOLS_INDEX.out.csi          // channel: [ val(meta), [ csi ] ]
-
-    versions = ch_versions                     // channel: [ versions.yml ]
+    meme_json     = HYPHY_MEME.out.meme_json        // channel: [ val(meta), [ meme_json ] ]
+    prime_json    = HYPHY_PRIME.out.prime_json      // channel: [ val(meta), [ prime_json ] ]
+    busted_json   = HYPHY_BUSTED.out.busted_json    // channel: [ val(meta), [ busted_json ] ]
+    versions      = ch_versions                     // channel: [ versions.yml ]
 }
 

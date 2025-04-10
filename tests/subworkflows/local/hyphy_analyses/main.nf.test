@@ -1,0 +1,54 @@
+nextflow_workflow {
+
+    name "Test Workflow HYPHY_ANALYSES"
+    script "subworkflows/local/hyphy_analyses/main.nf"
+    workflow "HYPHY_ANALYSES"
+
+    test("Should run all hyphy analyses") {
+
+        when {
+            params {
+                // No specific parameters needed
+            }
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'],
+                    file(projectDir + '/tests/subworkflows/local/hyphy_analyses/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true)
+                ])
+                input[1] = Channel.of([
+                    [ id:'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'],
+                    file(projectDir + '/tests/subworkflows/local/hyphy_analyses/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ])
+                """
+            }
+
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                // Check FEL output
+                { assert path(workflow.out.fel_json[0][1]).exists() },
+                { assert path(workflow.out.fel_json[0][1]).text.contains('FEL') },
+                { assert path(workflow.out.fel_json[0][1]).toString().endsWith('.FEL.json') },
+                // Check MEME output
+                { assert path(workflow.out.meme_json[0][1]).exists() },
+                { assert path(workflow.out.meme_json[0][1]).text.contains('MEME') },
+                { assert path(workflow.out.meme_json[0][1]).toString().endsWith('.MEME.json') },
+                // Check PRIME output
+                { assert path(workflow.out.prime_json[0][1]).exists() },
+                { assert path(workflow.out.prime_json[0][1]).text.contains('PRIME') },
+                { assert path(workflow.out.prime_json[0][1]).toString().endsWith('.PRIME.json') },
+                // Check BUSTED output
+                { assert path(workflow.out.busted_json[0][1]).exists() },
+                { assert path(workflow.out.busted_json[0][1]).text.contains('BUSTED') },
+                { assert path(workflow.out.busted_json[0][1]).toString().endsWith('.BUSTED.json') },
+                // Check versions file
+                { assert path(workflow.out.versions[0]).exists() },
+                { assert path(workflow.out.versions[0]).text.contains('hyphy:') }
+            )
+        }
+    }
+
+}
