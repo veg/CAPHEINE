@@ -46,7 +46,7 @@ process HYPHY_FEL {
     // TODO nf-core: If the tool supports multi-threading then you MUST provide the appropriate parameter
     //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
     """
-    hyphy FEL \\
+    hyphy fel \\
         --alignment $alignment \\
         --tree $tree \\
         --branches 'Internal' \\

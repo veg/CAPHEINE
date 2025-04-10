@@ -17,7 +17,7 @@ process HYPHY_BUSTED {
     script:
     def args = task.ext.args ?: ''
     """
-    hyphy BUSTED \\
+    hyphy busted \\
         --alignment $alignment \\
         --tree $tree \\
         --branches 'Internal' \\

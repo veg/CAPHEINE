@@ -17,7 +17,7 @@ process HYPHY_MEME {
     script:
     def args = task.ext.args ?: ''
     """
-    hyphy MEME \\
+    hyphy meme \\
         --alignment $alignment \\
         --tree $tree \\
         --branches 'Internal' \\

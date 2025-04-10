@@ -27,14 +27,9 @@ nextflow_process {
                 { 
                     def json = new groovy.json.JsonSlurper().parseText(path(process.out.meme_json[0][1]).text)
                     
-                    // Check if error sink rate class is included in entries
-                    def rateDistTest = json.fits["Unconstrained model"]["Rate Distributions"].Test
-                    //assert rateDistTest.keySet().containsAll(["0", "1", "2", "3"]) 
-
                     // Check for correct MEME settings
                     def settings = json.analysis["settings"]
-                    //assert settings["error-sink"] == 1
-                    //assert settings["srv"] == "Yes"
+                    assert settings["multihit"] == "None"
 
                     // Check that MEME only ran on internal branches
                     def tested = json.tested["0"]

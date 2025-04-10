@@ -17,7 +17,7 @@ process HYPHY_PRIME {
     script:
     def args = task.ext.args ?: ''
     """
-    hyphy PRIME \\
+    hyphy prime \\
         --alignment $alignment \\
         --tree $tree \\
         --branches 'Internal' \\
