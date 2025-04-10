@@ -1,5 +1,5 @@
 {
-    "MEME stub": {
+    "BUSTED stub": {
         "content": [
             {
                 "0": [
@@ -8,7 +8,7 @@
                 "1": [
                     
                 ],
-                "meme_json": [
+                "busted_json": [
                     
                 ],
                 "versions": [
@@ -20,9 +20,9 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-04-09T17:54:06.952135"
+        "timestamp": "2025-04-10T13:11:40.365783"
     },
-    "Testing if MEME generates results": {
+    "Testing if BUSTED generates results": {
         "content": [
             {
                 "0": [
@@ -31,7 +31,7 @@
                 "1": [
                     
                 ],
-                "meme_json": [
+                "busted_json": [
                     
                 ],
                 "versions": [
@@ -43,6 +43,6 @@
             "nf-test": "0.9.2",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-04-09T17:54:00.100817"
+        "timestamp": "2025-04-10T13:10:32.70166"
     }
 }

@@ -20,7 +20,22 @@ process HYPHY_MEME {
     hyphy MEME \\
         --alignment $alignment \\
         --tree $tree \\
+        --branches 'Internal' \\
+        --output ${meta.id}.MEME.json \\
         $args
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        hyphy: \$(hyphy --version | sed 's/HyPhy //g')
+    END_VERSIONS
+    """
+
+    stub:
+    def args = task.ext.args ?: ''
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    
+    """
+    touch ${prefix}.MEME.json
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

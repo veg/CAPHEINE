@@ -1,0 +1,3 @@
+
+Error:Parsing error (Only simple variable references [e.g. var = value or *ref = value or *(string expression) = value] can appear on the LHS of assignments in the following context: '8test=<ERROR HERE>"component_"+component') while compiling the statement: 8test="component_"+component
+Parsing error (Only simple variable references [e.g. var = value or *ref = value or *(string expression) = value] can appear on the LHS of assignments in the following context: '8test=<ERROR HERE>"component_"+component') while compiling the statement: 8test="component_"+component

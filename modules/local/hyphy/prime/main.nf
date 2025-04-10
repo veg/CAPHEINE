@@ -20,7 +20,22 @@ process HYPHY_PRIME {
     hyphy PRIME \\
         --alignment $alignment \\
         --tree $tree \\
+        --branches 'Internal' \\
+        --output ${meta.id}.PRIME.json \\
         $args
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        hyphy: \$(hyphy --version | sed 's/HyPhy //g')
+    END_VERSIONS
+    """
+
+    stub:
+    def args = task.ext.args ?: ''
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    
+    """
+    touch ${prefix}.PRIME.json
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
