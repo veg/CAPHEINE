@@ -20,16 +20,16 @@ process HYPHY_CONTRASTFEL {
     script:
     def args = task.ext.args ?: ''
     """
-    hyphy contrast-fel \
-        --alignment $alignment \
-        --tree $tree \
-        --branch-set $branch_set_tag \
-        --output ${meta.id}.CONTRASTFEL.json \
-        $args
+    hyphy contrast-fel \\
+        --alignment $alignment \\
+        --tree $tree \\
+        --branch-set $branch_set_tag \\
+        --output ${meta.id}.CONTRASTFEL.json \\
+        ${args}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        hyphy: $(hyphy --version | sed 's/HyPhy //g')
+        hyphy: \$(hyphy --version | sed 's/HyPhy //g')
     END_VERSIONS
     """
 
