@@ -14,11 +14,11 @@ nextflow_workflow {
                 """
                 input[0] = Channel.of([
                     [ id:'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'],
-                    file(projectDir + '/tests/subworkflows/local/hyphy_analyses/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true)
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true)
                 ])
                 input[1] = Channel.of([
                     [ id:'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'],
-                    file(projectDir + '/tests/subworkflows/local/hyphy_analyses/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
                 ])
                 """
             }

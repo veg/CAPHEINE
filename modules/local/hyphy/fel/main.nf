@@ -26,7 +26,8 @@ process HYPHY_FEL {
     //               MUST be provided as an input via a Groovy Map called "meta".
     //               This information may not be required in some instances e.g. indexing reference genome files:
     //               https://github.com/nf-core/modules/blob/master/modules/nf-core/bwa/index/main.nf
-    tuple val(meta), path(alignment), path(tree)
+    tuple val(meta), path(alignment)
+    tuple val(meta), path(tree)
 
     output:
     tuple val(meta), path("${meta.id}.FEL.json"), emit: fel_json

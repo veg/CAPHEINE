@@ -9,11 +9,8 @@ nextflow_process {
         when {
             process {
                 """
-                input[0] = [
-                    [id: 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'],
-                    file(projectDir + '/tests/modules/local/hyphy/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true),           // alignment
-                    file(projectDir + '/tests/modules/local/hyphy/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)   // tree file
-                ]
+                input[0] = [[id: 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'], file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true)] // alignment
+                input[1] = [[id: 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'], file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)] // tree file
                 """
             }
         }
@@ -59,11 +56,8 @@ nextflow_process {
         when {
             process {
                 """
-                input[0] = [
-                    [id: 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'],
-                    file(projectDir + '/tests/modules/local/hyphy/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true),
-                    file(projectDir + '/tests/modules/local/hyphy/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
-                ]
+                input[0] = [[id: 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'], file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true)] // alignment
+                input[1] = [[id: 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'], file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)] // tree file
                 """
             }
         }

@@ -20,30 +20,30 @@ workflow HYPHY_ANALYSES {
     ch_versions = Channel.empty()
 
     // Run FEL analysis
-    HYPHY_FEL ( 
-        alignment: ch_aln
-        tree: ch_tree 
+    HYPHY_FEL (
+        ch_aln,
+        ch_tree
     )
     ch_versions = ch_versions.mix(HYPHY_FEL.out.versions.first())
 
     // Run MEME analysis
     HYPHY_MEME (
-        alignment: ch_aln
-        tree: ch_tree
+        ch_aln,
+        ch_tree
     )
     ch_versions = ch_versions.mix(HYPHY_MEME.out.versions.first())
 
     // Run PRIME analysis
     HYPHY_PRIME (
-        alignment: ch_aln
-        tree: ch_tree
+        ch_aln,
+        ch_tree
     )
     ch_versions = ch_versions.mix(HYPHY_PRIME.out.versions.first())
 
     // Run BUSTED analysis
     HYPHY_BUSTED (
-        alignment: ch_aln
-        tree: ch_tree
+        ch_aln,
+        ch_tree
     )
     ch_versions = ch_versions.mix(HYPHY_BUSTED.out.versions.first())
 

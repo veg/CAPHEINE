@@ -5,7 +5,8 @@ process HYPHY_MEME {
     conda "${moduleDir}/environment.yml"
 
     input:
-    tuple val(meta), path(alignment), path(tree)
+    tuple val(meta), path(alignment)
+    tuple val(meta), path(tree)
 
     output:
     tuple val(meta), path("${meta.id}.MEME.json"), emit: meme_json
