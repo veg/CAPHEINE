@@ -3,6 +3,9 @@ process HYPHY_BUSTED {
     label 'process_single'
 
     conda "${moduleDir}/environment.yml"
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/hyphy:2.5.71--he91c24d_0' :
+        'biocontainers/hyphy:2.5.71--he91c24d_0' }"
 
     input:
     tuple val(meta), path(alignment)
