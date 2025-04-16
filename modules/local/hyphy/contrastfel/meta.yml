@@ -1,0 +1,55 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
+name: "hyphy_contrastfel"
+description: Contrast-FEL (Fixed Effects Likelihood) investigates whether or not selective pressures differ between two or more sets of 
+  branches at a site. Site-specific synonymous (alpha) and non-synonymous (beta, one per branch set) substitution rates are estimated 
+  and then beta rates are tested for equality at each site. LRT and permutation tests ar used to assess significance at each site, and FDR is applied alignment wide to call sites with different selective profiles
+keywords:
+  - hyphy
+  - selection
+  - phylogenetics
+  - genomics
+tools:
+  - "hyphy":
+      description: "An open-source software package for comparative sequence analysis using stochastic evolutionary models."
+      homepage: "https://veg.github.io/hyphy-site/"
+      documentation: "https://github.com/veg/hyphy/wiki"
+      tool_dev_url: "https://github.com/veg/hyphy"
+      doi: "10.1093/molbev/msu400"
+      licence: ['Custom']
+      identifier: biotools:HyPhy
+
+input:
+  - alignment:
+      type: file
+      description: Multiple sequence alignment file in FASTA format.
+      pattern: "*.fasta$"
+      ontologies:
+        - edam: "http://edamontology.org/format_1929"
+  - tree:
+      type: file
+      description: Phylogenetic tree file in Newick format.
+      pattern: "*.treefile"
+      ontologies:
+        - edam: "http://edamontology.org/format_1910"
+          
+output:
+  - contrastfel_json:
+      type: file
+      description: JSON file containing Contrast-FEL selection analysis results.
+      pattern: "*.CONTRASTFEL.json"
+      ontologies:
+        - edam: "http://edamontology.org/format_3464"
+          
+  - versions:
+    - "versions.yml":
+        type: file
+        description: File containing software versions
+        pattern: "versions.yml"
+
+authors:
+  - "@hverdonk"
+maintainers:
+  - "@hverdonk"
+  - "@d-callan"
+
