@@ -1,69 +1,62 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
 name: "cawlign"
-## TODO nf-core: Add a description of the module and list keywords
-description: write your description here
+description: Aligns a FASTA file of unaligned sequences to a reference gene using cawlign, producing an aligned FASTA file.
 keywords:
-  - sort
-  - example
+  - alignment
+  - fasta
   - genomics
+  - reference-guided
 tools:
   - "cawlign":
-      ## TODO nf-core: Add a description and other details for the software below
-      description: "A tool for aligning consensus sequences to reference genomes"
-      homepage: "None"
-      documentation: "None"
+      description: "A codon-aware aligner for mapping nucleotide or protein sequences to a reference."
+      homepage: "https://github.com/veg/cawlign"
+      documentation: "https://github.com/veg/cawlign#readme"
       tool_dev_url: "https://github.com/veg/cawlign"
       doi: ""
       licence: ['MIT']
       identifier: 
 
-## TODO nf-core: Add a description of all of the variables used as input
 input:
-  # Only when we have meta
-  - - meta:
-        type: map
-        description: |
-          Groovy Map containing sample information
-          e.g. `[ id:'sample1', single_end:false ]`
-  
-  ## TODO nf-core: Delete / customise this example input
-    - bam:
-        type: file
-        description: Sorted BAM/CRAM/SAM file
-        pattern: "*.{bam,cram,sam}"
-        ontologies:
-          - edam: "http://edamontology.org/format_25722"
-          - edam: "http://edamontology.org/format_2573"
-          - edam: "http://edamontology.org/format_3462"
-          
-
-## TODO nf-core: Add a description of all of the variables used as output
-output:
-  - bam:
-  #Only when we have meta
     - meta:
         type: map
         description: |
           Groovy Map containing sample information
-          e.g. `[ id:'sample1', single_end:false ]`
-  ## TODO nf-core: Delete / customise this example output
-    - "*.bam":
+          e.g. `[ id:'sample1' ]`
+    - reference:
         type: file
-        description: Sorted BAM/CRAM/SAM file
-        pattern: "*.{bam,cram,sam}"
+        description: Reference gene FASTA file
+        pattern: "*.fa,*.fasta,*.fna,*.ffn,*.faa,*.frn"
         ontologies:
-          - edam: "http://edamontology.org/format_25722"
-          - edam: "http://edamontology.org/format_2573"
-          - edam: "http://edamontology.org/format_3462"
-          
-  - versions:
-    - "versions.yml":
+          - edam: "http://edamontology.org/format_1929"
+    - unaligned:
         type: file
-        description: File containing software versions
-        pattern: "versions.yml"
+        description: FASTA file of unaligned sequences
+        pattern: "*.fa,*.fasta,*.fna,*.ffn,*.faa,*.frn"
+        ontologies:
+          - edam: "http://edamontology.org/format_1929"
+
+output:
+    - aligned:
+      - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
+      - "{id}-aligned.fasta":
+          type: file
+          description: Aligned FASTA file output from cawlign
+          pattern: "*-aligned.fasta"
+          ontologies:
+            - edam: "http://edamontology.org/format_1929"
+    - versions:
+      - "versions.yml":
+          type: file
+          description: File containing software version information
+          pattern: "versions.yml"
 
 authors:
   - "@hverdonk"
 maintainers:
   - "@hverdonk"
+  - "@d-callan"
