@@ -34,7 +34,7 @@ process HYPHY_RELAX {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        hyphy: \$(hyphy --version | sed 's/HyPhy //g')
+        hyphy: \$(hyphy --version | sed 's/HYPHY //g')
     END_VERSIONS
     """
 
@@ -46,7 +46,7 @@ process HYPHY_RELAX {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        hyphy: \$(hyphy --version | sed 's/HyPhy //g')
+        hyphy: \$(hyphy --version | sed 's/HYPHY //g')
     END_VERSIONS
     """
 }

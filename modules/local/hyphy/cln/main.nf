@@ -28,7 +28,7 @@ process HYPHY_CLN {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        hyphy: \$(hyphy --version)
+        hyphy: \$(hyphy --version | sed 's/HYPHY //g')
     END_VERSIONS
     """
 
@@ -44,7 +44,7 @@ process HYPHY_CLN {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        hyphy: \$(hyphy --version)
+        hyphy: \$(hyphy --version | sed 's/HYPHY //g')
     END_VERSIONS
     """
 }
