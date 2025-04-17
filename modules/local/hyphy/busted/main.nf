@@ -32,7 +32,7 @@ process HYPHY_BUSTED {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        hyphy: \$(hyphy --version | sed 's/HyPhy //g')
+        hyphy: \$(hyphy --version)
     END_VERSIONS
     """
 
@@ -45,7 +45,7 @@ process HYPHY_BUSTED {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        hyphy: \$(hyphy --version | sed 's/HyPhy //g')
+        hyphy: \$(hyphy --version)
     END_VERSIONS
     """
 }
