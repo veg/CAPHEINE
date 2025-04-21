@@ -15,7 +15,7 @@
 // TODO nf-core: Optional inputs are not currently supported by Nextflow. However, using an empty
 //               list (`[]`) instead of a file can be used to work around this issue.
 
-process HYPHY_LABELTREE {
+process HYPHY_LABELTREE_REGEXP {
     tag "$meta.id"
     label 'process_single'
 
@@ -29,14 +29,11 @@ process HYPHY_LABELTREE {
     //               MUST be provided as an input via a Groovy Map called "meta".
     //               This information may not be required in some instances e.g. indexing reference genome files:
     //               https://github.com/nf-core/modules/blob/master/modules/nf-core/bwa/index/main.nf
-    // TODO nf-core: Where applicable please provide/convert compressed files as input/output
-    //               e.g. "*.fastq.gz" and NOT "*.fastq", "*.bam" and NOT "*.sam" etc.
-    tuple val(meta), path(in_tree), val(list_or_regexp)
+    tuple val(meta), path(in_tree), val(regexp)
 
     output:
-    // TODO nf-core: Named file extensions MUST be emitted for ALL output channels
-    tuple val(meta), path(out_tree), emit: out_tree
-    path "versions.yml"            , emit: versions
+    tuple val(meta), path("${meta.id}-clean${in_tree.extension}"), emit: out_tree
+    path "versions.yml"                                          , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -48,18 +45,13 @@ process HYPHY_LABELTREE {
     // TODO nf-core: If the tool supports multi-threading then you MUST provide the appropriate parameter
     //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
     """
-    if (list_or_regexp instanceof Path && list_or_regexp.name.endsWith('.txt')) {
-        list_flag = "--list ${list_or_regexp}"
-    } else {
-        list_flag = "--regexp '${list_or_regexp}'"
-    }
-    // TODO: replace hyphy-analyses path with some sort of actual module
+    // TODO: replace hyphy-analyses path with some sort of actual command
     hyphy hyphy-analyses/LabelTrees/label-tree.bf \
-        --tree ${in_tree} \
-        ${list_flag} \
-        --label 'Foreground' \
-        --output ${out_tree} \
-        --internal-nodes 'All descendants' \
+        --tree ${in_tree} \\
+        --regexp '${regexp}' \\
+        --label 'Foreground' \\
+        --output "${meta.id}-clean${in_tree.extension}" \\
+        --internal-nodes 'All descendants' \\
         --leaf-nodes 'Skip'
 
     cat <<-END_VERSIONS > versions.yml
@@ -74,11 +66,66 @@ process HYPHY_LABELTREE {
     def ext = in_tree.name.endsWith('.nwk') ? '.nwk' : '.treefile'
     def out_tree = "${prefix}${ext}"
     """
-    if (list_or_regexp instanceof Path && list_or_regexp.name.endsWith('.txt')) {
-        list_flag = "--list ${list_or_regexp}"
-    } else {
-        list_flag = "--regexp '${list_or_regexp}'"
-    }
+    touch ${out_tree}
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        hyphy: \$(hyphy --version | sed 's/HYPHY //g')
+    END_VERSIONS
+    """
+}
+
+process HYPHY_LABELTREE_LIST {
+    tag "$meta.id"
+    label 'process_single'
+
+    conda "${moduleDir}/environment.yml"
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/hyphy:2.5.71--he91c24d_0' :
+        'biocontainers/hyphy:2.5.71--he91c24d_0' }"
+
+    input:
+    // TODO nf-core: Where applicable all sample-specific information e.g. "id", "single_end", "read_group"
+    //               MUST be provided as an input via a Groovy Map called "meta".
+    //               This information may not be required in some instances e.g. indexing reference genome files:
+    //               https://github.com/nf-core/modules/blob/master/modules/nf-core/bwa/index/main.nf
+    tuple val(meta), path(in_tree), path(in_list)
+
+    output:
+    tuple val(meta), path("${meta.id}-clean.${in_tree.extension}"), emit: out_tree
+    path "versions.yml"                                           , emit: versions
+
+    when:
+    task.ext.when == null || task.ext.when
+
+    script:
+    def args = task.ext.args ?: ''
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    // TODO nf-core: It MUST be possible to pass additional parameters to the tool as a command-line string via the "task.ext.args" directive
+    // TODO nf-core: If the tool supports multi-threading then you MUST provide the appropriate parameter
+    //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
+    // TODO: replace hyphy-analyses path with some sort of actual command
+    """
+    hyphy /Users/hverdonk/hyphy-analyses/LabelTrees/label-tree.bf \\
+        --tree ${in_tree} \\
+        --list ${in_list} \\
+        --label 'Foreground' \\
+        --output "${meta.id}-clean.${in_tree.extension}" \\
+        --internal-nodes 'All descendants' \\
+        --leaf-nodes 'Skip'
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        hyphy: \$(hyphy --version | sed 's/HYPHY //g')
+    END_VERSIONS
+    """
+
+    stub:
+    def args = task.ext.args ?: ''
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    //def ext = in_tree.name.endsWith('.nwk') ? '.nwk' : '.treefile'
+    def out_tree = "${prefix}-clean.${in_tree.extension}"
+    """
     touch ${out_tree}
 
     cat <<-END_VERSIONS > versions.yml

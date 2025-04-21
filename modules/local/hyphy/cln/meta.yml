@@ -2,14 +2,12 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
 name: "hyphy_cln"
 ## TODO nf-core: Add a description of the module and list keywords
-description: write your description here
+description: "Convert sequence names to HyPhy valid identifiers if needed and replace stop codons with gaps in codon data if any are present."
 keywords:
-  - sort
-  - example
+  - clean
   - genomics
 tools:
   - "hyphy":
-      ## TODO nf-core: Add a description and other details for the software below
       description: "An open-source software package for comparative sequence analysis using stochastic evolutionary models."
       homepage: "https://hyphy.org"
       documentation: "https://hyphy.org"
