@@ -105,7 +105,7 @@ process HYPHY_LABELTREE_LIST {
     //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
     // TODO: replace hyphy-analyses path with some sort of actual command
     """
-    hyphy /Users/hverdonk/hyphy-analyses/LabelTrees/label-tree.bf \\
+    hyphy label-tree \\
         --tree ${in_tree} \\
         --list ${in_list} \\
         --label 'Foreground' \\

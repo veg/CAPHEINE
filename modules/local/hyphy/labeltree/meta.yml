@@ -1,62 +1,54 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
 name: "hyphy_labeltree"
-## TODO nf-core: Add a description of the module and list keywords
-description: write your description here
+description: |
+  Runs the `labeltree` subcommand from HyPhy, which is used to annotate or manipulate phylogenetic tree labels for downstream evolutionary analyses.
 keywords:
-  - sort
-  - example
-  - genomics
+  - phylogenetics
+  - tree
+  - labeling
+  - annotation
+  - hyphy
+  - evolutionary biology
 tools:
   - "hyphy":
-      ## TODO nf-core: Add a description and other details for the software below
-      description: "An open-source software package for comparative sequence analysis using stochastic evolutionary models."
+      description: "An open-source software package for comparative sequence analysis using stochastic evolutionary models. This module uses the 'labeltree' subcommand to annotate or manipulate phylogenetic tree labels."
       homepage: "https://hyphy.org"
       documentation: "https://hyphy.org"
       tool_dev_url: "https://github.com/veg/hyphy"
-      doi: ""
+      doi: "10.1093/molbev/msy022"
       licence: ['MIT']
       identifier: biotools:HyPhy
 
-## TODO nf-core: Add a description of all of the variables used as input
 input:
-  # Only when we have meta
-  - - meta:
-        type: map
-        description: |
-          Groovy Map containing sample information
-          e.g. `[ id:'sample1', single_end:false ]`
-  
-  ## TODO nf-core: Delete / customise this example input
-    - bam:
-        type: file
-        description: Sorted BAM/CRAM/SAM file
-        pattern: "*.{bam,cram,sam}"
-        ontologies:
-          - edam: "http://edamontology.org/format_25722"
-          - edam: "http://edamontology.org/format_2573"
-          - edam: "http://edamontology.org/format_3462"
-          
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. `[ id:'sample1']`
+  - in_tree:
+      type: file
+      description: Input phylogenetic tree file (Newick or Nexus format)
+      pattern: "*.{nwk,newick,tree,treefile,nex,nexus}"
+      ontologies:
+        - edam: "http://edamontology.org/format_1910" # Newick format
+        - edam: "http://edamontology.org/format_2010" # Nexus format
 
-## TODO nf-core: Add a description of all of the variables used as output
 output:
-  - bam:
-  #Only when we have meta
-    - meta:
-        type: map
-        description: |
-          Groovy Map containing sample information
-          e.g. `[ id:'sample1', single_end:false ]`
-  ## TODO nf-core: Delete / customise this example output
-    - "*.bam":
-        type: file
-        description: Sorted BAM/CRAM/SAM file
-        pattern: "*.{bam,cram,sam}"
-        ontologies:
-          - edam: "http://edamontology.org/format_25722"
-          - edam: "http://edamontology.org/format_2573"
-          - edam: "http://edamontology.org/format_3462"
-          
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. `[ id:'sample1' ]`
+  - out_tree:
+      type: file
+      description: Output phylogenetic tree file with updated or annotated labels (Newick or Nexus format)
+      pattern: "*.{nwk,newick,tree,treefile,nex,nexus}"
+      ontologies:
+        - edam: "http://edamontology.org/format_1910"
+        - edam: "http://edamontology.org/format_2010"
+
+
   - versions:
     - "versions.yml":
         type: file
