@@ -45,8 +45,7 @@ process HYPHY_LABELTREE_REGEXP {
     // TODO nf-core: If the tool supports multi-threading then you MUST provide the appropriate parameter
     //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
     """
-    // TODO: replace hyphy-analyses path with some sort of actual command
-    hyphy hyphy-analyses/LabelTrees/label-tree.bf \
+    hyphy label-tree \\
         --tree ${in_tree} \\
         --regexp '${regexp}' \\
         --label 'Foreground' \\
