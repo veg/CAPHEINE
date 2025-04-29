@@ -25,14 +25,10 @@ process HYPHY_LABELTREE_REGEXP {
         'biocontainers/hyphy:2.5.71--he91c24d_0' }"
 
     input:
-    // TODO nf-core: Where applicable all sample-specific information e.g. "id", "single_end", "read_group"
-    //               MUST be provided as an input via a Groovy Map called "meta".
-    //               This information may not be required in some instances e.g. indexing reference genome files:
-    //               https://github.com/nf-core/modules/blob/master/modules/nf-core/bwa/index/main.nf
     tuple val(meta), path(in_tree), val(regexp)
 
     output:
-    tuple val(meta), path("${meta.id}-clean${in_tree.extension}"), emit: out_tree
+    tuple val(meta), path("${meta.id}-labeled.${in_tree.extension}"), emit: out_tree
     path "versions.yml"                                          , emit: versions
 
     when:
@@ -41,6 +37,7 @@ process HYPHY_LABELTREE_REGEXP {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
+    def out_tree = "${prefix}-labeled.${in_tree.extension}"
     // TODO nf-core: It MUST be possible to pass additional parameters to the tool as a command-line string via the "task.ext.args" directive
     // TODO nf-core: If the tool supports multi-threading then you MUST provide the appropriate parameter
     //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
@@ -49,7 +46,7 @@ process HYPHY_LABELTREE_REGEXP {
         --tree ${in_tree} \\
         --regexp '${regexp}' \\
         --label 'Foreground' \\
-        --output "${meta.id}-clean${in_tree.extension}" \\
+        --output "${out_tree}" \\
         --internal-nodes 'All descendants' \\
         --leaf-nodes 'Skip'
 
@@ -62,8 +59,7 @@ process HYPHY_LABELTREE_REGEXP {
     stub:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def ext = in_tree.name.endsWith('.nwk') ? '.nwk' : '.treefile'
-    def out_tree = "${prefix}${ext}"
+    def out_tree = "${prefix}-labeled.${in_tree.extension}"
     """
     touch ${out_tree}
 
@@ -84,14 +80,10 @@ process HYPHY_LABELTREE_LIST {
         'biocontainers/hyphy:2.5.71--he91c24d_0' }"
 
     input:
-    // TODO nf-core: Where applicable all sample-specific information e.g. "id", "single_end", "read_group"
-    //               MUST be provided as an input via a Groovy Map called "meta".
-    //               This information may not be required in some instances e.g. indexing reference genome files:
-    //               https://github.com/nf-core/modules/blob/master/modules/nf-core/bwa/index/main.nf
     tuple val(meta), path(in_tree), path(in_list)
 
     output:
-    tuple val(meta), path("${meta.id}-clean.${in_tree.extension}"), emit: out_tree
+    tuple val(meta), path("${meta.id}-labeled.${in_tree.extension}"), emit: out_tree
     path "versions.yml"                                           , emit: versions
 
     when:
@@ -100,16 +92,16 @@ process HYPHY_LABELTREE_LIST {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
+    def out_tree = "${prefix}-labeled.${in_tree.extension}"
     // TODO nf-core: It MUST be possible to pass additional parameters to the tool as a command-line string via the "task.ext.args" directive
     // TODO nf-core: If the tool supports multi-threading then you MUST provide the appropriate parameter
     //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
-    // TODO: replace hyphy-analyses path with some sort of actual command
     """
     hyphy label-tree \\
         --tree ${in_tree} \\
         --list ${in_list} \\
         --label 'Foreground' \\
-        --output "${meta.id}-clean.${in_tree.extension}" \\
+        --output "${out_tree}" \\
         --internal-nodes 'All descendants' \\
         --leaf-nodes 'Skip'
 
@@ -122,8 +114,7 @@ process HYPHY_LABELTREE_LIST {
     stub:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    //def ext = in_tree.name.endsWith('.nwk') ? '.nwk' : '.treefile'
-    def out_tree = "${prefix}-clean.${in_tree.extension}"
+    def out_tree = "${prefix}-labeled.${in_tree.extension}"
     """
     touch ${out_tree}
 
