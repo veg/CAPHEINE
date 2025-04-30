@@ -1,5 +1,6 @@
 // Subworkflow to process viral non-recombinant sequences
 
+include { REMOVEAMBIGSEQS } from '../../../modules/local/removeambigseqs/main'
 include { CAWLIGN         } from '../../../modules/local/cawlign/main'
 include { REMOVEDUPS      } from '../../../modules/local/hyphy/removedups/main'
 include { IQTREE          } from '../../../modules/local/iqtree/main'
@@ -16,10 +17,16 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
 
     ch_versions = Channel.empty()
 
+    // Remove sequences with ambiguous bases
+    REMOVEAMBIGSEQS (
+        ch_unaligned
+    )
+    ch_versions = ch_versions.mix(REMOVEAMBIGSEQS.out.versions.first())
+
     // Align sequences using cawlign
     CAWLIGN (
         ch_reference,
-        ch_unaligned
+        REMOVEAMBIGSEQS.out.cleaned_seqs
     )
     ch_versions = ch_versions.mix(CAWLIGN.out.versions.first())
 
