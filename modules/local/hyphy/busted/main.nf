@@ -12,7 +12,7 @@ process HYPHY_BUSTED {
     tuple val(meta), path(tree)
 
     output:
-    tuple val(meta), path("${meta.id}.BUSTED.json"), emit: busted_json
+    tuple val(meta), path("BUSTED/${meta.id}.BUSTED.json"), emit: busted_json
     path "versions.yml"                            , emit: versions
 
     when:
@@ -21,13 +21,15 @@ process HYPHY_BUSTED {
     script:
     def args = task.ext.args ?: ''
     """
+    mkdir -p BUSTED
+
     hyphy busted \\
         --alignment $alignment \\
         --tree $tree \\
         --branches 'Internal' \\
         --srv Yes \\
         --error-sink Yes \\
-        --output ${meta.id}.BUSTED.json \\
+        --output BUSTED/${meta.id}.BUSTED.json \\
         $args
 
     cat <<-END_VERSIONS > versions.yml
@@ -41,7 +43,9 @@ process HYPHY_BUSTED {
     def prefix = task.ext.prefix ?: "${meta.id}"
     
     """
-    touch ${prefix}.BUSTED.json
+    mkdir -p BUSTED
+
+    touch BUSTED/${prefix}.BUSTED.json
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

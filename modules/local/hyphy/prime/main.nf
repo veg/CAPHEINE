@@ -12,7 +12,7 @@ process HYPHY_PRIME {
     tuple val(meta), path(tree)
 
     output:
-    tuple val(meta), path("${meta.id}.PRIME.json"), emit: prime_json
+    tuple val(meta), path("PRIME/${meta.id}.PRIME.json"), emit: prime_json
     path "versions.yml"                           , emit: versions
 
     when:
@@ -21,11 +21,13 @@ process HYPHY_PRIME {
     script:
     def args = task.ext.args ?: ''
     """
+    mkdir -p PRIME
+    
     hyphy prime \\
         --alignment $alignment \\
         --tree $tree \\
         --branches 'Internal' \\
-        --output ${meta.id}.PRIME.json \\
+        --output PRIME/${meta.id}.PRIME.json \\
         $args
 
     cat <<-END_VERSIONS > versions.yml
@@ -39,7 +41,9 @@ process HYPHY_PRIME {
     def prefix = task.ext.prefix ?: "${meta.id}"
     
     """
-    touch ${prefix}.PRIME.json
+    mkdir -p PRIME
+    
+    touch PRIME/${prefix}.PRIME.json
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

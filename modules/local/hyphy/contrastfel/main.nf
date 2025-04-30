@@ -13,7 +13,7 @@ process HYPHY_CONTRASTFEL {
     val(branch_set_tag)
 
     output:
-    tuple val(meta), path("${meta.id}.CONTRASTFEL.json"), emit: contrastfel_json
+    tuple val(meta), path("CONTRASTFEL/${meta.id}.CONTRASTFEL.json"), emit: contrastfel_json
     path "versions.yml"                                 , emit: versions
 
     when:
@@ -22,11 +22,13 @@ process HYPHY_CONTRASTFEL {
     script:
     def args = task.ext.args ?: ''
     """
+    mkdir -p CONTRASTFEL
+    
     hyphy contrast-fel \\
         --alignment $alignment \\
         --tree $tree \\
         --branch-set $branch_set_tag \\
-        --output ${meta.id}.CONTRASTFEL.json \\
+        --output CONTRASTFEL/${meta.id}.CONTRASTFEL.json \\
         ${args}
 
     cat <<-END_VERSIONS > versions.yml
@@ -39,7 +41,9 @@ process HYPHY_CONTRASTFEL {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.CONTRASTFEL.json
+    mkdir -p CONTRASTFEL
+    
+    touch CONTRASTFEL/${prefix}.CONTRASTFEL.json
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

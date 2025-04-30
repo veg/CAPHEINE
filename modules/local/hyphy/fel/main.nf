@@ -26,7 +26,7 @@ process HYPHY_FEL {
     tuple val(meta), path(tree)
 
     output:
-    tuple val(meta), path("${meta.id}.FEL.json"), emit: fel_json
+    tuple val(meta), path("FEL/${meta.id}.FEL.json"), emit: fel_json
     path "versions.yml"                         , emit: versions
 
     when:
@@ -39,11 +39,13 @@ process HYPHY_FEL {
     // TODO nf-core: If the tool supports multi-threading then you MUST provide the appropriate parameter
     //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
     """
+    mkdir -p FEL
+    
     hyphy fel \\
         --alignment $alignment \\
         --tree $tree \\
         --branches 'Internal' \\
-        --output ${meta.id}.FEL.json \\
+        --output FEL/${meta.id}.FEL.json \\
         ${args}
 
     cat <<-END_VERSIONS > versions.yml
@@ -57,7 +59,9 @@ process HYPHY_FEL {
     def prefix = task.ext.prefix ?: "${meta.id}"
     
     """
-    touch ${prefix}.FEL.json
+    mkdir -p FEL
+    
+    touch FEL/${prefix}.FEL.json
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

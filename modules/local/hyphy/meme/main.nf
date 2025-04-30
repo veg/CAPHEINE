@@ -12,7 +12,7 @@ process HYPHY_MEME {
     tuple val(meta), path(tree)
 
     output:
-    tuple val(meta), path("${meta.id}.MEME.json"), emit: meme_json
+    tuple val(meta), path("MEME/${meta.id}.MEME.json"), emit: meme_json
     path "versions.yml"                          , emit: versions
 
     when:
@@ -21,11 +21,13 @@ process HYPHY_MEME {
     script:
     def args = task.ext.args ?: ''
     """
+    mkdir -p MEME
+    
     hyphy meme \\
         --alignment $alignment \\
         --tree $tree \\
         --branches 'Internal' \\
-        --output ${meta.id}.MEME.json \\
+        --output MEME/${meta.id}.MEME.json \\
         $args
 
     cat <<-END_VERSIONS > versions.yml
@@ -39,7 +41,9 @@ process HYPHY_MEME {
     def prefix = task.ext.prefix ?: "${meta.id}"
     
     """
-    touch ${prefix}.MEME.json
+    mkdir -p MEME
+    
+    touch MEME/${prefix}.MEME.json
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

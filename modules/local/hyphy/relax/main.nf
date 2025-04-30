@@ -13,7 +13,7 @@ process HYPHY_RELAX {
     val(test_tag)
 
     output:
-    tuple val(meta), path("${meta.id}.RELAX.json"), emit: relax_json
+    tuple val(meta), path("RELAX/${meta.id}.RELAX.json"), emit: relax_json
     path "versions.yml"                           , emit: versions
 
     when:
@@ -22,10 +22,12 @@ process HYPHY_RELAX {
     script:
     def args = task.ext.args ?: ''
     """
+    mkdir -p RELAX
+    
     hyphy relax \\
         --alignment $alignment \\
         --tree $tree \\
-        --output ${meta.id}.RELAX.json \\
+        --output RELAX/${meta.id}.RELAX.json \\
         --mode "Classic mode" \\
         --test $test_tag \\
         --reference "Reference" \\
@@ -42,7 +44,9 @@ process HYPHY_RELAX {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.RELAX.json
+    mkdir -p RELAX
+    
+    touch RELAX/${prefix}.RELAX.json
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
