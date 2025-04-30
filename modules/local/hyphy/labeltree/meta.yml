@@ -40,7 +40,7 @@ output:
       description: |
         Groovy Map containing sample information
         e.g. `[ id:'sample1' ]`
-  - out_tree:
+  - labeled_tree:
       type: file
       description: Output phylogenetic tree file with updated or annotated labels (Newick or Nexus format)
       pattern: "*.{nwk,newick,tree,treefile,nex,nexus}"

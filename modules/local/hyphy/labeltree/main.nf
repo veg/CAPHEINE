@@ -28,8 +28,8 @@ process HYPHY_LABELTREE_REGEXP {
     tuple val(meta), path(in_tree), val(regexp)
 
     output:
-    tuple val(meta), path("${meta.id}-labeled.${in_tree.extension}"), emit: out_tree
-    path "versions.yml"                                          , emit: versions
+    tuple val(meta), path("${meta.id}-labeled.${in_tree.extension}"), emit: labeled_tree
+    path "versions.yml"                                             , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -83,8 +83,8 @@ process HYPHY_LABELTREE_LIST {
     tuple val(meta), path(in_tree), path(in_list)
 
     output:
-    tuple val(meta), path("${meta.id}-labeled.${in_tree.extension}"), emit: out_tree
-    path "versions.yml"                                           , emit: versions
+    tuple val(meta), path("${meta.id}-labeled.${in_tree.extension}"), emit: labeled_tree
+    path "versions.yml"                                             , emit: versions
 
     when:
     task.ext.when == null || task.ext.when

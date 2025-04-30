@@ -18,7 +18,7 @@ process HYPHY_REMOVEDUPS {
     tuple val(meta), path(in_msa)
 
     output:
-    tuple val(meta), path("${meta.id}-nodups${in_msa.extension}"), emit: msa_nodups
+    tuple val(meta), path("${meta.id}-nodups${in_msa.extension}"), emit: deduplicated
     path "versions.yml"                                          , emit: versions
 
     when:

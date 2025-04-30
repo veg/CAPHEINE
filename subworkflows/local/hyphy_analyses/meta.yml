@@ -58,18 +58,6 @@ output:
         Channel containing BUSTED (episodic diversifying selection) analysis results
         Structure: [ val(meta), path(json) ]
       pattern: "*.BUSTED.json"
-  - contrastfel_json:
-      type: file
-      description: |
-        Channel containing Contrast-FEL (site-specific selection between two or more sets of branches) analysis results
-        Structure: [ val(meta), path(json) ]
-      pattern: "*.CONTRASTFEL.json"
-  - relax_json:
-      type: file
-      description: |
-        Channel containing RELAX (relaxed selection) analysis results
-        Structure: [ val(meta), path(json) ]
-      pattern: "*.RELAX.json"
   - versions:
       type: file
       description: |
