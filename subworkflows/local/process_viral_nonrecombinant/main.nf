@@ -1,36 +1,56 @@
-// TODO nf-core: If in doubt look at other nf-core/subworkflows to see how we are doing things! :)
-//               https://github.com/nf-core/modules/tree/master/subworkflows
-//               You can also ask for help via your pull request or on the #subworkflows channel on the nf-core Slack workspace:
-//               https://nf-co.re/join
-// TODO nf-core: A subworkflow SHOULD import at least two modules
+// Subworkflow to process viral non-recombinant sequences
 
-include { SAMTOOLS_SORT      } from '../../../modules/nf-core/samtools/sort/main'
-include { SAMTOOLS_INDEX     } from '../../../modules/nf-core/samtools/index/main'
+include { CAWLIGN         } from '../../../modules/local/cawlign/main'
+include { REMOVEDUPS      } from '../../../modules/local/hyphy/removedups/main'
+include { IQTREE          } from '../../../modules/local/iqtree/main'
+include { LABELTREE       } from '../../../modules/local/hyphy/labeltree/main'
 
 workflow PROCESS_VIRAL_NONRECOMBINANT {
 
     take:
-    // TODO nf-core: edit input (take) channels
-    ch_bam // channel: [ val(meta), [ bam ] ]
+    ch_unaligned      // channel: [ val(meta), [ unaligned_sequences ] ]
+    ch_reference      // channel: [ val(meta), [ reference_gene ] ]
+    ch_foreground     // channel: [ foreground_sequences_list ]
 
     main:
 
     ch_versions = Channel.empty()
 
-    // TODO nf-core: substitute modules here for the modules of your subworkflow
+    // Align sequences using cawlign
+    CAWLIGN (
+        ch_reference,
+        ch_unaligned
+    )
+    ch_versions = ch_versions.mix(CAWLIGN.out.versions.first())
 
-    SAMTOOLS_SORT ( ch_bam )
-    ch_versions = ch_versions.mix(SAMTOOLS_SORT.out.versions.first())
+    // Remove duplicate sequences
+    REMOVEDUPS (
+        CAWLIGN.out.aligned
+    )
+    ch_versions = ch_versions.mix(REMOVEDUPS.out.versions.first())
 
-    SAMTOOLS_INDEX ( SAMTOOLS_SORT.out.bam )
-    ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
+    // Generate phylogenetic tree with IQTree
+    // -T [num_cpu_cores] when using multiple cores
+    // [] is so we can avoid passing a guide tree to IQTree
+    IQTREE (
+        [REMOVEDUPS.out.deduplicated, []],
+        -m GTR+I+G
+    )
+    ch_versions = ch_versions.mix(IQTREE.out.versions.first())
+
+    // Label tree with foreground sequences
+    LABELTREE (
+        IQTREE.out.phylogeny,
+        ch_foreground
+    )
+    ch_versions = ch_versions.mix(LABELTREE.out.versions.first())
 
     emit:
-    // TODO nf-core: edit emitted channels
-    bam      = SAMTOOLS_SORT.out.bam           // channel: [ val(meta), [ bam ] ]
-    bai      = SAMTOOLS_INDEX.out.bai          // channel: [ val(meta), [ bai ] ]
-    csi      = SAMTOOLS_INDEX.out.csi          // channel: [ val(meta), [ csi ] ]
+    aligned       = CAWLIGN.out.aligned            // channel: [ val(meta), [ aligned_sequences ] ]
+    deduplicated  = REMOVEDUPS.out.deduplicated    // channel: [ val(meta), [ deduplicated_sequences ] ]
+    tree          = IQTREE.out.phylogeny           // channel: [ val(meta), [ phylogenetic_tree ] ]
+    labeled_tree  = LABELTREE.out.labeled_tree     // channel: [ val(meta), [ labeled_tree ] ]
 
-    versions = ch_versions                     // channel: [ versions.yml ]
+    versions      = ch_versions                    // channel: [ versions.yml ]
 }
 
