@@ -37,7 +37,7 @@ output:
   - contrastfel_json:
       type: file
       description: JSON file containing Contrast-FEL selection analysis results.
-      pattern: "*.CONTRASTFEL.json"
+      pattern: "CONTRASTFEL/*.CONTRASTFEL.json"
       ontologies:
         - edam: "http://edamontology.org/format_3464"
           

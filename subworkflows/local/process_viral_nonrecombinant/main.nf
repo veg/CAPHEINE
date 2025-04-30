@@ -32,7 +32,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
 
     // Remove duplicate sequences
     REMOVEDUPS (
-        CAWLIGN.out.aligned
+        CAWLIGN.out.aligned_seqs
     )
     ch_versions = ch_versions.mix(REMOVEDUPS.out.versions.first())
 
@@ -40,7 +40,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
     // -T [num_cpu_cores] when using multiple cores
     // [] is so we can avoid passing a guide tree to IQTree
     IQTREE (
-        [REMOVEDUPS.out.deduplicated, []],
+        [REMOVEDUPS.out.deduplicated_seqs, []],
         -m GTR+I+G
     )
     ch_versions = ch_versions.mix(IQTREE.out.versions.first())
@@ -53,8 +53,8 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
     ch_versions = ch_versions.mix(LABELTREE.out.versions.first())
 
     emit:
-    aligned       = CAWLIGN.out.aligned            // channel: [ val(meta), [ aligned_sequences ] ]
-    deduplicated  = REMOVEDUPS.out.deduplicated    // channel: [ val(meta), [ deduplicated_sequences ] ]
+    aligned       = CAWLIGN.out.aligned_seqs            // channel: [ val(meta), [ aligned_sequences ] ]
+    deduplicated  = REMOVEDUPS.out.deduplicated_seqs    // channel: [ val(meta), [ deduplicated_sequences ] ]
     tree          = IQTREE.out.phylogeny           // channel: [ val(meta), [ phylogenetic_tree ] ]
     labeled_tree  = LABELTREE.out.labeled_tree     // channel: [ val(meta), [ labeled_tree ] ]
 

@@ -36,7 +36,7 @@ output:
   - prime_json:
       type: file
       description: JSON file containing property-informed evolution analysis results.
-      pattern: "*.PRIME.json"
+      pattern: "PRIME/*.PRIME.json"
       ontologies:
         - edam: "http://edamontology.org/format_3464"
           

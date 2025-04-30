@@ -36,7 +36,7 @@ output:
   - fel_json:
       type: file
       description: JSON file containing site-specific tests for selection results.
-      pattern: "*.FEL.json"
+      pattern: "FEL/*.FEL.json"
       ontologies:
         - edam: "http://edamontology.org/format_3464"
           

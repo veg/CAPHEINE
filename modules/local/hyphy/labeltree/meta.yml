@@ -2,7 +2,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
 name: "hyphy_labeltree"
 description: |
-  Runs the `labeltree` subcommand from HyPhy, which is used to annotate or manipulate phylogenetic tree labels for downstream evolutionary analyses.
+  Runs the `label-tree` subcommand from HyPhy, which is used to annotate or manipulate phylogenetic tree labels for downstream evolutionary analyses.
 keywords:
   - phylogenetics
   - tree

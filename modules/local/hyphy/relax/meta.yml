@@ -35,7 +35,7 @@ output:
   - relax_json:
       type: file
       description: JSON file containing relaxed selection analysis results.
-      pattern: "*.RELAX.json"
+      pattern: "RELAX/*.RELAX.json"
       ontologies:
         - edam: "http://edamontology.org/format_3464"
           

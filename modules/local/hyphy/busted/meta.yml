@@ -41,7 +41,7 @@ output:
       - "{id}.BUSTED.json":
           type: file
           description: JSON file containing episodic diversifying selection test results.
-          pattern: "*.BUSTED.json"
+          pattern: "BUSTED/*.BUSTED.json"
           ontologies:
             - edam: "http://edamontology.org/format_3464"
   - versions:

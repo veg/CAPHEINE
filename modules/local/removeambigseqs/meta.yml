@@ -1,69 +1,52 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
 name: "removeambigseqs"
-## TODO nf-core: Add a description of the module and list keywords
-description: write your description here
+description: Remove sequences with excessive ambiguous bases from a FASTA file
 keywords:
-  - sort
-  - example
+  - fasta
+  - sequence filtering
   - genomics
+  - bioinformatics
 tools:
-  - "removeambigseqs":
-      ## TODO nf-core: Add a description and other details for the software below
-      description: ""
+  - "filter-ambig-sequences.py":
+      description: "Custom Python script to filter out sequences with excessive ambiguous bases"
       homepage: ""
       documentation: ""
       tool_dev_url: ""
       doi: ""
-      licence: 
-      identifier: 
+      licence: ""
+      identifier: ""
 
-## TODO nf-core: Add a description of all of the variables used as input
 input:
   # Only when we have meta
   - - meta:
-        type: map
-        description: |
-          Groovy Map containing sample information
-          e.g. `[ id:'sample1', single_end:false ]`
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. `[ id:'sample1', single_end:false ]`
   
-  ## TODO nf-core: Delete / customise this example input
-    - bam:
-        type: file
-        description: Sorted BAM/CRAM/SAM file
-        pattern: "*.{bam,cram,sam}"
-        ontologies:
-          - edam: "http://edamontology.org/format_25722"
-          - edam: "http://edamontology.org/format_2573"
-          - edam: "http://edamontology.org/format_3462"
-          
+  - input_seqs:
+      type: file
+      description: Input FASTA file to filter for sequences with low ambiguous base content
+      pattern: "*.fasta"
+      ontologies:
+        - edam: "http://edamontology.org/format_1929"
 
-## TODO nf-core: Add a description of all of the variables used as output
 output:
-  - bam:
-  #Only when we have meta
-    - meta:
-        type: map
-        description: |
-          Groovy Map containing sample information
-          e.g. `[ id:'sample1', single_end:false ]`
-  ## TODO nf-core: Delete / customise this example output
-    - "*.bam":
-        type: file
-        description: Sorted BAM/CRAM/SAM file
-        pattern: "*.{bam,cram,sam}"
-        ontologies:
-          - edam: "http://edamontology.org/format_25722"
-          - edam: "http://edamontology.org/format_2573"
-          - edam: "http://edamontology.org/format_3462"
-          
+  - cleaned_seqs:
+      type: file
+      description: FASTA file with sequences filtered to remove those with excessive ambiguous bases
+      pattern: "*-clean.fasta"
+  
   - versions:
-    - "versions.yml":
-        type: file
-        description: File containing software versions
-        pattern: "versions.yml"
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+      ontologies:
+        - edam: "http://edamontology.org/format_1929"
 
 authors:
   - "@hverdonk"
 maintainers:
   - "@hverdonk"
+  - "@d-callan"
