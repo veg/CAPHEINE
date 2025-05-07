@@ -1,15 +1,15 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
 name: "hyphy_removedups"
-## TODO nf-core: Add a description of the module and list keywords
-description: write your description here
+description: "Removes duplicate sequences from a FASTA file using HyPhy's built-in functionality"
 keywords:
-  - sort
-  - example
-  - genomics
+  - hyphy
+  - deduplication
+  - sequences
+  - fasta
+  - phylogenetics
 tools:
   - "hyphy":
-      ## TODO nf-core: Add a description and other details for the software below
       description: "An open-source software package for comparative sequence analysis using stochastic evolutionary models."
       homepage: "https://hyphy.org"
       documentation: "https://hyphy.org"
@@ -18,45 +18,31 @@ tools:
       licence: ['MIT']
       identifier: biotools:HyPhy
 
-## TODO nf-core: Add a description of all of the variables used as input
 input:
-  # Only when we have meta
-  - - meta:
-        type: map
-        description: |
-          Groovy Map containing sample information
-          e.g. `[ id:'sample1', single_end:false ]`
-  
-  ## TODO nf-core: Delete / customise this example input
-    - bam:
-        type: file
-        description: Sorted BAM/CRAM/SAM file
-        pattern: "*.{bam,cram,sam}"
-        ontologies:
-          - edam: "http://edamontology.org/format_25722"
-          - edam: "http://edamontology.org/format_2573"
-          - edam: "http://edamontology.org/format_3462"
-          
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. `[ id:'sample1' ]`
+  - fasta:
+      type: file
+      description: Input FASTA file containing sequences that may have duplicates
+      pattern: "*.fasta"
+      ontologies:
+        - edam: "http://edamontology.org/format_1929"
 
-## TODO nf-core: Add a description of all of the variables used as output
 output:
-  - bam:
-  #Only when we have meta
-    - meta:
-        type: map
-        description: |
-          Groovy Map containing sample information
-          e.g. `[ id:'sample1', single_end:false ]`
-  ## TODO nf-core: Delete / customise this example output
-    - "*.bam":
-        type: file
-        description: Sorted BAM/CRAM/SAM file
-        pattern: "*.{bam,cram,sam}"
-        ontologies:
-          - edam: "http://edamontology.org/format_25722"
-          - edam: "http://edamontology.org/format_2573"
-          - edam: "http://edamontology.org/format_3462"
-          
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. `[ id:'sample1' ]`
+  - deduplicated:
+      type: file
+      description: FASTA file with duplicate sequences removed
+      pattern: "*.fasta"
+      ontologies:
+        - edam: "http://edamontology.org/format_1929"
   - versions:
     - "versions.yml":
         type: file
@@ -67,3 +53,4 @@ authors:
   - "@hverdonk"
 maintainers:
   - "@hverdonk"
+  - "@dcallan"
