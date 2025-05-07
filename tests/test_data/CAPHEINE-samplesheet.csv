@@ -1,0 +1,2 @@
+Sample,Alignment File,Tree File (conditional),Foreground Branches (optional)
+Gene1,Gene1.msa,Gene1.bestTree,"either a regexp to select foreground branches, OR a filepath to a list of foreground branches"
