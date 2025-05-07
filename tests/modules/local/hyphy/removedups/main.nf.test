@@ -2,7 +2,7 @@
 nextflow_process {
 
     name "Test Process HYPHY_REMOVEDUPS"
-    script "../main.nf"
+    script "modules/local/hyphy/removedups/main.nf"
     process "HYPHY_REMOVEDUPS"
 
     tag "modules"

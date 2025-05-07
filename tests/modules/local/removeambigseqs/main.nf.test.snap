@@ -1,0 +1,68 @@
+{
+    "denv1 - fasta - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "DENV1_50seqs"
+                        },
+                        "DENV1_50seqs-clean.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,43ad60638e5e0294ed566e998a4e1e45"
+                ],
+                "cleaned_seqs": [
+                    [
+                        {
+                            "id": "DENV1_50seqs"
+                        },
+                        "DENV1_50seqs-clean.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,43ad60638e5e0294ed566e998a4e1e45"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-05-07T14:57:18.497302"
+    },
+    "denv1 - fasta": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "DENV1_50seqs"
+                        },
+                        "DENV1_50seqs-clean.fasta:md5,13c2cf7dc9f53ad21a5441837a884115"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,43ad60638e5e0294ed566e998a4e1e45"
+                ],
+                "cleaned_seqs": [
+                    [
+                        {
+                            "id": "DENV1_50seqs"
+                        },
+                        "DENV1_50seqs-clean.fasta:md5,13c2cf7dc9f53ad21a5441837a884115"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,43ad60638e5e0294ed566e998a4e1e45"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.6"
+        },
+        "timestamp": "2025-05-07T15:02:31.740796"
+    }
+}
