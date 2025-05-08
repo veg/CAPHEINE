@@ -80,7 +80,8 @@ process HYPHY_LABELTREE_LIST {
         'biocontainers/hyphy:2.5.71--he91c24d_0' }"
 
     input:
-    tuple val(meta), path(in_tree), path(in_list)
+    tuple val(meta), path(in_tree)
+    path(in_list)
 
     output:
     tuple val(meta), path("${meta.id}-labeled.${in_tree.extension}"), emit: labeled_tree

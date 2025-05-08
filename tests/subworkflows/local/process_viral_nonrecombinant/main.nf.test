@@ -10,26 +10,25 @@ nextflow_workflow {
     tag "subworkflows/process_viral_nonrecombinant"
     tag "removeambigseqs"
     tag "cawlign"
-    tag "removedups"
+    tag "hyphy_cln"
     tag "iqtree"
-    tag "labeltree"
+    tag "hyphy_labeltree_list"
 
 
-    // TODO nf-core: Change the test name preferably indicating the test-data and file-format used
     test("denv1 - fasta") {
         when {
             workflow {
                 """
                 input[0] = [
                     [ id:'capsid_protein_C'], // meta map
-                    file('${projectDir}/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true),
+                    file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true),
                 ]
                 input[1] = [
                     [ id:'capsid_protein_C' ],
-                    file('${projectDir}/tests/test_data/capsid_protein_C_DENV1_ref.fasta', checkIfExists: true),
+                    file(projectDir + '/tests/test_data/capsid_protein_C_DENV1_ref.fasta', checkIfExists: true),
                 ]
                 input[2] = [
-                    file('${projectDir}/tests/test_data/pretend-foreground-seqs.txt', checkIfExists: true),
+                    file(projectDir + '/tests/test_data/pretend-foreground-seqs.txt', checkIfExists: true),
                 ]
                 """
             }
@@ -39,10 +38,20 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(workflow.out).match() },
-                { assert workflow.out.aligned.exists() },
-                { assert workflow.out.deduplicated.exists() },
-                { assert workflow.out.phylogeny.exists() },
-                { assert workflow.out.labeled_tree.exists() }
+                { assert path(workflow.out.cleaned[0][1]).exists() },
+                { assert path(workflow.out.cleaned[0][1]).toString().endsWith('-clean.fasta') },
+                { assert path(workflow.out.aligned[0][1]).exists() },
+                { assert path(workflow.out.aligned[0][1]).toString().endsWith('-aligned.fasta') },
+                { assert path(workflow.out.deduplicated[0][1]).exists() },
+                { assert path(workflow.out.deduplicated[0][1]).toString().endsWith('-nodups.fasta') },
+                { assert path(workflow.out.phylogeny[0][1]).exists() },
+                { assert path(workflow.out.phylogeny[0][1]).toString().endsWith('.treefile') },
+                { assert path(workflow.out.labeled_tree[0][1]).exists() },
+                { assert path(workflow.out.labeled_tree[0][1]).toString().endsWith('-labeled.treefile') },
+                { assert path(workflow.out.versions[0]).exists() },
+                { assert path(workflow.out.versions[0]).text.contains('hyphy:') },
+                { assert path(workflow.out.versions[0]).text.contains('iqtree:') },
+                { assert path(workflow.out.versions[0]).text.contains('cawlign:') },
             )
         }
     }

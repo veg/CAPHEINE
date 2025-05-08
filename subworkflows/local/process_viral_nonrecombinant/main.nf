@@ -2,9 +2,9 @@
 
 include { REMOVEAMBIGSEQS } from '../../../modules/local/removeambigseqs/main'
 include { CAWLIGN         } from '../../../modules/local/cawlign/main'
-include { REMOVEDUPS      } from '../../../modules/local/hyphy/removedups/main'
+include { HYPHY_CLN       } from '../../../modules/local/hyphy/cln/main'
 include { IQTREE          } from '../../../modules/local/iqtree/main'
-include { LABELTREE       } from '../../../modules/local/hyphy/labeltree/main'
+include { HYPHY_LABELTREE_LIST       } from '../../../modules/local/hyphy/labeltree/main'
 
 workflow PROCESS_VIRAL_NONRECOMBINANT {
 
@@ -30,12 +30,6 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
     )
     ch_versions = ch_versions.mix(CAWLIGN.out.versions.first())
 
-    // Remove duplicate sequences "-nodups${in_msa.extension}"
-    // REMOVEDUPS (
-    //     CAWLIGN.out.aligned_seqs
-    // )
-    // ch_versions = ch_versions.mix(REMOVEDUPS.out.versions.first())
-
     // Remove duplicate sequences and clean up sequence names "-nodups${in_msa.extension}"
     HYPHY_CLN (
         CAWLIGN.out.aligned_seqs
@@ -45,26 +39,24 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
 
     // Generate phylogenetic tree with IQTree
     // -T [num_cpu_cores] when using multiple cores
-    // [] is so we can avoid passing a guide tree to IQTree
     IQTREE (
-        [REMOVEDUPS.out.deduplicated_seqs, []],
-        -m GTR+I+G
+        HYPHY_CLN.out.deduplicated_seqs
     )
     ch_versions = ch_versions.mix(IQTREE.out.versions.first())
 
     // Label tree with foreground sequences
-    LABELTREE (
+    HYPHY_LABELTREE_LIST (
         IQTREE.out.phylogeny,
         ch_foreground
     )
-    ch_versions = ch_versions.mix(LABELTREE.out.versions.first())
+    ch_versions = ch_versions.mix(HYPHY_LABELTREE_LIST.out.versions.first())
 
     emit:
+    cleaned       = REMOVEAMBIGSEQS.out.cleaned_seqs    // channel: [ val(meta), [ cleaned_sequences ] ]
     aligned       = CAWLIGN.out.aligned_seqs            // channel: [ val(meta), [ aligned_sequences ] ]
-    deduplicated  = REMOVEDUPS.out.deduplicated_seqs    // channel: [ val(meta), [ deduplicated_sequences ] ]
+    deduplicated  = HYPHY_CLN.out.deduplicated_seqs    // channel: [ val(meta), [ deduplicated_sequences ] ]
     tree          = IQTREE.out.phylogeny           // channel: [ val(meta), [ phylogenetic_tree ] ]
-    labeled_tree  = LABELTREE.out.labeled_tree     // channel: [ val(meta), [ labeled_tree ] ]
-
+    labeled_tree  = HYPHY_LABELTREE_LIST.out.labeled_tree     // channel: [ val(meta), [ labeled_tree ] ]
     versions      = ch_versions                    // channel: [ versions.yml ]
 }
 

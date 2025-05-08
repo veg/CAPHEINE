@@ -49,9 +49,10 @@ nextflow_process {
                 { assert snapshot(process.out).match() },
                 { assert path(process.out.deduplicated_seqs[0][1]).exists() },
                 { assert path(process.out.deduplicated_seqs[0][1]).size() > 0 },
-                { assert path(process.out.deduplicated_seqs[0][1]).text.split("\n").count { it.startsWith('>') } == 7 }
+                { assert path(process.out.deduplicated_seqs[0][1]).text.split("\n").count { it.startsWith('>') } == 7 },
                 { assert path(process.out.deduplicated_seqs[0][1]).text.split("\n").every { !it.startsWith('>') || !it.contains('.') && !it.contains('|') } },
-
+                { assert path(process.out.versions[0]).exists() },
+                { assert path(process.out.versions[0]).text.contains('hyphy:') },
             )
         }
     }

@@ -16,7 +16,7 @@ process CAWLIGN {
 
     input:
     tuple val(meta), path(reference)  // gene ID and path to gene reference sequence
-    path(unaligned)  // path to bulk unaligned sequences
+    tuple val(meta), path(unaligned)  // path to bulk unaligned sequences
 
     output:
     tuple val(meta), path("${meta.id}-aligned.fasta"), emit: aligned_seqs
@@ -34,10 +34,10 @@ process CAWLIGN {
     """
     cawlign \\
         -t codon \\
-        -r $reference \\
+        -r ${reference} \\
         -f refmap \\
         -s BLOSUM62 \\
-        \"$unaligned\" \\
+        \"${unaligned}\" \\
         > ${prefix}-aligned.fasta
 
     cat <<-END_VERSIONS > versions.yml

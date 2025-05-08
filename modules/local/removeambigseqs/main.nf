@@ -27,6 +27,7 @@ process REMOVEAMBIGSEQS {
     """
     python ${projectDir}/bin/filter-ambig-sequences.py \\
         -i ${input_seqs} \\
+        -o ${prefix} \\
         ${args}
 
     cat <<-END_VERSIONS > versions.yml
