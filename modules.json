@@ -12,7 +12,7 @@
                     },
                     "iqtree": {
                         "branch": "master",
-                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+                        "git_sha": "2ae11ef01a83c7330c09d08d14d21ff445e32141",
                         "installed_by": ["modules"]
                     },
                     "multiqc": {
