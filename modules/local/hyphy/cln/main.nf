@@ -12,7 +12,7 @@ process HYPHY_CLN {
     tuple val(meta), path(alignment)
 
     output:
-    tuple val(meta), path("${meta.id}-nodups${alignment.extension}"), emit: nodups
+    tuple val(meta), path("${meta.id}-nodups.${alignment.extension}"), emit: deduplicated_seqs
     path "versions.yml"                             , emit: versions
 
     when:
@@ -24,7 +24,7 @@ process HYPHY_CLN {
     // TODO nf-core: If the tool supports multi-threading then you MUST provide the appropriate parameter
     //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
     """
-    hyphy cln Universal ${alignment} "Yes/No" ${prefix}-clean${alignment.extension}
+    hyphy cln Universal ${alignment} "Yes/No" ${prefix}-nodups.${alignment.extension}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -35,12 +35,8 @@ process HYPHY_CLN {
     stub:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    // TODO nf-core: A stub section should mimic the execution of the original module as best as possible
-    //               Have a look at the following examples:
-    //               Simple example: https://github.com/nf-core/modules/blob/818474a292b4860ae8ff88e149fbcda68814114d/modules/nf-core/bcftools/annotate/main.nf#L47-L63
-    //               Complex example: https://github.com/nf-core/modules/blob/818474a292b4860ae8ff88e149fbcda68814114d/modules/nf-core/bedtools/split/main.nf#L38-L54
     """
-    touch ${prefix}-clean${alignment.extension}
+    touch ${prefix}-nodups.${alignment.extension}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

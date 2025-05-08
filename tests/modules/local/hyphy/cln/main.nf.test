@@ -25,14 +25,39 @@ nextflow_process {
         then {
             assertAll(
                 { assert process.success },
-                { assert path(process.out.nodups[0][1]).exists() },
-                { assert path(process.out.nodups[0][1]).size() <= file(projectDir + '/tests/test_data/capsid_protein_C_DENV1-clean.fasta').size() }  // File should be at most the same size as the input, if no duplicates were removed
+                { assert path(process.out.deduplicated_seqs[0][1]).exists() },
+                { assert path(process.out.deduplicated_seqs[0][1]).size() <= file(projectDir + '/tests/test_data/capsid_protein_C_DENV1-clean.fasta').size() }  // File should be at most the same size as the input, if no duplicates were removed
+            )
+        }
+    }
+
+     test("denv1 - fasta") {
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ], // meta map
+                    file(projectDir + '/tests/test_data/DENV1_7seqs_withDups.fasta', checkIfExists: true),
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() },
+                { assert path(process.out.deduplicated_seqs[0][1]).exists() },
+                { assert path(process.out.deduplicated_seqs[0][1]).size() > 0 },
+                { assert path(process.out.deduplicated_seqs[0][1]).text.split("\n").count { it.startsWith('>') } == 7 }
+                { assert path(process.out.deduplicated_seqs[0][1]).text.split("\n").every { !it.startsWith('>') || !it.contains('.') && !it.contains('|') } },
+
             )
         }
     }
 
     // TODO nf-core: Change the test name preferably indicating the test-data and file-format used but keep the " - stub" suffix.
-    test("hyphy_cln - capsid_protein_C_DENV1 - fasta - stub") {
+    test("hyphy_cln - stub") {
         options "-stub"
 
         when {

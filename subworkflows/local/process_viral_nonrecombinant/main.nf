@@ -17,24 +17,31 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
 
     ch_versions = Channel.empty()
 
-    // Remove sequences with ambiguous bases
+    // Remove sequences with ambiguous bases "-clean.fasta"
     REMOVEAMBIGSEQS (
         ch_unaligned
     )
     ch_versions = ch_versions.mix(REMOVEAMBIGSEQS.out.versions.first())
 
-    // Align sequences using cawlign
+    // Align sequences using cawlign "-aligned.fasta"
     CAWLIGN (
         ch_reference,
         REMOVEAMBIGSEQS.out.cleaned_seqs
     )
     ch_versions = ch_versions.mix(CAWLIGN.out.versions.first())
 
-    // Remove duplicate sequences
-    REMOVEDUPS (
+    // Remove duplicate sequences "-nodups${in_msa.extension}"
+    // REMOVEDUPS (
+    //     CAWLIGN.out.aligned_seqs
+    // )
+    // ch_versions = ch_versions.mix(REMOVEDUPS.out.versions.first())
+
+    // Remove duplicate sequences and clean up sequence names "-nodups${in_msa.extension}"
+    HYPHY_CLN (
         CAWLIGN.out.aligned_seqs
     )
-    ch_versions = ch_versions.mix(REMOVEDUPS.out.versions.first())
+    ch_versions = ch_versions.mix(HYPHY_CLN.out.versions.first())
+
 
     // Generate phylogenetic tree with IQTree
     // -T [num_cpu_cores] when using multiple cores
