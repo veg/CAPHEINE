@@ -3,8 +3,8 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { FASTQC                 } from '../modules/nf-core/fastqc/main'
-include { MULTIQC                } from '../modules/nf-core/multiqc/main'
+include { PROCESS_VIRAL_NONRECOMBINANT } from '../subworkflows/local/process_viral_nonrecombinant/main'
+include { HYPHY_ANALYSES         } from '../subworkflows/local/hyphy_analyses/main'
 include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -23,15 +23,24 @@ workflow CAPHEINE {
     main:
 
     ch_versions = Channel.empty()
-    ch_multiqc_files = Channel.empty()
+    ch_processed_files = Channel.empty()
     //
-    // MODULE: Run FastQC
+    // SUBWORKFLOW: Run preprocessing of viral non-recombinant viral data
     //
-    FASTQC (
+    PROCESS_VIRAL_NONRECOMBINANT (
         ch_samplesheet
     )
-    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+    ch_processed_files = ch_processed_files.mix(PROCESS_VIRAL_NONRECOMBINANT.out.zip.collect{it[1]})
+    ch_versions = ch_versions.mix(PROCESS_VIRAL_NONRECOMBINANT.out.versions.first())
+
+    //
+    // SUBWORKFLOW: Run Hyphy Analyses
+    //
+    HYPHY_ANALYSES (
+        ch_processed_files
+    )
+    ch_processed_files = ch_processed_files.mix(HYPHY_ANALYSES.out.zip.collect{it[1]})
+    ch_versions = ch_versions.mix(HYPHY_ANALYSES.out.versions.first())
 
     //
     // Collate and save software versions
@@ -46,7 +55,7 @@ workflow CAPHEINE {
 
 
     //
-    // MODULE: MultiQC
+    // SUBWORKFLOW: MultiQC
     //
     ch_multiqc_config        = Channel.fromPath(
         "$projectDir/assets/multiqc_config.yml", checkIfExists: true)
