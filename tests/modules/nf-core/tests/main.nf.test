@@ -1,7 +1,7 @@
 nextflow_process {
 
     name "Test Process IQTREE"
-    script "modules/nf-core/iqtree/main.nf"
+    script "modules/local/iqtree/main.nf"
     process "IQTREE"
 
     tag "modules"

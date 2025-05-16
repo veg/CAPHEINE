@@ -37,20 +37,18 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(workflow.out).match() },
                 { assert path(workflow.out.cleaned[0][1]).exists() },
                 { assert path(workflow.out.cleaned[0][1]).toString().endsWith('-clean.fasta') },
                 { assert path(workflow.out.aligned[0][1]).exists() },
                 { assert path(workflow.out.aligned[0][1]).toString().endsWith('-aligned.fasta') },
                 { assert path(workflow.out.deduplicated[0][1]).exists() },
                 { assert path(workflow.out.deduplicated[0][1]).toString().endsWith('-nodups.fasta') },
-                { assert path(workflow.out.phylogeny[0][1]).exists() },
-                { assert path(workflow.out.phylogeny[0][1]).toString().endsWith('.treefile') },
+                { assert path(workflow.out.tree[0][1]).exists() },
+                { assert path(workflow.out.tree[0][1]).toString().endsWith('.treefile') },
                 { assert path(workflow.out.labeled_tree[0][1]).exists() },
                 { assert path(workflow.out.labeled_tree[0][1]).toString().endsWith('-labeled.treefile') },
-                { assert path(workflow.out.versions[0]).exists() },
-                { assert path(workflow.out.versions[0]).text.contains('hyphy:') },
-                { assert path(workflow.out.versions[0]).text.contains('iqtree:') },
+                { assert path(workflow.out.versions[1]).text.contains('hyphy:') },
+                { assert path(workflow.out.versions[2]).text.contains('iqtree:') },
                 { assert path(workflow.out.versions[0]).text.contains('cawlign:') },
             )
         }

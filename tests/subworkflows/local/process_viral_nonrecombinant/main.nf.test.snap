@@ -7,53 +7,101 @@
                         {
                             "id": "capsid_protein_C"
                         },
-                        "capsid_protein_C-clean.fasta:md5,c42da16548e22aa5a88002b85473218e"
+                        "capsid_protein_C-clean.fasta:md5,748fecc5186b3e7e6268f67824df69f7"
                     ]
                 ],
                 "1": [
-                    
+                    [
+                        {
+                            "id": "capsid_protein_C"
+                        },
+                        "capsid_protein_C-aligned.fasta:md5,136458917e11d62ae3afab562358e74b"
+                    ]
                 ],
                 "2": [
-                    
+                    [
+                        {
+                            "id": "capsid_protein_C"
+                        },
+                        "capsid_protein_C-nodups.fasta:md5,dbfab3fa12cf0df2563742bfcfedee4f"
+                    ]
                 ],
                 "3": [
-                    
+                    [
+                        {
+                            "id": "capsid_protein_C"
+                        },
+                        "capsid_protein_C.treefile:md5,dbb5a4b69e05683b2b99573b2b60b6cc"
+                    ]
                 ],
                 "4": [
-                    
+                    [
+                        {
+                            "id": "capsid_protein_C"
+                        },
+                        "capsid_protein_C-labeled.treefile:md5,91bb74431cdf45992e8aaf2ee31cf6fa"
+                    ]
                 ],
                 "5": [
+                    "versions.yml:md5,150d0e7f4f5aee1e0abd0235b1baeb39",
+                    "versions.yml:md5,8722116f94d160320cf3db1d8f06218b",
+                    "versions.yml:md5,cf516bf7f5d0f6bea9a1a804c8abfc7f",
+                    "versions.yml:md5,d1e971b8701b6c7dadfe19a932a8134a",
                     "versions.yml:md5,d76aaf361c88cf5c96b01610f987474e"
                 ],
                 "aligned": [
-                    
+                    [
+                        {
+                            "id": "capsid_protein_C"
+                        },
+                        "capsid_protein_C-aligned.fasta:md5,136458917e11d62ae3afab562358e74b"
+                    ]
                 ],
                 "cleaned": [
                     [
                         {
                             "id": "capsid_protein_C"
                         },
-                        "capsid_protein_C-clean.fasta:md5,c42da16548e22aa5a88002b85473218e"
+                        "capsid_protein_C-clean.fasta:md5,748fecc5186b3e7e6268f67824df69f7"
                     ]
                 ],
                 "deduplicated": [
-                    
+                    [
+                        {
+                            "id": "capsid_protein_C"
+                        },
+                        "capsid_protein_C-nodups.fasta:md5,dbfab3fa12cf0df2563742bfcfedee4f"
+                    ]
                 ],
                 "labeled_tree": [
-                    
+                    [
+                        {
+                            "id": "capsid_protein_C"
+                        },
+                        "capsid_protein_C-labeled.treefile:md5,91bb74431cdf45992e8aaf2ee31cf6fa"
+                    ]
                 ],
                 "tree": [
-                    
+                    [
+                        {
+                            "id": "capsid_protein_C"
+                        },
+                        "capsid_protein_C.treefile:md5,dbb5a4b69e05683b2b99573b2b60b6cc"
+                    ]
                 ],
                 "versions": [
+                    "versions.yml:md5,150d0e7f4f5aee1e0abd0235b1baeb39",
+                    "versions.yml:md5,8722116f94d160320cf3db1d8f06218b",
+                    "versions.yml:md5,cf516bf7f5d0f6bea9a1a804c8abfc7f",
+                    "versions.yml:md5,d1e971b8701b6c7dadfe19a932a8134a",
                     "versions.yml:md5,d76aaf361c88cf5c96b01610f987474e"
                 ]
             }
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.6"
+            "nextflow": "25.04.2"
         },
-        "timestamp": "2025-05-08T16:05:02.020207"
+        "timestamp": "2025-05-16T14:13:11.144096"
     }
 }
