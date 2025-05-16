@@ -17,6 +17,8 @@ nextflow_process {
                 input[0] = [
                     [ id:'FBgn0000055_NT_033779.5_10_species_12_seqs'], 
                     file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-unlabeled.fasta.treefile', checkIfExists: true),
+                ]
+                input[1] = [ 
                     file(projectDir + '/tests/test_data/Droso_ingroup.txt', checkIfExists: true)
                 ]
                 """
@@ -26,13 +28,13 @@ nextflow_process {
         then {
             assertAll(
                 { assert process.success },
-                { assert path(process.out.out_tree[0][1]).exists() },
-                { assert path(process.out.out_tree[0][1]).toString().endsWith('.treefile') },
-                { assert process.out.out_tree[0][0] == [id:'FBgn0000055_NT_033779.5_10_species_12_seqs'] },
-                { assert path(process.out.out_tree[0][1]).text.contains('(') }, // crude check for newick
+                { assert path(process.out.labeled_tree[0][1]).exists() },
+                { assert path(process.out.labeled_tree[0][1]).toString().endsWith('.treefile') },
+                { assert process.out.labeled_tree[0][0] == [id:'FBgn0000055_NT_033779.5_10_species_12_seqs'] },
+                { assert path(process.out.labeled_tree[0][1]).text.contains('(') }, // crude check for newick
                 // Check that the output tree matches the expected tree
                 { 
-                    def tree = path(process.out.out_tree[0][1]).text
+                    def tree = path(process.out.labeled_tree[0][1]).text
                     def regex = ~/\{Foreground\}:0\.014817/
                     def regex2 = ~/\{Foreground\}:0\.025516/
                     assert tree =~ regex
@@ -56,6 +58,8 @@ nextflow_process {
                 input[0] = [
                     [ id:'FBgn0000055_NT_033779.5_10_species_12_seqs'], 
                     file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-unlabeled.fasta.treefile', checkIfExists: true),
+                ]
+                input[1] = [ 
                     file(projectDir + '/tests/test_data/Droso_ingroup.txt', checkIfExists: true)
                 ]
                 """
