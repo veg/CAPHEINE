@@ -5,14 +5,14 @@
         "https://github.com/nf-core/modules.git": {
             "modules": {
                 "nf-core": {
+                    "fastavalidator": {
+                        "branch": "master",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+                        "installed_by": ["modules"]
+                    },
                     "fastqc": {
                         "branch": "master",
                         "git_sha": "08108058ea36a63f141c25c4e75f9f872a5b2296",
-                        "installed_by": ["modules"]
-                    },
-                    "iqtree": {
-                        "branch": "master",
-                        "git_sha": "2ae11ef01a83c7330c09d08d14d21ff445e32141",
                         "installed_by": ["modules"]
                     },
                     "multiqc": {
