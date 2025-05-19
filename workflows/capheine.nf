@@ -26,8 +26,18 @@ workflow CAPHEINE {
     ch_versions = Channel.empty()
     ch_unaligned = Channel.empty()
     ch_reference = Channel.empty()
+
+    // preprocessing output channels
     ch_processed_aln = Channel.empty()
     ch_processed_trees = Channel.empty()
+
+    // hyphy output channels
+    ch_fel = Channel.empty()
+    ch_meme = Channel.empty()
+    ch_prime = Channel.empty()
+    ch_busted = Channel.empty()
+    ch_contrastfel = Channel.empty()
+    ch_relax = Channel.empty()
 
     // set up channels from input samplesheet
     ch_input
@@ -96,18 +106,18 @@ workflow CAPHEINE {
     //
     HYPHY_ANALYSES (
         ch_processed_aln,
-        ch_processed_trees
+        ch_processed_trees,
+        (ch_foreground_seqs.size() > 0) ? [ch_foreground_seqs] : ch_foreground_regexp
     )
+    ch_fel      = ch_fel.mix(HYPHY_FEL.out.fel_json)
+    ch_meme     = ch_meme.mix(HYPHY_MEME.out.meme_json)
+    ch_prime    = ch_prime.mix(HYPHY_PRIME.out.prime_json)
+    ch_busted   = ch_busted.mix(HYPHY_BUSTED.out.busted_json)
+    ch_contrastfel = ch_contrastfel.mix(HYPHY_CONTRASTFEL.out.contrastfel_json)
+    ch_relax    = ch_relax.mix(HYPHY_RELAX.out.relax_json)
     ch_versions = ch_versions.mix(HYPHY_ANALYSES.out.versions.first())
 
     //TODO: create a final subworkflow to process the hyphy data into something clean and useful
-
-    emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
-    versions       = ch_versions                 // channel: [ path(versions.yml) ]
-
-
-
-
 
     //
     // Collate and save software versions
@@ -120,54 +130,9 @@ workflow CAPHEINE {
             newLine: true
         ).set { ch_collated_versions }
 
-
-    //
-    // SUBWORKFLOW: run HyPhy analyses
-    //
-    // ch_multiqc_config        = Channel.fromPath(
-    //     "$projectDir/assets/multiqc_config.yml", checkIfExists: true)
-    // ch_multiqc_custom_config = params.multiqc_config ?
-    //     Channel.fromPath(params.multiqc_config, checkIfExists: true) :
-    //     Channel.empty()
-    // ch_multiqc_logo          = params.multiqc_logo ?
-    //     Channel.fromPath(params.multiqc_logo, checkIfExists: true) :
-    //     Channel.empty()
-
-    // summary_params      = paramsSummaryMap(
-    //     workflow, parameters_schema: "nextflow_schema.json")
-    // ch_workflow_summary = Channel.value(paramsSummaryMultiqc(summary_params))
-
-
-    // ch_multiqc_files = ch_multiqc_files.mix(
-    //     ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-    // ch_multiqc_custom_methods_description = params.multiqc_methods_description ?
-    //     file(params.multiqc_methods_description, checkIfExists: true) :
-    //     file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
-    // ch_methods_description                = Channel.value(
-    //     methodsDescriptionText(ch_multiqc_custom_methods_description))
-
-
-    // I think the whole purpose of this section, and the above sections
-    // is to essentially recreate the sample sheet but for MultiQC
-
-
-    // ch_multiqc_files = ch_multiqc_files.mix(ch_collated_versions)
-    // ch_multiqc_files = ch_multiqc_files.mix(
-    //     ch_methods_description.collectFile(
-    //         name: 'methods_description_mqc.yaml',
-    //         sort: true
-    //     )
-    // )
-
-    // MULTIQC (
-    //     ch_multiqc_files.collect(),
-    //     ch_multiqc_config.toList(),
-    //     ch_multiqc_custom_config.toList(),
-    //     ch_multiqc_logo.toList(),
-    //     [],
-    //     []
-    // )
-
+    // TODO: if necessary, emit whatever hyphy emits in the interim before we create the final subworkflow
+    // emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
+    versions       = ch_versions                 // channel: [ path(versions.yml) ]
 
 }
 
