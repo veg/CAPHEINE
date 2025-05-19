@@ -25,7 +25,8 @@ process HYPHY_LABELTREE_REGEXP {
         'biocontainers/hyphy:2.5.71--he91c24d_0' }"
 
     input:
-    tuple val(meta), path(in_tree), val(regexp)
+    tuple val(meta), path(in_tree)
+    val(regexp)
 
     output:
     tuple val(meta), path("${meta.id}-labeled.${in_tree.extension}"), emit: labeled_tree
@@ -38,9 +39,7 @@ process HYPHY_LABELTREE_REGEXP {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     def out_tree = "${prefix}-labeled.${in_tree.extension}"
-    // TODO nf-core: It MUST be possible to pass additional parameters to the tool as a command-line string via the "task.ext.args" directive
-    // TODO nf-core: If the tool supports multi-threading then you MUST provide the appropriate parameter
-    //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
+
     """
     hyphy label-tree \\
         --tree ${in_tree} \\
@@ -94,9 +93,7 @@ process HYPHY_LABELTREE_LIST {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     def out_tree = "${prefix}-labeled.${in_tree.extension}"
-    // TODO nf-core: It MUST be possible to pass additional parameters to the tool as a command-line string via the "task.ext.args" directive
-    // TODO nf-core: If the tool supports multi-threading then you MUST provide the appropriate parameter
-    //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
+
     """
     hyphy label-tree \\
         --tree ${in_tree} \\
@@ -125,3 +122,12 @@ process HYPHY_LABELTREE_LIST {
     END_VERSIONS
     """
 }
+
+
+hyphy label-tree \
+        --tree tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-unlabeled.fasta.treefile \
+        --regexp 'D_su*' \
+        --label 'Foreground' \
+        --output "FBgn0000055_NT_033779.5_10_species_12_seqs-labeled.fasta.treefile" \
+        --internal-nodes 'All descendants' \
+        --leaf-nodes 'Skip'
