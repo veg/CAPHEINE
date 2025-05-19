@@ -15,8 +15,8 @@ process CAWLIGN {
         'biocontainers/cawlign:0.1.11--he91c24d_0' }"
 
     input:
-    tuple val(meta), path(reference)  // gene ID and path to gene reference sequence
-    tuple val(meta), path(unaligned)  // path to bulk unaligned sequences
+    tuple val(meta), path(reference)  // gene ID and path to gene reference sequence in FASTA format
+    tuple val(meta), path(unaligned)  // path to bulk unaligned sequences in FASTA format
 
     output:
     tuple val(meta), path("${meta.id}-aligned.fasta"), emit: aligned_seqs
@@ -26,11 +26,8 @@ process CAWLIGN {
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    // TODO nf-core: It MUST be possible to pass additional parameters to the tool as a command-line string via the "task.ext.args" directive
-    // TODO nf-core: If the tool supports multi-threading then you MUST provide the appropriate parameter
-    //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
+    
     """
     cawlign \\
         -t codon \\
