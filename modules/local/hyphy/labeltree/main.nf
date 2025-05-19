@@ -122,12 +122,3 @@ process HYPHY_LABELTREE_LIST {
     END_VERSIONS
     """
 }
-
-
-hyphy label-tree \
-        --tree tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-unlabeled.fasta.treefile \
-        --regexp 'D_su*' \
-        --label 'Foreground' \
-        --output "FBgn0000055_NT_033779.5_10_species_12_seqs-labeled.fasta.treefile" \
-        --internal-nodes 'All descendants' \
-        --leaf-nodes 'Skip'
