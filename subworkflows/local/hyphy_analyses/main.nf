@@ -13,7 +13,6 @@ workflow HYPHY_ANALYSES {
     ch_branch_set // channel: branch_set
 
     main:
-
     ch_versions = Channel.empty()
 
     // Run FEL analysis
@@ -44,29 +43,43 @@ workflow HYPHY_ANALYSES {
     )
     ch_versions = ch_versions.mix(HYPHY_BUSTED.out.versions.first())
 
-    // Run Contrast-FEL analysis
-    HYPHY_CONTRASTFEL (
-        ch_aln,
-        ch_tree,
-        ch_branch_set
-    )
-    ch_versions = ch_versions.mix(HYPHY_CONTRASTFEL.out.versions.first())
+    // Run Contrast-FEL and RELAX analyses if branch set is provided
+    if (ch_branch_set) {
+        // confirm that the tree is labeled
+        ch_tree
+            .map { it ->
+                def tree = it[1]
+                if (tree.text.contains("Foreground")) {
+                    true
+                } else {
+                    error "No branches were labeled as 'Foreground' in the tree file ${tree}, but branch set was provided."
+                }
+            }
 
-    // Run RELAX analysis
-    HYPHY_RELAX (
-        ch_aln,
-        ch_tree,
-        ch_branch_set
-    )
-    ch_versions = ch_versions.mix(HYPHY_RELAX.out.versions.first())
+        // Run Contrast-FEL analysis
+        HYPHY_CONTRASTFEL (
+            ch_aln,
+            ch_tree,
+            "Foreground"
+        )
+        ch_versions = ch_versions.mix(HYPHY_CONTRASTFEL.out.versions.first())
+
+        // Run RELAX analysis
+        HYPHY_RELAX (
+            ch_aln,
+            ch_tree,
+            "Foreground"
+        )
+        ch_versions = ch_versions.mix(HYPHY_RELAX.out.versions.first())
+    }
 
     emit:
     fel_json      = HYPHY_FEL.out.fel_json          // channel: [ val(meta), [ fel_json ] ]
     meme_json     = HYPHY_MEME.out.meme_json        // channel: [ val(meta), [ meme_json ] ]
     prime_json    = HYPHY_PRIME.out.prime_json      // channel: [ val(meta), [ prime_json ] ]
     busted_json   = HYPHY_BUSTED.out.busted_json    // channel: [ val(meta), [ busted_json ] ]
-    contrastfel_json = HYPHY_CONTRASTFEL.out.contrastfel_json // channel: [ val(meta), [ contrastfel_json ] ]
-    relax_json    = HYPHY_RELAX.out.relax_json      // channel: [ val(meta), [ relax_json ] ]
+    contrastfel_json = ch_branch_set ? HYPHY_CONTRASTFEL.out.contrastfel_json : [] // channel: [ val(meta), [ contrastfel_json ] ]
+    relax_json    = ch_branch_set ? HYPHY_RELAX.out.relax_json : []                // channel: [ val(meta), [ relax_json ] ]
     versions      = ch_versions                     // channel: [ versions.yml ]
 }
 
