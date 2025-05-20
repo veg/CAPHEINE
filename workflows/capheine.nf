@@ -72,11 +72,16 @@ workflow CAPHEINE {
         error "ERROR: either a file of foreground sequences OR a regular expression matching foreground sequences can be provided, not both. Please ensure that only one parameter is provided."
     } else if (params.foreground_seqs) {
         ch_foreground_seqs         = file(params.foreground_seqs, checkIfExists: true)
+        ch_foreground_regexp       = []
+        has_foreground_seqs        = true
     } else if (params.foreground_regexp) {
+        ch_foreground_seqs         = []
         ch_foreground_regexp       = params.foreground_regexp
+        has_foreground_seqs        = true
     } else {
         ch_foreground_seqs         = []
         ch_foreground_regexp       = []
+        has_foreground_seqs        = false
     }
 
     //
@@ -92,7 +97,8 @@ workflow CAPHEINE {
     PROCESS_VIRAL_NONRECOMBINANT (
         ch_unaligned,
         ch_reference,
-        (ch_foreground_seqs.size() > 0) ? [ch_foreground_seqs] : ch_foreground_regexp
+        ch_foreground_seqs,
+        ch_foreground_regexp
     )
     ch_processed_aln = ch_processed_aln.mix(PROCESS_VIRAL_NONRECOMBINANT.out.deduplicated)
     ch_processed_trees = ch_processed_trees.mix(PROCESS_VIRAL_NONRECOMBINANT.out.labeled_tree)
@@ -107,7 +113,7 @@ workflow CAPHEINE {
     HYPHY_ANALYSES (
         ch_processed_aln,
         ch_processed_trees,
-        (ch_foreground_seqs.size() > 0) ? [ch_foreground_seqs] : ch_foreground_regexp
+        has_foreground_seqs
     )
     ch_fel      = ch_fel.mix(HYPHY_FEL.out.fel_json)
     ch_meme     = ch_meme.mix(HYPHY_MEME.out.meme_json)

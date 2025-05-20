@@ -1,0 +1,62 @@
+nextflow_workflow {
+
+    name "Test Workflow CAPHEINE"
+    script "workflows/capheine.nf"
+    workflow "CAPHEINE"
+
+    test("Should run without failures") {
+
+        when {
+            params {
+                // define parameters here. Example:
+                // outdir = "tests/results"
+            }
+            workflow {
+                // TODO: format the input like a single row of a sample sheet
+                """
+                input[0] = [
+                    [ id:'capsid_protein_C'], // meta map
+                    file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true),
+                ]
+                input[1] = [
+                    [ id:'capsid_protein_C' ],
+                    file(projectDir + '/tests/test_data/capsid_protein_C_DENV1_ref.fasta', checkIfExists: true),
+                ]
+                input[2] = []
+                input[3] = [
+                    '*_2023_09_*',
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                // Check FEL output exists
+                { assert path(workflow.out.fel_json[0][1]).exists() },
+                { assert path(workflow.out.fel_json[0][1]).text.contains('FEL') },
+                // Check MEME output exists
+                { assert path(workflow.out.meme_json[0][1]).exists() },
+                { assert path(workflow.out.meme_json[0][1]).text.contains('MEME') },
+                // Check PRIME output exists
+                { assert path(workflow.out.prime_json[0][1]).exists() },
+                { assert path(workflow.out.prime_json[0][1]).text.contains('PRIME') },
+                // Check BUSTED output exists
+                { assert path(workflow.out.busted_json[0][1]).exists() },
+                { assert path(workflow.out.busted_json[0][1]).text.contains('BUSTED') },
+                // Check Contrast-FEL output exists
+                { assert path(workflow.out.contrastfel_json[0][1]).exists() },
+                { assert path(workflow.out.contrastfel_json[0][1]).text.contains('Contrast-FEL') },
+                // Check RELAX output exists
+                { assert path(workflow.out.relax_json[0][1]).exists() },
+                { assert path(workflow.out.relax_json[0][1]).text.contains('RELAX') },
+                // Check versions file
+                { assert path(workflow.out.versions[0]).exists() },
+                { assert workflow.out.versions.size() == 12 }
+            )
+        }
+
+    }
+
+}
