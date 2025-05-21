@@ -12,19 +12,13 @@ nextflow_workflow {
                 // outdir = "tests/results"
             }
             workflow {
-                // TODO: format the input like a single row of a sample sheet
+                // TODO: fix input format & ensure input format matches planned sample sheet format
                 """
-                input[0] = [
-                    [ id:'capsid_protein_C'], // meta map
+                input = [
+                    'capsid_protein_C',
                     file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true),
-                ]
-                input[1] = [
-                    [ id:'capsid_protein_C' ],
                     file(projectDir + '/tests/test_data/capsid_protein_C_DENV1_ref.fasta', checkIfExists: true),
-                ]
-                input[2] = []
-                input[3] = [
-                    '*_2023_09_*',
+                    '*_2023_09_*'
                 ]
                 """
             }
