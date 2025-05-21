@@ -53,12 +53,13 @@ workflow HYPHY_CAPHEINE {
     )
     emit:
     //multiqc_report = CAPHEINE.out.multiqc_report // channel: /path/to/multiqc_report.html
-    fel_results      = CAPHEINE.out.ch_fel
-    meme_results     = CAPHEINE.out.ch_meme
-    prime_results    = CAPHEINE.out.ch_prime
-    busted_results   = CAPHEINE.out.ch_busted
-    contrastfel_results = CAPHEINE.out.ch_contrastfel
-    relax_results    = CAPHEINE.out.ch_relax
+    fel_results      = CAPHEINE.out.fel_results
+    meme_results     = CAPHEINE.out.meme_results
+    prime_results    = CAPHEINE.out.prime_results
+    busted_results   = CAPHEINE.out.busted_results
+    contrastfel_results = CAPHEINE.out.contrastfel_results
+    relax_results    = CAPHEINE.out.relax_results
+    versions       = CAPHEINE.out.versions
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

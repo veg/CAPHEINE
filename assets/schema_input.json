@@ -27,10 +27,17 @@
                 "pattern": "^\\S+\\.f(ast)?a$",
                 "errorMessage": "Reference sequence file must be provided and must have extension '.fa' or '.fasta'"
             },
-            "foreground": {
+            "foreground_seqs": {
                 "type": "string",
-                "pattern": "^\\S+$",
-                "errorMessage": "Foreground must be a valid file path or regular expression"
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.txt$",
+                "errorMessage": "Foreground must be a valid file path to a text file"
+            },
+            "foreground_regexp": {
+                "type": "string",
+                "pattern": "^(?:(?:\\[|\\]|[^\\[\\]]|\\\\[\\[\\]])*$",
+                "errorMessage": "Foreground must be a valid regular expression"
             }
         },
         "required": ["sample", "raw_sequences", "ref_sequence"]
