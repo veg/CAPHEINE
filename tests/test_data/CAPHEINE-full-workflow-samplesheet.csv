@@ -1,2 +1,2 @@
-Sample,Raw sequences,Reference Genome
-Species 1,reads.fasta,genome.gb
+sample,raw_sequences,ref_sequence,foreground
+capsid_protein_C,/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-raw-seqs.fasta,/Users/hverdonk/nf-core-capheine/tests/test_data/capsid_protein_C_DENV1_ref.fasta,*_2023_09_*

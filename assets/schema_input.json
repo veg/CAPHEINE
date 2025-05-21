@@ -13,21 +13,26 @@
                 "errorMessage": "Sample name must be provided and cannot contain spaces",
                 "meta": ["id"]
             },
-            "fastq_1": {
+            "raw_sequences": {
                 "type": "string",
                 "format": "file-path",
                 "exists": true,
-                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "pattern": "^\\S+\\.f(ast)?a$",
+                "errorMessage": "Raw sequences file must be provided and must have extension '.fa' or '.fasta'"
             },
-            "fastq_2": {
+            "ref_sequence": {
                 "type": "string",
                 "format": "file-path",
                 "exists": true,
-                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "pattern": "^\\S+\\.f(ast)?a$",
+                "errorMessage": "Reference sequence file must be provided and must have extension '.fa' or '.fasta'"
+            },
+            "foreground": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Foreground must be a valid file path or regular expression"
             }
         },
-        "required": ["sample", "fastq_1"]
+        "required": ["sample", "raw_sequences", "ref_sequence"]
     }
 }

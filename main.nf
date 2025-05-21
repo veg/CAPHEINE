@@ -17,9 +17,6 @@ include { CAPHEINE  } from './workflows/capheine'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_capheine_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_capheine_pipeline'
 include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_capheine_pipeline'
-// include { MEME } from './modules/nf-core/meme/main.nf'
-// include { PRIME } from './modules/nf-core/prime/main.nf'
-// include { BUSTED } from './modules/nf-core/busted/main.nf'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -41,7 +38,7 @@ include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_caph
 //
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
-workflow NFCORE_CAPHEINE {
+workflow HYPHY_CAPHEINE {
 
     take:
     samplesheet // channel: samplesheet read in from --input
@@ -55,7 +52,13 @@ workflow NFCORE_CAPHEINE {
         samplesheet
     )
     emit:
-    multiqc_report = CAPHEINE.out.multiqc_report // channel: /path/to/multiqc_report.html
+    //multiqc_report = CAPHEINE.out.multiqc_report // channel: /path/to/multiqc_report.html
+    fel_results      = CAPHEINE.out.ch_fel
+    meme_results     = CAPHEINE.out.ch_meme
+    prime_results    = CAPHEINE.out.ch_prime
+    busted_results   = CAPHEINE.out.ch_busted
+    contrastfel_results = CAPHEINE.out.ch_contrastfel
+    relax_results    = CAPHEINE.out.ch_relax
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -81,21 +84,21 @@ workflow {
     //
     // WORKFLOW: Run main workflow
     //
-    NFCORE_CAPHEINE (
+    HYPHY_CAPHEINE (
         PIPELINE_INITIALISATION.out.samplesheet
     )
-    //
-    // SUBWORKFLOW: Run completion tasks
-    //
-    PIPELINE_COMPLETION (
-        params.email,
-        params.email_on_fail,
-        params.plaintext_email,
-        params.outdir,
-        params.monochrome_logs,
-        params.hook_url,
-        NFCORE_CAPHEINE.out.multiqc_report
-    )
+    // //
+    // // SUBWORKFLOW: Run completion tasks
+    // //
+    // PIPELINE_COMPLETION (
+    //     params.email,
+    //     params.email_on_fail,
+    //     params.plaintext_email,
+    //     params.outdir,
+    //     params.monochrome_logs,
+    //     params.hook_url,
+    //     HYPHY_CAPHEINE.out.multiqc_report
+    // )
 }
 
 /*

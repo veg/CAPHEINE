@@ -1,0 +1,21 @@
+nextflow_pipeline {
+
+    name "Test Workflow main.nf"
+    script "main.nf"
+
+    test("Should run without failures") {
+
+        when {
+            params {
+                input = "/Users/hverdonk/nf-core-capheine/tests/test_data/CAPHEINE-full-workflow-samplesheet.csv"
+                outdir = "/Users/hverdonk/nf-core-capheine/tests/test_results"
+            }
+        }
+
+        then {
+            assert workflow.success
+        }
+
+    }
+
+}
