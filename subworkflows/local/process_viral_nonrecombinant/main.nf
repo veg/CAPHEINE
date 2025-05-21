@@ -1,5 +1,6 @@
 // Subworkflow to process viral non-recombinant sequences
 
+include { FASTAVALIDATOR         } from '../../../modules/nf-core/fastavalidator/main'
 include { REMOVEAMBIGSEQS } from '../../../modules/local/removeambigseqs/main'
 include { CAWLIGN         } from '../../../modules/local/cawlign/main'
 include { HYPHY_CLN       } from '../../../modules/local/hyphy/cln/main'
@@ -18,6 +19,12 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
     main:
     ch_versions = Channel.empty()
     ch_out_tree = Channel.empty()
+
+    // Validate unaligned sequences file
+    FASTAVALIDATOR(
+        ch_unaligned
+    )
+    ch_versions = ch_versions.mix(FASTAVALIDATOR.out.versions)
 
     // Remove sequences with ambiguous bases "-clean.fasta"
     REMOVEAMBIGSEQS (
