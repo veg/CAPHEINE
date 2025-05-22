@@ -35,9 +35,7 @@
                 "errorMessage": "Foreground must be a valid file path to a text file"
             },
             "foreground_regexp": {
-                "type": "string",
-                "pattern": "^(?:(?:\\[|\\]|[^\\[\\]]|\\\\[\\[\\]])*$",
-                "errorMessage": "Foreground must be a valid regular expression"
+                "type": "string"
             }
         },
         "required": ["sample", "raw_sequences", "ref_sequence"]
