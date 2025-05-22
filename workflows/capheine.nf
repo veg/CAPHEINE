@@ -50,9 +50,9 @@ workflow CAPHEINE {
             }
             return true
         }
-        .map {
-            meta, fasta, ref ->
-                [ meta, file(fasta) ]
+        .map { it ->
+            def (meta, fasta, ref, foreground_seqs, foreground_regexp) = it
+            [ meta, file(fasta) ]
         }
         .set { ch_unaligned }
 
@@ -64,9 +64,9 @@ workflow CAPHEINE {
             }
             return true
         }
-        .map {
-            meta, fasta, ref ->
-                [ meta, file(ref) ]
+        .map { it ->
+            def (meta, fasta, ref, foreground_seqs, foreground_regexp) = it
+            [ meta, file(ref) ]
         }
         .set { ch_reference }
 
