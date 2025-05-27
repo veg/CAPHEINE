@@ -1,6 +1,6 @@
 {
-    "name": "nf-core/capheine",
-    "homePage": "https://github.com/nf-core/capheine",
+    "name": "CAPHEINE",
+    "homePage": "https://github.com/veg/CAPHEINE",
     "repos": {
         "https://github.com/nf-core/modules.git": {
             "modules": {

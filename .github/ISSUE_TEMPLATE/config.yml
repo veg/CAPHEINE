@@ -4,4 +4,4 @@ contact_links:
     about: Please join the nf-core community here
   - name: "Slack #capheine channel"
     url: https://nfcore.slack.com/channels/capheine
-    about: Discussion about the nf-core/capheine pipeline
+    about: Discussion about the CAPHEINE pipeline

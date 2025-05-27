@@ -7,7 +7,7 @@ nextflow_pipeline {
 
         when {
             params {
-                input = "/Users/hverdonk/nf-core-capheine/tests/test_data/CAPHEINE-full-workflow-samplesheet.csv"
+                input = "/Users/hverdonk/nf-core-capheine/assets/samplesheet.csv"
                 outdir = "/Users/hverdonk/nf-core-capheine/tests/test_results"
             }
         }

@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/capheine/master/assets/schema_input.json",
-    "title": "nf-core/capheine pipeline - params.input schema",
+    "$id": "https://raw.githubusercontent.com/CAPHEINE/master/assets/schema_input.json",
+    "title": "CAPHEINE pipeline - params.input schema",
     "description": "Schema for the file provided with params.input",
     "type": "array",
     "items": {

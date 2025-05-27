@@ -1,5 +1,5 @@
 //
-// Subworkflow with functionality specific to the nf-core/capheine pipeline
+// Subworkflow with functionality specific to the CAPHEINE pipeline
 //
 
 /*
