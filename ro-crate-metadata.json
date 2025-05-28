@@ -98,7 +98,7 @@
                     "@id": ".prettierignore"
                 }
             ],
-            "isBasedOn": "https://github.com/hverdonk/capheine",
+            "isBasedOn": "https://github.com/veg/CAPHEINE",
             "license": "MIT",
             "mainEntity": {
                 "@id": "main.nf"
@@ -162,7 +162,7 @@
                 "@id": "https://nf-co.re/"
             },
             "url": [
-                "https://github.com/hverdonk/capheine",
+                "https://github.com/veg/CAPHEINE",
                 "https://nf-co.re/veg/CAPHEINE/1.1/"
             ],
             "version": [
@@ -198,7 +198,7 @@
             "@id": "#e0a04e61-bd09-4e57-b024-61aab8b3d57e",
             "@type": "TestInstance",
             "name": "GitHub Actions workflow for testing veg/CAPHEINE",
-            "resource": "repos/hverdonk/capheine/actions/workflows/ci.yml",
+            "resource": "repos/veg/CAPHEINE/actions/workflows/ci.yml",
             "runsOn": {
                 "@id": "https://w3id.org/ro/terms/test#GithubService"
             },
