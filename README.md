@@ -62,7 +62,7 @@ Each row represents a single reference gene, with the raw sequences to be aligne
 Now, you can run the pipeline using:
 
 ```bash
-nextflow run capheine \
+nextflow run veg/CAPHEINE \
    -profile <docker/singularity/.../institute> \
    --input samplesheet.csv \
    --outdir <OUTDIR>
@@ -72,6 +72,16 @@ nextflow run capheine \
 > Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).
 
 For more details and further functionality, please refer to the [usage documentation](docs/usage.md).
+
+## Testing the pipeline
+
+To test the pipeline, you can run it with the `-profile test` option. This will run the pipeline with a minimal test dataset to check that it completes without any syntax errors.
+
+```bash
+nextflow run veg/CAPHEINE \
+-profile test,docker \
+--outdir <OUTDIR>
+```
 
 ## Pipeline output
 

@@ -7,7 +7,7 @@ on:
 jobs:
   run-platform:
     name: Run AWS tests
-    if: github.repository == 'hverdonk/CAPHEINE'
+    if: github.repository == 'veg/CAPHEINE'
     runs-on: ubuntu-latest
     steps:
       # Launch workflow using Seqera Platform CLI tool action

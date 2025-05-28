@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/hverdonk/CAPHEINE/master/nextflow_schema.json",
-    "title": "hverdonk/CAPHEINE pipeline parameters",
+    "$id": "https://raw.githubusercontent.com/veg/CAPHEINE/master/nextflow_schema.json",
+    "title": "veg/CAPHEINE pipeline parameters",
     "description": "Automated evolutionary annotation of existing datasets using Nextflow",
     "type": "object",
     "$defs": {
