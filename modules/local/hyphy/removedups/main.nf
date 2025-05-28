@@ -5,14 +5,10 @@ process HYPHY_REMOVEDUPS {
     tag "$meta.id"
     label 'process_single'
 
-    // TODO nf-core: List required Conda package(s).
-    //               Software MUST be pinned to channel (i.e. "bioconda"), version (i.e. "1.10").
-    //               For Conda, the build (i.e. "h9402c20_2") must be EXCLUDED to support installation on different operating systems.
-    // TODO nf-core: See section in main README for further information regarding finding and adding container addresses to the section below.
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/YOUR-TOOL-HERE':
-        'biocontainers/YOUR-TOOL-HERE' }"
+        'https://depot.galaxyproject.org/singularity/hyphy:2.5.73--he91c24d_0':
+        'biocontainers/hyphy:2.5.73--he91c24d_0' }"
 
     input:
     tuple val(meta), path(in_msa)
