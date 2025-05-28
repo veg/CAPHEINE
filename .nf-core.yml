@@ -2,7 +2,25 @@ repository_type: pipeline
 
 nf_core_version: 3.2.1
 
-lint: {}
+lint:
+  pipeline_name_conventions: false
+  nextflow_config:
+    - manifest.name
+    - manifest.homePage
+  files_exist:
+    - CODE_OF_CONDUCT.md
+  files_unchanged:
+    - CODE_OF_CONDUCT.md
+    - LICENSE.md
+    - .github/CONTRIBUTING.md
+    - .github/ISSUE_TEMPLATE/bug_report.yml
+    - .github/ISSUE_TEMPLATE/feature_request.yml
+    - .github/PULL_REQUEST_TEMPLATE.md
+    - .github/workflows/branch.yml
+    - assets/email_template.html
+    - assets/email_template.txt
+    - assets/sendmail_template.txt
+    - docs/README.md
 
 template:
   org: nf-core
