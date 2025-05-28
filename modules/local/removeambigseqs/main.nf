@@ -8,8 +8,8 @@ process REMOVEAMBIGSEQS {
     // TODO nf-core: See section in main README for further information regarding finding and adding container addresses to the section below.
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/biopython:1.85--py313h90d716c_1':
-        'biocontainers/biopython:1.85--py313h90d716c_1' }"
+        'https://depot.galaxyproject.org/singularity/biopython:1.79':
+        'biocontainers/biopython:1.79' }"
 
     input:
     tuple val(meta), path(input_seqs)
