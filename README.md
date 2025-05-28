@@ -1,7 +1,7 @@
 <h1>
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/images/nf-core-capheine_logo_dark.png">
-    <img alt="CAPHEINE" src="docs/images/nf-core-capheine_logo_light.png">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/CAPHEINE-logo.png">
+    <img alt="CAPHEINE" src="docs/images/CAPHEINE-logo.png">
   </picture>
 </h1>
 
