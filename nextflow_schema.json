@@ -19,15 +19,26 @@
                     "schema": "assets/schema_input.json",
                     "mimetype": "text/csv",
                     "pattern": "^\\S+\\.csv$",
-                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
                     "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/capheine/usage#samplesheet-input).",
-                    "fa_icon": "fas fa-file-csv"
+                    "fa_icon": "fas fa-file-csv",
+                    "description": "Path to comma-separated file containing information about the samples in the experiment."
                 },
                 "outdir": {
                     "type": "string",
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
                     "fa_icon": "fas fa-folder-open"
+                },
+                "foreground_seqs": {
+                    "type": "string",
+                    "fa_icon": "fas fa-file",
+                    "format": "file-path",
+                    "description": "Path to newline-separated file containing fasta sequence identifiers for the foreground sequences."
+                },
+                "foreground_regexp": {
+                    "type": "string",
+                    "description": "Regular expression to match fasta sequence identifiers of foreground sequences.",
+                    "fa_icon": "fas fa-font"
                 },
                 "email": {
                     "type": "string",

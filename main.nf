@@ -42,6 +42,8 @@ workflow HYPHY_CAPHEINE {
 
     take:
     samplesheet // channel: samplesheet read in from --input
+    foreground_seqs // channel: path(foreground_sequences.fasta)
+    foreground_regexp // channel: string
 
     main:
 
@@ -49,7 +51,9 @@ workflow HYPHY_CAPHEINE {
     // WORKFLOW: Run pipeline
     //
     CAPHEINE (
-        samplesheet
+        samplesheet,
+        foreground_seqs,
+        foreground_regexp
     )
     emit:
     multiqc_report = CAPHEINE.out.multiqc_report // channel: /path/to/multiqc_report.html
@@ -86,7 +90,9 @@ workflow {
     // WORKFLOW: Run main workflow
     //
     HYPHY_CAPHEINE (
-        PIPELINE_INITIALISATION.out.samplesheet
+        PIPELINE_INITIALISATION.out.samplesheet,
+        params.foreground_seqs,
+        params.foreground_regexp
     )
     //
     // SUBWORKFLOW: Run completion tasks

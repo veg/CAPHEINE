@@ -22,6 +22,8 @@ workflow CAPHEINE {
 
     take:
     ch_input    // channel: [ meta, path(raw_sequences.fasta), path(reference_sequence.fasta) ]. Input is directly from the samplesheet, via --input
+    ch_foreground_seqs // channel: path(foreground_sequences.fasta)
+    ch_foreground_regexp // channel: string
 
     main:
     ch_multiqc_files = Channel.empty()

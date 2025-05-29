@@ -79,7 +79,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
             if (tree.text.contains("Foreground")) {
                 true
             } else {
-                println "[WARN] No internal branches were labeled in the tree file ${tree}. Check your foreground sequences."
+                //println "[WARN] No internal branches were labeled in the tree file ${tree}. Check your foreground sequences."
                 log.warn "No internal branches were labeled in the tree file ${tree}. Check your foreground sequences."
             }
         }

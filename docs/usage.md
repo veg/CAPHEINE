@@ -6,7 +6,7 @@
 
 ## Samplesheet input
 
-You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 5 columns, and a header row as shown in the examples below.
+You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
 
 ```bash
 --input '[path to samplesheet file]'
@@ -14,14 +14,14 @@ You will need to create a samplesheet with information about the samples you wou
 
 ### Full samplesheet
 
-The samplesheet can have as many columns as you desire; however, there is a strict requirement for the first 5 columns to match those defined in the table below.
+The samplesheet can have as many columns as you desire; however, there is a strict requirement for the first 3 columns to match those defined in the table below.
 
 A final samplesheet file may look something like the one below. The example below shows the same dataset of raw sequences being aligned to two different reference genes, with (potentially) different foreground taxa.
 
 ```csv title="samplesheet.csv"
-sample,raw_sequences,ref_sequence,foreground_seqs,foreground_regexp
-Gene1,raw-seqs.fasta,Gene1_ref.fasta,,foreground_regexp
-Gene2,raw-seqs.fasta,Gene2_ref.fasta,foreground_taxa.txt,
+sample,raw_sequences,ref_sequence
+Gene1,raw-seqs.fasta,Gene1_ref.fasta
+Gene2,raw-seqs.fasta,Gene2_ref.fasta
 ```
 
 | Column    | Description                                                                                                                                                                            |
@@ -29,8 +29,6 @@ Gene2,raw-seqs.fasta,Gene2_ref.fasta,foreground_taxa.txt,
 | `sample`  | Custom sample name. Spaces and other special characters in sample names are automatically converted to underscores (`_`). |
 | `raw_sequences` | Full path to FASTA file containing raw sequences to be aligned to the reference. |
 | `ref_sequence` | Full path to FASTA file containing the reference gene sequence. |
-| `foreground_seqs` | Full path to a text file containing a newline-separated list of foreground taxa (optional). |
-| `foreground_regexp` | Regular expression to match foreground taxa (optional). |
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 
@@ -42,7 +40,17 @@ The typical command for running the pipeline is as follows:
 nextflow run CAPHEINE --input ./samplesheet.csv --outdir ./results -profile docker
 ```
 
-This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
+The pipeline can also be run with a specified set of foreground sequences, whose evolution can be compared to all hold-out sequences. Foreground sequences can be specified in two ways:
+1. As a list
+```bash
+nextflow run CAPHEINE --input ./samplesheet.csv --outdir ./results --foreground_seqs /path/to/fasta_ID_list.txt -profile docker
+```
+2. As a regular expression
+```bash
+nextflow run CAPHEINE --input ./samplesheet.csv --outdir ./results --foreground_regexp "[A-Z]+[0-9]+" -profile docker
+```
+
+All of the above commands will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
 
 Note that the pipeline will create the following files in your working directory:
 
