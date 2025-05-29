@@ -29,7 +29,7 @@ process HYPHY_LABELTREE_REGEXP {
     val(regexp)
 
     output:
-    tuple val(meta), path("${meta.id}-labeled.${in_tree.extension}"), emit: labeled_tree
+    tuple val(meta), path("LABELTREE/${meta.id}-labeled.${in_tree.extension}"), emit: labeled_tree
     path "versions.yml"                                             , emit: versions
 
     when:
@@ -41,11 +41,13 @@ process HYPHY_LABELTREE_REGEXP {
     def out_tree = "${prefix}-labeled.${in_tree.extension}"
 
     """
+    mkdir -p LABELTREE
+
     hyphy label-tree \\
         --tree ${in_tree} \\
         --regexp '${regexp}' \\
         --label 'Foreground' \\
-        --output "${out_tree}" \\
+        --output LABELTREE/${out_tree} \\
         --internal-nodes 'All descendants' \\
         --leaf-nodes 'Skip'
 
@@ -60,7 +62,8 @@ process HYPHY_LABELTREE_REGEXP {
     def prefix = task.ext.prefix ?: "${meta.id}"
     def out_tree = "${prefix}-labeled.${in_tree.extension}"
     """
-    touch ${out_tree}
+    mkdir -p LABELTREE
+    touch LABELTREE/${out_tree}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -83,7 +86,7 @@ process HYPHY_LABELTREE_LIST {
     path(in_list)
 
     output:
-    tuple val(meta), path("${meta.id}-labeled.${in_tree.extension}"), emit: labeled_tree
+    tuple val(meta), path("LABELTREE/${meta.id}-labeled.${in_tree.extension}"), emit: labeled_tree
     path "versions.yml"                                             , emit: versions
 
     when:
@@ -95,11 +98,13 @@ process HYPHY_LABELTREE_LIST {
     def out_tree = "${prefix}-labeled.${in_tree.extension}"
 
     """
+    mkdir -p LABELTREE
+
     hyphy label-tree \\
         --tree ${in_tree} \\
         --list ${in_list} \\
         --label 'Foreground' \\
-        --output "${out_tree}" \\
+        --output LABELTREE/${out_tree} \\
         --internal-nodes 'All descendants' \\
         --leaf-nodes 'Skip'
 
@@ -114,7 +119,8 @@ process HYPHY_LABELTREE_LIST {
     def prefix = task.ext.prefix ?: "${meta.id}"
     def out_tree = "${prefix}-labeled.${in_tree.extension}"
     """
-    touch ${out_tree}
+    mkdir -p LABELTREE
+    touch LABELTREE/${out_tree}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -14,8 +14,8 @@ process HYPHY_REMOVEDUPS {
     tuple val(meta), path(in_msa)
 
     output:
-    tuple val(meta), path("${meta.id}-nodups${in_msa.extension}"), emit: deduplicated_seqs
-    path "versions.yml"                                          , emit: versions
+    tuple val(meta), path("REMOVEDUPS/${meta.id}-nodups.${in_msa.extension}"), emit: deduplicated_seqs
+    path "versions.yml"                                                     , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -26,9 +26,11 @@ process HYPHY_REMOVEDUPS {
 
 
     """
+    mkdir -p REMOVEDUPS
+
     hyphy remove-duplicates \\
         --msa ${in_msa} \\
-        --output "${meta.id}-nodups${in_msa.extension}"
+        --output REMOVEDUPS/${meta.id}-nodups.${in_msa.extension}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -41,7 +43,8 @@ process HYPHY_REMOVEDUPS {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${meta.id}-nodups${in_msa.extension}
+    mkdir -p REMOVEDUPS
+    touch REMOVEDUPS/${meta.id}-nodups.${in_msa.extension}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
