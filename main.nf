@@ -52,7 +52,7 @@ workflow HYPHY_CAPHEINE {
         samplesheet
     )
     emit:
-    //multiqc_report = CAPHEINE.out.multiqc_report // channel: /path/to/multiqc_report.html
+    multiqc_report = CAPHEINE.out.multiqc_report // channel: /path/to/multiqc_report.html
     fel_results      = CAPHEINE.out.fel_results
     meme_results     = CAPHEINE.out.meme_results
     prime_results    = CAPHEINE.out.prime_results
@@ -88,18 +88,18 @@ workflow {
     HYPHY_CAPHEINE (
         PIPELINE_INITIALISATION.out.samplesheet
     )
-    // //
-    // // SUBWORKFLOW: Run completion tasks
-    // //
-    // PIPELINE_COMPLETION (
-    //     params.email,
-    //     params.email_on_fail,
-    //     params.plaintext_email,
-    //     params.outdir,
-    //     params.monochrome_logs,
-    //     params.hook_url,
-    //     HYPHY_CAPHEINE.out.multiqc_report
-    // )
+    //
+    // SUBWORKFLOW: Run completion tasks
+    //
+    PIPELINE_COMPLETION (
+        params.email,
+        params.email_on_fail,
+        params.plaintext_email,
+        params.outdir,
+        params.monochrome_logs,
+        params.hook_url,
+        HYPHY_CAPHEINE.out.multiqc_report
+    )
 }
 
 /*
