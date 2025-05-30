@@ -6,7 +6,7 @@
 //               e.g. single-end/paired-end data MUST also be defined and evaluated appropriately.
 
 process CAWLIGN {
-    tag "$meta.id"
+    tag "${reference.baseName}"
     label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
@@ -15,18 +15,18 @@ process CAWLIGN {
         'biocontainers/cawlign:0.1.11--he91c24d_0' }"
 
     input:
-    tuple val(meta), path(reference)  // gene ID and path to gene reference sequence in FASTA format
-    tuple val(meta), path(unaligned)  // path to bulk unaligned sequences in FASTA format
+    path reference  // path to gene reference sequence in FASTA format
+    path unaligned  // path to bulk unaligned sequences in FASTA format
 
     output:
-    tuple val(meta), path("${meta.id}-aligned.fasta"), emit: aligned_seqs
-    path "versions.yml"                              , emit: versions
+    tuple val(reference.baseName), path("${reference.baseName}-aligned.fasta") , emit: aligned_seqs
+    path "versions.yml"                                , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: reference.baseName
     
     """
     cawlign \\
@@ -45,7 +45,7 @@ process CAWLIGN {
 
     stub:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: reference.baseName
     """
     touch ${prefix}-aligned.fasta
 

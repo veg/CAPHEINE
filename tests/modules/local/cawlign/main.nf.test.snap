@@ -4,21 +4,17 @@
             {
                 "0": [
                     [
-                        {
-                            "id": "capsid_protein_C"
-                        },
-                        "capsid_protein_C-aligned.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "capsid_protein_C_DENV1_ref",
+                        "capsid_protein_C_DENV1_ref-aligned.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "1": [
                     "versions.yml:md5,88ee5b45390e03ae064c8b63f67702cf"
                 ],
-                "aligned": [
+                "aligned_seqs": [
                     [
-                        {
-                            "id": "capsid_protein_C"
-                        },
-                        "capsid_protein_C-aligned.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "capsid_protein_C_DENV1_ref",
+                        "capsid_protein_C_DENV1_ref-aligned.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "versions": [
@@ -28,8 +24,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.5"
+            "nextflow": "25.04.2"
         },
-        "timestamp": "2025-04-17T15:58:06.67572"
+        "timestamp": "2025-05-30T17:48:08.09535"
     }
 }

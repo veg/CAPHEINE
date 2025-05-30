@@ -14,10 +14,7 @@ nextflow_process {
         when {
             process {
                 """
-                input[0] = [
-                    [ id: 'capsid_protein_C' ],
-                    file(projectDir + '/tests/test_data/capsid_protein_C_DENV1.fasta', checkIfExists: true)
-                ]
+                input[0] = file(projectDir + '/tests/test_data/capsid_protein_C_DENV1_ref.fasta', checkIfExists: true)
                 input[1] = file(projectDir + '/tests/test_data/DENV1_50seqs.fasta', checkIfExists: true)
                 """
             }
@@ -25,8 +22,9 @@ nextflow_process {
         then {
             assertAll(
                 { assert process.success },
-                { assert path(process.out.aligned[0][1]).exists() },
-                { assert path(process.out.aligned[0][1]).size() > 0 }
+                { assert path(process.out.aligned_seqs[0][1]).exists() },
+                { assert path(process.out.aligned_seqs[0][1]).size() > 0 },
+                { assert path(process.out.aligned_seqs[0][1]).getFileName().toString().startsWith(process.out.aligned_seqs[0][0].toString()) }
             )
         }
     }
@@ -39,10 +37,7 @@ nextflow_process {
         when {
             process {
                 """
-                input[0] = [
-                    [ id: 'capsid_protein_C' ],
-                    file(projectDir + '/tests/test_data/capsid_protein_C_DENV1.fasta', checkIfExists: true)
-                ]
+                input[0] = file(projectDir + '/tests/test_data/capsid_protein_C_DENV1_ref.fasta', checkIfExists: true)
                 input[1] = file(projectDir + '/tests/test_data/DENV1_50seqs.fasta', checkIfExists: true)
                 """
             }
