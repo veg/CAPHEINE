@@ -1,50 +1,39 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
 name: "seqkit_split"
-## TODO nf-core: Add a description of the module and list keywords
-description: write your description here
+description: "Split FASTA/Q files into multiple files based on sequence IDs"
 keywords:
-  - sort
-  - example
+  - split
+  - fasta
+  - fastq
+  - sequences
   - genomics
 tools:
   - "seqkit":
       description: "a cross-platform and ultrafast toolkit for FASTA/Q file manipulation"
-      homepage: "None"
-      documentation: "None"
-      tool_dev_url: "None"
-      doi: ""
+      homepage: "https://bioinf.shenwei.me/seqkit/"
+      documentation: "https://bioinf.shenwei.me/seqkit/usage/#split"
+      tool_dev_url: "https://github.com/shenwei356/seqkit"
+      doi: "10.1371/journal.pone.0163962"
       licence: ['MIT']
       identifier: biotools:seqkit
 
-## TODO nf-core: Add a description of all of the variables used as input
 input:
-  #
-  ## TODO nf-core: Delete / customise this example input
-    - bam:
-        type: file
-        description: Sorted BAM/CRAM/SAM file
-        pattern: "*.{bam,cram,sam}"
-        ontologies:
-          - edam: "http://edamontology.org/format_25722"
-          - edam: "http://edamontology.org/format_2573"
-          - edam: "http://edamontology.org/format_3462"
-          
+  - ref_fasta:
+      type: file
+      description: Input FASTA/Q file to be split
+      pattern: "*.{fasta,fa,fastq,fq}"
+      ontologies:
+        - edam: "http://edamontology.org/format_1929"
+        - edam: "http://edamontology.org/format_1930"
 
-## TODO nf-core: Add a description of all of the variables used as output
 output:
-  - bam:
-  #
-  ## TODO nf-core: Delete / customise this example output
-    - "*.bam":
-        type: file
-        description: Sorted BAM/CRAM/SAM file
-        pattern: "*.{bam,cram,sam}"
-        ontologies:
-          - edam: "http://edamontology.org/format_25722"
-          - edam: "http://edamontology.org/format_2573"
-          - edam: "http://edamontology.org/format_3462"
-          
+  - "*.fasta":
+      type: file
+      description: Split FASTA files, one per sequence
+      pattern: "*.fasta"
+      ontologies:
+        - edam: "http://edamontology.org/format_1929"
   - versions:
     - "versions.yml":
         type: file
