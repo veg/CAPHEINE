@@ -12,10 +12,10 @@ include { HYPHY_LABELTREE_REGEXP     } from '../../../modules/local/hyphy/labelt
 workflow PROCESS_VIRAL_NONRECOMBINANT {
 
     take:
-    ch_unaligned      // channel: [ path(unaligned_sequences.fasta) ]
-    ch_reference      // channel: [ path(reference_genes.fasta) ]
-    ch_foreground_seqs     // channel: [ path(foreground_sequences_list) ]
-    ch_foreground_regexp   // channel: [ val('regexp') ]
+    ch_unaligned      // channel: path(unaligned_sequences.fasta)
+    ch_reference      // channel: path(reference_genes.fasta)
+    ch_foreground_list     // channel: path(foreground_sequences_list)
+    ch_foreground_regexp   // channel: val('regexp')
 
     main:
     ch_versions = Channel.empty()
@@ -70,10 +70,10 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
         ch_out_tree = HYPHY_LABELTREE_REGEXP.out.labeled_tree
         ch_versions = ch_versions.mix(HYPHY_LABELTREE_REGEXP.out.versions.first())
     }
-    if (ch_foreground_seqs) {
+    if (ch_foreground_list) {
         HYPHY_LABELTREE_LIST (
             IQTREE.out.phylogeny,
-            ch_foreground_seqs
+            ch_foreground_list
         )
         ch_out_tree = HYPHY_LABELTREE_LIST.out.labeled_tree
         ch_versions = ch_versions.mix(HYPHY_LABELTREE_LIST.out.versions.first())
