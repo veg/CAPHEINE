@@ -16,14 +16,8 @@ nextflow_workflow {
         when {
             workflow {
                 """
-                input[0] = [
-                    [ id:'capsid_protein_C'], // meta map
-                    file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true),
-                ]
-                input[1] = [
-                    [ id:'capsid_protein_C' ],
-                    file(projectDir + '/tests/test_data/capsid_protein_C_DENV1_ref.fasta', checkIfExists: true),
-                ]
+                input[0] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
+                input[1] = file(projectDir + '/tests/test_data/pretend_DENV1_ref.fasta', checkIfExists: true)
                 input[2] = []
                 input[3] = []
                 """
@@ -39,7 +33,7 @@ nextflow_workflow {
                 { assert path(workflow.out.tree[0][1]).toString().endsWith('.treefile') },
                 // no labeled tree should be generated
                 { assert !path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
-                { assert workflow.out.versions.size() == 4 },
+                { assert workflow.out.versions.size() == 5 },
                 // hacky check, but this test should also generate a warning that no internal branches could be labeled
             )
         }
@@ -49,18 +43,10 @@ nextflow_workflow {
         when {
             workflow {
                 """
-                input[0] = [
-                    [ id:'capsid_protein_C'], // meta map
-                    file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true),
-                ]
-                input[1] = [
-                    [ id:'capsid_protein_C' ],
-                    file(projectDir + '/tests/test_data/capsid_protein_C_DENV1_ref.fasta', checkIfExists: true),
-                ]
+                input[0] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
+                input[1] = file(projectDir + '/tests/test_data/pretend_DENV1_ref.fasta', checkIfExists: true)
                 input[2] = []
-                input[3] = [
-                    'dontmatch',
-                ]
+                input[3] = ['dontmatch']
                 """
             }
         }
@@ -82,17 +68,9 @@ nextflow_workflow {
         when {
             workflow {
                 """
-                input[0] = [
-                    [ id:'capsid_protein_C'], // meta map
-                    file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true),
-                ]
-                input[1] = [
-                    [ id:'capsid_protein_C' ],
-                    file(projectDir + '/tests/test_data/capsid_protein_C_DENV1_ref.fasta', checkIfExists: true),
-                ]
-                input[2] = [
-                    file(projectDir + '/tests/test_data/pretend-foreground-seqs.txt', checkIfExists: true),
-                ]
+                input[0] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
+                input[1] = file(projectDir + '/tests/test_data/pretend_DENV1_ref.fasta', checkIfExists: true)
+                input[2] = file(projectDir + '/tests/test_data/pretend-foreground-seqs.txt', checkIfExists: true)
                 input[3] = []
                 """
             }
@@ -116,18 +94,10 @@ nextflow_workflow {
         when {
             workflow {
                 """
-                input[0] = [
-                    [ id:'capsid_protein_C'], // meta map
-                    file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true),
-                ]
-                input[1] = [
-                    [ id:'capsid_protein_C' ],
-                    file(projectDir + '/tests/test_data/capsid_protein_C_DENV1_ref.fasta', checkIfExists: true),
-                ]
+                input[0] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
+                input[1] = file(projectDir + '/tests/test_data/pretend_DENV1_ref.fasta', checkIfExists: true)
                 input[2] = []
-                input[3] = [
-                    '*_2023_09_*',
-                ]
+                input[3] = ['*_2023_09_*']
                 """
             }
         }

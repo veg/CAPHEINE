@@ -1,6 +1,7 @@
 // Subworkflow to process viral non-recombinant sequences
 
 include { FASTAVALIDATOR         } from '../../../modules/nf-core/fastavalidator/main'
+include { SEQKIT_SPLIT } from '../../../modules/local/seqkit/split/main'
 include { REMOVEAMBIGSEQS } from '../../../modules/local/removeambigseqs/main'
 include { CAWLIGN         } from '../../../modules/local/cawlign/main'
 include { HYPHY_CLN       } from '../../../modules/local/hyphy/cln/main'
@@ -11,8 +12,8 @@ include { HYPHY_LABELTREE_REGEXP     } from '../../../modules/local/hyphy/labelt
 workflow PROCESS_VIRAL_NONRECOMBINANT {
 
     take:
-    ch_unaligned      // channel: [ val(meta), [ unaligned_sequences ] ]
-    ch_reference      // channel: [ val(meta), [ reference_gene ] ]
+    ch_unaligned      // channel: [ path(unaligned_sequences.fasta) ]
+    ch_reference      // channel: [ path(reference_genes.fasta) ]
     ch_foreground_seqs     // channel: [ path(foreground_sequences_list) ]
     ch_foreground_regexp   // channel: [ val('regexp') ]
 
@@ -20,11 +21,11 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
     ch_versions = Channel.empty()
     ch_out_tree = Channel.empty()
 
-    // Validate unaligned sequences file
-    FASTAVALIDATOR(
-        ch_unaligned
-    )
-    ch_versions = ch_versions.mix(FASTAVALIDATOR.out.versions)
+    // // Validate unaligned sequences file
+    // FASTAVALIDATOR(
+    //     ch_unaligned
+    // )
+    // ch_versions = ch_versions.mix(FASTAVALIDATOR.out.versions)
 
     // Remove sequences with ambiguous bases "-clean.fasta"
     REMOVEAMBIGSEQS (
@@ -32,16 +33,22 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
     )
     ch_versions = ch_versions.mix(REMOVEAMBIGSEQS.out.versions.first())
 
-    // Align sequences using cawlign "-aligned.fasta"
+    // Split reference gene into individual genes
+    SEQKIT_SPLIT (
+        ch_reference
+    )
+    ch_versions = ch_versions.mix(SEQKIT_SPLIT.out.versions.first())
+
+    // Align sequences using cawlign "-aligned.fasta" Adds metadata to the sequences
     CAWLIGN (
-        ch_reference,
+        SEQKIT_SPLIT.out.gene_fastas.flatten(),
         REMOVEAMBIGSEQS.out.cleaned_seqs
     )
     ch_versions = ch_versions.mix(CAWLIGN.out.versions.first())
 
     // Remove duplicate sequences and clean up sequence names "-nodups${in_msa.extension}"
     HYPHY_CLN (
-        CAWLIGN.out.aligned_seqs
+        CAWLIGN.out.aligned_seqs.map { gene_name, file -> [[id: gene_name], file] }  // Convert metadata string to metadata map
     )
     ch_versions = ch_versions.mix(HYPHY_CLN.out.versions.first())
 
