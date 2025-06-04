@@ -31,12 +31,18 @@ workflow PIPELINE_INITIALISATION {
     monochrome_logs   // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir            //  string: The output directory where the results will be saved
-    input             //  string: Path to input samplesheet
+    reference_genes   //  string: Path to FASTA of gene reference sequences
+    unaligned_seqs    //  string: Path to FASTA of unaligned DNA sequences
+    //input             //  string: Path to input samplesheet
 
     main:
 
     ch_versions = Channel.empty()
-    ch_samplesheet = Channel.empty()
+    //ch_samplesheet = Channel.empty()
+    ch_reference_genes = Channel.empty()
+    ch_unaligned_seqs = Channel.empty()
+    ch_foreground_list = Channel.empty()
+    ch_foreground_regexp = Channel.empty()
 
     //
     // Print version and exit if required and dump pipeline parameters to JSON file
@@ -70,12 +76,29 @@ workflow PIPELINE_INITIALISATION {
     validateInputParameters()
 
     //
-    // Create channel from input file provided through params.input
+    // Create channels from input files provided through params.input
     //
-    ch_samplesheet = Channel.fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
+    // ch_samplesheet = Channel.fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
+    ch_reference_genes = file(reference_genes, checkIfExists: true)
+    ch_unaligned_seqs = file(unaligned_seqs, checkIfExists: true)
+    
+    if (params.foreground_list) {
+        ch_foreground_list         = file(params.foreground_list, checkIfExists: true)
+        ch_foreground_regexp       = []
+    } else if (params.foreground_regexp) {
+        ch_foreground_list         = []
+        ch_foreground_regexp       = params.foreground_regexp
+    } else {
+        ch_foreground_list         = []
+        ch_foreground_regexp       = []
+    }
 
     emit:
-    samplesheet = ch_samplesheet
+    //samplesheet = ch_samplesheet
+    ref_genes = ch_reference_genes
+    unaligned = ch_unaligned_seqs
+    foreground_list = ch_foreground_list
+    foreground_regexp = ch_foreground_regexp
     versions    = ch_versions
 }
 
@@ -136,7 +159,7 @@ workflow PIPELINE_COMPLETION {
 // Check and validate pipeline parameters
 //
 def validateInputParameters() {
-    genomeExistsError()
+    foregroundError()
 }
 
 //
@@ -180,6 +203,18 @@ def genomeExistsError() {
             "  Genome '${params.genome}' not found in any config files provided to the pipeline.\n" +
             "  Currently, the available genome keys are:\n" +
             "  ${params.genomes.keySet().join(", ")}\n" +
+            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        error(error_string)
+    }
+}
+//
+// Exit pipeline if two different methods of specifying foreground sequences are provided
+//
+def foregroundError() {
+    if (params.foreground_list && params.foreground_regexp) {
+        def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            "  ERROR: either a file of foreground sequences OR a regular expression matching foreground " +
+            "  sequences can be provided, not both. Please ensure that only one parameter is provided." +
             "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
         error(error_string)
     }
