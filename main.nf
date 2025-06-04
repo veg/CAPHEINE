@@ -41,18 +41,21 @@ include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_caph
 workflow HYPHY_CAPHEINE {
 
     take:
-    samplesheet // channel: samplesheet read in from --input
-    foreground_seqs // channel: path(foreground_sequences.fasta)
+    //samplesheet // channel: samplesheet read in from --input
+    ch_reference // channel: path(reference_genes.fasta)
+    ch_unaligned // channel: path(unaligned_sequences.fasta)
+    foreground_list // channel: path(foreground_sequences.fasta)
     foreground_regexp // channel: string
 
     main:
-
     //
     // WORKFLOW: Run pipeline
     //
+    // samplesheet was replaced with ch_reference and ch_unaligned
     CAPHEINE (
-        samplesheet,
-        foreground_seqs,
+        ch_reference,
+        ch_unaligned,
+        foreground_list,
         foreground_regexp
     )
     emit:
@@ -83,16 +86,19 @@ workflow {
         params.monochrome_logs,
         args,
         params.outdir,
-        params.input
+        params.reference_genes,
+        params.unaligned_seqs
     )
 
     //
     // WORKFLOW: Run main workflow
     //
+    //PIPELINE_INITIALISATION.out.samplesheet replaced with params.reference_genes and params.unaligned_seqs
     HYPHY_CAPHEINE (
-        PIPELINE_INITIALISATION.out.samplesheet,
-        params.foreground_seqs,
-        params.foreground_regexp
+        PIPELINE_INITIALISATION.out.ref_genes,
+        PIPELINE_INITIALISATION.out.unaligned,
+        PIPELINE_INITIALISATION.out.foreground_list,
+        PIPELINE_INITIALISATION.out.foreground_regexp
     )
     //
     // SUBWORKFLOW: Run completion tasks

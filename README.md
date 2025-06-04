@@ -43,29 +43,60 @@
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
-<!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
-     Explain what rows and columns represent. For instance (please edit as appropriate):  -->
+### Input Parameters
 
-First, prepare a samplesheet with your input data that looks as follows:
+The main input parameters for the CAPHEINE pipeline are:
 
-`samplesheet.csv`:
+| Parameter             | Description                                                                 | Required |
+|-----------------------|-----------------------------------------------------------------------------|----------|
+| `--reference_genes`   | Path to FASTA file of gene reference sequences                              | Yes      |
+| `--unaligned_seqs`    | Path to FASTA file of unaligned DNA sequences                               | Yes      |
+| `--outdir`            | Output directory for results                                                | Yes      |
+| `--email`             | Email address for completion summary                                        | No       |
+| `--multiqc_title`     | Title for the MultiQC report                                                | No       |
+| `--validate_params`   | Boolean, validate parameters against the schema at runtime (default: true)  | No       |
+| `--monochrome_logs`   | Boolean, do not use colored log outputs                                     | No       |
+| `--hook_url`          | URL for notification hooks (if used)                                        | No       |
+| `-params-file`        | YAML/JSON file specifying parameters (recommended for reproducibility)      | No       |
 
-```csv title="samplesheet.csv"
-sample,raw_sequences,ref_sequence,foreground_seqs,foreground_regexp
-Gene1,raw-seqs.fasta,Gene1_ref.fasta,,foreground_regexp
-Gene2,raw-seqs.fasta,Gene2_ref.fasta,foreground_taxa.txt,
-```
+Additional advanced and institutional config parameters are available; see the documentation for details.
 
-Each row represents a single reference gene, with the raw sequences to be aligned to it, and optional foreground taxa. The `foreground_seqs` column should contain a text file with a newline-separated list of foreground taxa, while the `foreground_regexp` column should contain a regular expression to match foreground taxa. Only one of these columns should be provided per row.
-
-
-Now, you can run the pipeline using:
+In general, you can run the pipeline with:
 
 ```bash
-nextflow run veg/CAPHEINE \
+nextflow run CAPHEINE \
    -profile <docker/singularity/.../institute> \
-   --input samplesheet.csv \
+   --reference_genes <reference_genes.fasta> \
+   --unaligned_seqs <unaligned_seqs.fasta> \
    --outdir <OUTDIR>
+```
+
+Where:
+- `reference_genes`: Path to FASTA file of gene reference sequences.
+- `unaligned_seqs`: Path to FASTA file of unaligned DNA sequences.
+- `outdir`: Output directory for results.
+
+You can also provide additional parameters:
+- `foreground_list`: (Optional) Path to a text file with a newline-separated list of foreground taxa.
+- `foreground_regexp`: (Optional) Regular expression to match foreground taxa.
+
+Only one of `foreground_list` or `foreground_regexp` should be provided per row.
+
+You can also run CAPHEINE using a parameter file (recommended for reproducibility):
+
+```bash
+nextflow run CAPHEINE \
+   -profile <docker/singularity/.../institute> \
+   -params-file params.yaml
+```
+
+Where `params.yaml` might contain:
+
+```yaml
+treference_genes: './reference_genes.fasta'
+unaligned_seqs: './unaligned_seqs.fasta'
+outdir: './results/'
+# other parameters as needed
 ```
 
 > [!WARNING]
@@ -78,7 +109,7 @@ For more details and further functionality, please refer to the [usage documenta
 To test the pipeline, you can run it with the `-profile test` option. This will run the pipeline with a minimal test dataset to check that it completes without any syntax errors.
 
 ```bash
-nextflow run veg/CAPHEINE \
+nextflow run CAPHEINE \
 -profile test,docker \
 --outdir <OUTDIR>
 ```

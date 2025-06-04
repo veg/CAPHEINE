@@ -21,15 +21,14 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_caph
 workflow CAPHEINE {
 
     take:
-    ch_input    // channel: [ meta, path(raw_sequences.fasta), path(reference_sequence.fasta) ]. Input is directly from the samplesheet, via --input
-    ch_foreground_seqs // channel: path(foreground_sequences.fasta)
+    ch_reference
+    ch_unaligned
+    ch_foreground_list // channel: path(foreground_sequences.fasta)
     ch_foreground_regexp // channel: string
 
     main:
     ch_multiqc_files = Channel.empty()
     ch_versions = Channel.empty()
-    ch_unaligned = Channel.empty()
-    ch_reference = Channel.empty()
 
     // preprocessing output channels
     ch_processed_aln = Channel.empty()
@@ -43,56 +42,17 @@ workflow CAPHEINE {
     ch_contrastfel = Channel.empty()
     ch_relax = Channel.empty()
 
-    // set up channels from input samplesheet
-    ch_input
-        .filter { it ->
-            if (it[1].size() == 0) {
-                println "Skipping entry with no raw sequences: ${it}"
-                return false
-            }
-            return true
-        }
-        .map { it ->
-            def (meta, fasta, ref, foreground_seqs, foreground_regexp) = it
-            [ meta, file(fasta) ]
-        }
-        .set { ch_unaligned }
-
-    ch_input
-        .filter { it ->
-            if (it[2].size() == 0) {
-                println "Skipping entry with no reference sequence: ${it}"
-                return false
-            }
-            return true
-        }
-        .map { it ->
-            def (meta, fasta, ref, foreground_seqs, foreground_regexp) = it
-            [ meta, file(ref) ]
-        }
-        .set { ch_reference }
-
-    if (params.foreground_seqs && params.foreground_regexp) {
-        error "ERROR: either a file of foreground sequences OR a regular expression matching foreground sequences can be provided, not both. Please ensure that only one parameter is provided."
-    } else if (params.foreground_seqs) {
-        ch_foreground_seqs         = file(params.foreground_seqs, checkIfExists: true)
-        ch_foreground_regexp       = []
-        has_foreground_seqs        = true
-    } else if (params.foreground_regexp) {
-        ch_foreground_seqs         = []
-        ch_foreground_regexp       = params.foreground_regexp
-        has_foreground_seqs        = true
+    if (params.foreground_list || params.foreground_regexp) {
+        has_foreground_list        = true
     } else {
-        ch_foreground_seqs         = []
-        ch_foreground_regexp       = []
-        has_foreground_seqs        = false
+        has_foreground_list        = false
     }
 
     //
     // VALIDATE REFERENCE SEQUENCE
     //
-    FASTAVALIDATOR(ch_reference)
-    ch_versions = ch_versions.mix(FASTAVALIDATOR.out.versions)
+    // FASTAVALIDATOR(ch_reference)
+    // ch_versions = ch_versions.mix(FASTAVALIDATOR.out.versions)
 
     //
     // SUBWORKFLOW: Run preprocessing of viral non-recombinant viral data
@@ -100,7 +60,7 @@ workflow CAPHEINE {
     PROCESS_VIRAL_NONRECOMBINANT (
         ch_unaligned,
         ch_reference,
-        ch_foreground_seqs,
+        ch_foreground_list,
         ch_foreground_regexp
     )
     ch_processed_aln = ch_processed_aln.mix(PROCESS_VIRAL_NONRECOMBINANT.out.deduplicated)
@@ -112,8 +72,7 @@ workflow CAPHEINE {
     //
     HYPHY_ANALYSES (
         ch_processed_aln,
-        ch_processed_trees,
-        has_foreground_seqs
+        ch_processed_trees
     )
     ch_fel      = ch_fel.mix(HYPHY_ANALYSES.out.fel_json)
     ch_meme     = ch_meme.mix(HYPHY_ANALYSES.out.meme_json)

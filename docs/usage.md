@@ -4,51 +4,51 @@
 
 <!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
 
-## Samplesheet input
+## Input files and parameters
 
-You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
+The CAPHEINE pipeline requires you to provide input files directly via command line flags. There is no longer a samplesheet input.
 
-```bash
---input '[path to samplesheet file]'
-```
+- `--reference_genes` (required): Path to a FASTA file containing reference gene sequences.
+- `--unaligned_seqs` (required): Path to a FASTA file containing unaligned DNA sequences.
+- `--outdir` (required): Output directory for results.
+- `--foreground_list` (optional): Path to a text file with a newline-separated list of foreground taxa.
+- `--foreground_regexp` (optional): Regular expression string to match foreground taxa.
 
-### Full samplesheet
+Only one of `--foreground_list` or `--foreground_regexp` should be provided per run (if either is used).
 
-The samplesheet can have as many columns as you desire; however, there is a strict requirement for the first 3 columns to match those defined in the table below.
-
-A final samplesheet file may look something like the one below. The example below shows the same dataset of raw sequences being aligned to two different reference genes, with (potentially) different foreground taxa.
-
-```csv title="samplesheet.csv"
-sample,raw_sequences,ref_sequence
-Gene1,raw-seqs.fasta,Gene1_ref.fasta
-Gene2,raw-seqs.fasta,Gene2_ref.fasta
-```
-
-| Column    | Description                                                                                                                                                                            |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`  | Custom sample name. Spaces and other special characters in sample names are automatically converted to underscores (`_`). |
-| `raw_sequences` | Full path to FASTA file containing raw sequences to be aligned to the reference. |
-| `ref_sequence` | Full path to FASTA file containing the reference gene sequence. |
-
-An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
-
-## Running the pipeline
-
-The typical command for running the pipeline is as follows:
+Example usage:
 
 ```bash
-nextflow run CAPHEINE --input ./samplesheet.csv --outdir ./results -profile docker
+nextflow run CAPHEINE \
+  --reference_genes ./reference_genes.fasta \
+  --unaligned_seqs ./unaligned_seqs.fasta \
+  --outdir ./results \
+  -profile docker
 ```
 
-The pipeline can also be run with a specified set of foreground sequences, whose evolution can be compared to all hold-out sequences. Foreground sequences can be specified in two ways:
-1. As a list
+With a foreground taxa list:
+
 ```bash
-nextflow run CAPHEINE --input ./samplesheet.csv --outdir ./results --foreground_list /path/to/fasta_ID_list.txt -profile docker
+nextflow run CAPHEINE \
+  --reference_genes ./reference_genes.fasta \
+  --unaligned_seqs ./unaligned_seqs.fasta \
+  --foreground_list ./foreground_taxa.txt \
+  --outdir ./results \
+  -profile docker
 ```
-2. As a regular expression
+
+With a foreground taxa regular expression:
+
 ```bash
-nextflow run CAPHEINE --input ./samplesheet.csv --outdir ./results --foreground_regexp "[A-Z]+[0-9]+" -profile docker
+nextflow run CAPHEINE \
+  --reference_genes ./reference_genes.fasta \
+  --unaligned_seqs ./unaligned_seqs.fasta \
+  --foreground_regexp '^Homo.*' \
+  --outdir ./results \
+  -profile docker
 ```
+
+
 
 All of the above commands will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
 
@@ -77,9 +77,12 @@ nextflow run CAPHEINE -profile docker -params-file params.yaml
 with:
 
 ```yaml title="params.yaml"
-input: './samplesheet.csv'
+reference_genes: './reference_genes.fasta'
+unaligned_seqs: './unaligned_seqs.fasta'
 outdir: './results/'
-<...>
+# Optional (uncomment to use):
+# foreground_list: './foreground_taxa.txt'
+# foreground_regexp: '^Homo.*'
 ```
 
 You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).

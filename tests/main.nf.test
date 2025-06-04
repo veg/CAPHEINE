@@ -3,12 +3,49 @@ nextflow_pipeline {
     name "Test Workflow main.nf"
     script "main.nf"
 
-    test("Should run without failures") {
+    test("Simple test, no foreground provided") {
 
         when {
             params {
-                input = "/Users/hverdonk/nf-core-capheine/tests/test_data/samplesheet.csv"
-                outdir = "/Users/hverdonk/nf-core-capheine/tests/test_results"
+                outdir = "tests/test_results"
+                reference_genes = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend_DENV1_ref.fasta'
+                unaligned_seqs = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-raw-seqs.fasta'
+            }
+        }
+
+        then {
+            assert workflow.success
+        }
+
+    }
+
+    test("Forbid foreground_list AND foreground_regexp") {
+
+        when {
+            params {
+                outdir = "tests/test_results"
+                reference_genes = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend_DENV1_ref.fasta'
+                unaligned_seqs = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-raw-seqs.fasta'
+                foreground_list = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-foreground-seqs.txt'
+                foreground_regexp = '_2023_09_'
+                outdir = "tests/test_results"
+            }
+        }
+
+        then {
+            assert !workflow.success
+        }
+
+    }
+
+    test("Foreground - regexp provided") {
+
+        when {
+            params {
+                reference_genes = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend_DENV1_ref.fasta'
+                unaligned_seqs = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-raw-seqs.fasta'
+                foreground_regexp = '_2023_09_'
+                outdir = "tests/test_results"
             }
         }
 
