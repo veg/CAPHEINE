@@ -14,6 +14,10 @@ nextflow_workflow {
 
     test("denv1 - fasta - no tree labeling") {
         when {
+            params {
+                foreground_list = null
+                foreground_regexp = null
+            }
             workflow {
                 """
                 input[0] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
@@ -41,6 +45,11 @@ nextflow_workflow {
     
     test("denv1 - fasta - nonmatching foreground regexp") {
         when {
+            params {
+                foreground_list = null
+                foreground_regexp = ['dontmatch']
+            }
+
             workflow {
                 """
                 input[0] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
@@ -66,6 +75,11 @@ nextflow_workflow {
 
     test("denv1 - fasta - foreground list") {
         when {
+            params {
+                foreground_list = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-foreground-seqs.txt'
+                foreground_regexp = null
+            }
+
             workflow {
                 """
                 input[0] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
@@ -92,6 +106,10 @@ nextflow_workflow {
 
     test("denv1 - fasta - foreground regexp") {
         when {
+            params {
+                foreground_list = null
+                foreground_regexp = ['*_2023_09_*']
+            }
             workflow {
                 """
                 input[0] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)

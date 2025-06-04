@@ -20,6 +20,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
     main:
     ch_versions = Channel.empty()
     ch_out_tree = Channel.empty()
+        
 
     // // Validate unaligned sequences file
     // FASTAVALIDATOR(
@@ -62,7 +63,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
     ch_versions = ch_versions.mix(IQTREE.out.versions.first())
 
     // Label tree with foreground sequences
-    if (ch_foreground_regexp) {
+    if (params.foreground_regexp) {
         HYPHY_LABELTREE_REGEXP (
             IQTREE.out.phylogeny,
             ch_foreground_regexp
@@ -70,7 +71,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
         ch_out_tree = HYPHY_LABELTREE_REGEXP.out.labeled_tree
         ch_versions = ch_versions.mix(HYPHY_LABELTREE_REGEXP.out.versions.first())
     }
-    if (ch_foreground_list) {
+    if (params.foreground_list) {
         HYPHY_LABELTREE_LIST (
             IQTREE.out.phylogeny,
             ch_foreground_list
