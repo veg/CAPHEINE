@@ -10,10 +10,10 @@ workflow HYPHY_ANALYSES {
     take:
     ch_aln // channel: [ val(meta), [ aln ] ]
     ch_tree // channel: [ val(meta), [ tree ] ]
-    ch_branch_set // channel: branch_set
 
     main:
     ch_versions = Channel.empty()
+    has_foreground = params.foreground_list || params.foreground_regexp
 
     // Run FEL analysis
     HYPHY_FEL (
@@ -44,7 +44,7 @@ workflow HYPHY_ANALYSES {
     ch_versions = ch_versions.mix(HYPHY_BUSTED.out.versions.first())
 
     // Run Contrast-FEL and RELAX analyses if branch set is provided
-    if (ch_branch_set) {
+    if (has_foreground) {
         // confirm that the tree is labeled
         ch_tree
             .map { it ->
@@ -78,8 +78,8 @@ workflow HYPHY_ANALYSES {
     meme_json     = HYPHY_MEME.out.meme_json        // channel: [ val(meta), [ meme_json ] ]
     prime_json    = HYPHY_PRIME.out.prime_json      // channel: [ val(meta), [ prime_json ] ]
     busted_json   = HYPHY_BUSTED.out.busted_json    // channel: [ val(meta), [ busted_json ] ]
-    contrastfel_json = ch_branch_set ? HYPHY_CONTRASTFEL.out.contrastfel_json : [] // channel: [ val(meta), [ contrastfel_json ] ]
-    relax_json    = ch_branch_set ? HYPHY_RELAX.out.relax_json : []                // channel: [ val(meta), [ relax_json ] ]
+    contrastfel_json = has_foreground ? HYPHY_CONTRASTFEL.out.contrastfel_json : [] // channel: [ val(meta), [ contrastfel_json ] ]
+    relax_json    = has_foreground ? HYPHY_RELAX.out.relax_json : []                // channel: [ val(meta), [ relax_json ] ]
     versions      = ch_versions                     // channel: [ versions.yml ]
 }
 
