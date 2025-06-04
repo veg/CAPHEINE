@@ -27,7 +27,7 @@
                 "pattern": "^\\S+\\.f(ast)?a$",
                 "errorMessage": "Reference sequence file must be provided and must have extension '.fa' or '.fasta'"
             },
-            "foreground_seqs": {
+            "foreground_list": {
                 "type": "string",
                 "format": "file-path",
                 "exists": true,

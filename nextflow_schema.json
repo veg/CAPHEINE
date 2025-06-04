@@ -10,26 +10,22 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["input", "outdir"],
+            "required": ["reference_genes", "unaligned_seqs", "outdir"],
             "properties": {
-                "input": {
+                "reference_genes": {
                     "type": "string",
+                    "description": "Path to file of reference gene sequences in FASTA format.",
+                    "help_text": "There should be one coding gene reference sequence per fasta ID",
+                    "fa_icon": "fas fa-file"
+                },
+                "unaligned_seqs": {
+                    "type": "string",
+                    "description": "Path to file of unaligned sequences in FASTA format",
                     "format": "file-path",
-                    "exists": true,
-                    "schema": "assets/schema_input.json",
-                    "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/capheine/usage#samplesheet-input).",
-                    "fa_icon": "fas fa-file-csv",
-                    "description": "Path to comma-separated file containing information about the samples in the experiment."
+                    "mimetype": "text/fasta",
+                    "fa_icon": "fas fa-file"
                 },
-                "outdir": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
-                    "fa_icon": "fas fa-folder-open"
-                },
-                "foreground_seqs": {
+                "foreground_list": {
                     "type": "string",
                     "fa_icon": "fas fa-file",
                     "format": "file-path",
@@ -39,6 +35,12 @@
                     "type": "string",
                     "description": "Regular expression to match fasta sequence identifiers of foreground sequences.",
                     "fa_icon": "fas fa-font"
+                },
+                "outdir": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
+                    "fa_icon": "fas fa-folder-open"
                 },
                 "email": {
                     "type": "string",

@@ -43,7 +43,7 @@ nextflow run CAPHEINE --input ./samplesheet.csv --outdir ./results -profile dock
 The pipeline can also be run with a specified set of foreground sequences, whose evolution can be compared to all hold-out sequences. Foreground sequences can be specified in two ways:
 1. As a list
 ```bash
-nextflow run CAPHEINE --input ./samplesheet.csv --outdir ./results --foreground_seqs /path/to/fasta_ID_list.txt -profile docker
+nextflow run CAPHEINE --input ./samplesheet.csv --outdir ./results --foreground_list /path/to/fasta_ID_list.txt -profile docker
 ```
 2. As a regular expression
 ```bash
