@@ -5,7 +5,6 @@
 */
 include { PROCESS_VIRAL_NONRECOMBINANT } from '../subworkflows/local/process_viral_nonrecombinant/main'
 include { HYPHY_ANALYSES         } from '../subworkflows/local/hyphy_analyses/main'
-include { FASTAVALIDATOR         } from '../modules/nf-core/fastavalidator/main'
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
 include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -48,11 +47,6 @@ workflow CAPHEINE {
         has_foreground_list        = false
     }
 
-    //
-    // VALIDATE REFERENCE SEQUENCE
-    //
-    // FASTAVALIDATOR(ch_reference)
-    // ch_versions = ch_versions.mix(FASTAVALIDATOR.out.versions)
 
     //
     // SUBWORKFLOW: Run preprocessing of viral non-recombinant viral data

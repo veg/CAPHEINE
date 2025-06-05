@@ -21,20 +21,19 @@
 <!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
      workflows use the "tube map" design for that. See https://nf-co.re/docs/contributing/design_guidelines#examples for examples.   -->
 
-1. Sequence validation ([`FASTAValidator`](https://github.com/evolbioinfo/fastavalidator))
-2. Ambiguous sequence removal
-3. Multiple sequence alignment ([`cawlign`](https://github.com/evolbioinfo/cawlign))
-4. Sequence deduplication and cleaning ([`HyPhy CLN`](https://hyphy.org/methods/selection-methods/))
-5. Phylogenetic tree construction ([`IQ-TREE`](http://www.iqtree.org/))
-6. Selection analyses using HyPhy:
+1. Ambiguous sequence removal
+2. Multiple sequence alignment ([`cawlign`](https://github.com/evolbioinfo/cawlign))
+3. Sequence deduplication and cleaning ([`HyPhy CLN`](https://hyphy.org/methods/selection-methods/))
+4. Phylogenetic tree construction ([`IQ-TREE`](http://www.iqtree.org/))
+5. Selection analyses using HyPhy:
    - [FEL](https://hyphy.org/methods/selection-methods/#FEL) (Fixed Effects Likelihood)
    - [MEME](https://hyphy.org/methods/selection-methods/#MEME) (Mixed Effects Model of Evolution)
    - [PRIME](https://hyphy.org/methods/selection-methods/#PRIME) (Probabilistic Inference of Molecular Evolution)
    - [BUSTED](https://hyphy.org/methods/selection-methods/#BUSTED) (Branch-Site Unrestricted Statistical Test for Episodic Diversification)
-7. Optional branch-specific analyses when foreground branches are specified:
+6. Optional branch-specific analyses when foreground branches are specified:
    - [Contrast-FEL](https://hyphy.org/methods/selection-methods/#CONTRAST-FEL)
    - [RELAX](https://hyphy.org/methods/selection-methods/#RELAX)
-8. Report generation ([`MultiQC`](http://multiqc.info/))
+7. Report generation ([`MultiQC`](http://multiqc.info/))
 
 
 
