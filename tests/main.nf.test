@@ -7,7 +7,7 @@ nextflow_pipeline {
 
         when {
             params {
-                outdir = "tests/test_results"
+                outdir = "$outputDir"
                 reference_genes = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend_DENV1_ref.fasta'
                 unaligned_seqs = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-raw-seqs.fasta'
             }
@@ -23,12 +23,11 @@ nextflow_pipeline {
 
         when {
             params {
-                outdir = "tests/test_results"
+                outdir = "$outputDir"
                 reference_genes = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend_DENV1_ref.fasta'
                 unaligned_seqs = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-raw-seqs.fasta'
                 foreground_list = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-foreground-seqs.txt'
                 foreground_regexp = '_2023_09_'
-                outdir = "tests/test_results"
             }
         }
 
@@ -45,7 +44,7 @@ nextflow_pipeline {
                 reference_genes = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend_DENV1_ref.fasta'
                 unaligned_seqs = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-raw-seqs.fasta'
                 foreground_regexp = '_2023_09_'
-                outdir = "tests/test_results"
+                outdir = "$outputDir"
             }
         }
 
