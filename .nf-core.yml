@@ -3,10 +3,12 @@ repository_type: pipeline
 nf_core_version: 3.2.1
 
 lint:
+  multiqc_config: false
   pipeline_name_conventions: false
   nextflow_config:
     - manifest.name
     - manifest.homePage
+    - params.input
   files_exist:
     - CODE_OF_CONDUCT.md
   files_unchanged:
