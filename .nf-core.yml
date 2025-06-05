@@ -3,14 +3,21 @@ repository_type: pipeline
 nf_core_version: 3.2.1
 
 lint:
+  actions_awsfulltest: false
   multiqc_config: false
   pipeline_name_conventions: false
+  nf_test_content:
+    - tests/default.nf.test
+    - tests/main.nf.test
   nextflow_config:
     - manifest.name
     - manifest.homePage
     - params.input
   files_exist:
     - CODE_OF_CONDUCT.md
+    - .github/workflows/nf-test.yml
+    - .github/actions/get-shards/action.yml
+    - .github/actions/nf-test/action.yml
   files_unchanged:
     - CODE_OF_CONDUCT.md
     - LICENSE.md

@@ -1,0 +1,20 @@
+nextflow_pipeline {
+
+    name "Test pipeline with default settings"
+    script "../main.nf"
+
+    test("Params: default") {
+        when {
+            params {
+                outdir = "$outputDir"
+                reference_genes = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend_DENV1_ref.fasta'
+                unaligned_seqs = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-raw-seqs.fasta'
+            }
+        }
+
+        then {
+            assert workflow.success 
+        }
+    }
+
+}
