@@ -18,6 +18,9 @@ lint:
     - .github/workflows/nf-test.yml
     - .github/actions/get-shards/action.yml
     - .github/actions/nf-test/action.yml
+    - assets/nf-core-CAPHEINE_logo_light.png
+    - docs/images/nf-core-CAPHEINE_logo_light.png
+    - docs/images/nf-core-CAPHEINE_logo_dark.png
   files_unchanged:
     - CODE_OF_CONDUCT.md
     - LICENSE.md
