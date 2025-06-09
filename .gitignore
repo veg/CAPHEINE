@@ -9,4 +9,4 @@ testing*
 null/
 .nf-test/*
 .nf-test.log
-tests/test_results/*
+test_results/*

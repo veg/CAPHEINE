@@ -11,6 +11,7 @@
 process HYPHY_FEL {
     tag "$meta.id"
     label 'process_single'
+    cache 'deep'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?

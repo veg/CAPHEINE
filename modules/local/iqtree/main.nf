@@ -1,6 +1,9 @@
 process IQTREE {
     tag "$meta.id"
     label 'process_medium'
+    cache 'deep'
+    // duplicate removal is somewhat stochastic (random duplicate is removed)
+    // This can cause issues where the cached tree does not match the alignment
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
