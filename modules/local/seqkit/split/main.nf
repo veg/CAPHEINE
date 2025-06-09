@@ -19,7 +19,7 @@ process SEQKIT_SPLIT {
 
     script:
     def args = task.ext.args ?: ''
-    
+
     // TODO nf-core: If the tool supports multi-threading then you MUST provide the appropriate parameter
     //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
     """
@@ -38,7 +38,7 @@ process SEQKIT_SPLIT {
 
     stub:
     def args = task.ext.args ?: ''
-    
+
     """
     touch gene1.fasta
     touch gene2.fasta

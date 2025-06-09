@@ -39,7 +39,7 @@ nextflow_process {
 
         when {
             process {
-                """                
+                """
                 input[0] = [
                     [ id:'test' ], // meta map
                     file('${projectDir}/tests/test_data/DENV1_7seqs_withDups.fasta', checkIfExists: true),

@@ -23,7 +23,7 @@ process HYPHY_MEME {
     def args = task.ext.args ?: ''
     """
     mkdir -p MEME
-    
+
     hyphy meme \\
         --alignment $alignment \\
         --tree $tree \\
@@ -40,10 +40,10 @@ process HYPHY_MEME {
     stub:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    
+
     """
     mkdir -p MEME
-    
+
     touch MEME/${prefix}.MEME.json
 
     cat <<-END_VERSIONS > versions.yml

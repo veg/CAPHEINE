@@ -48,8 +48,6 @@ nextflow run CAPHEINE \
   -profile docker
 ```
 
-
-
 All of the above commands will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
 
 Note that the pipeline will create the following files in your working directory:
@@ -77,9 +75,9 @@ nextflow run CAPHEINE -profile docker -params-file params.yaml
 with:
 
 ```yaml title="params.yaml"
-reference_genes: './reference_genes.fasta'
-unaligned_seqs: './unaligned_seqs.fasta'
-outdir: './results/'
+reference_genes: "./reference_genes.fasta"
+unaligned_seqs: "./unaligned_seqs.fasta"
+outdir: "./results/"
 # Optional (uncomment to use):
 # foreground_list: './foreground_taxa.txt'
 # foreground_regexp: '^Homo.*'

@@ -8,9 +8,9 @@ nextflow_workflow {
 
         when {
             params {
-                // the list itself isn't used, but it signals that the foreground sequences were labeled by the 
+                // the list itself isn't used, but it signals that the foreground sequences were labeled by the
                 // process_viral_nonrecombinant subworkflow
-                foreground_list = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-foreground-seqs.txt'  
+                foreground_list = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-foreground-seqs.txt'
                 foreground_regexp = null
             }
             workflow {
@@ -51,16 +51,16 @@ nextflow_workflow {
                 { assert path(workflow.out.contrastfel_json[0][1]).exists() },
                 { assert path(workflow.out.contrastfel_json[0][1]).text.contains('Contrast-FEL') },
                 { assert path(workflow.out.contrastfel_json[0][1]).toString().endsWith('.CONTRASTFEL.json') },
-                { 
+                {
                     def json = new groovy.json.JsonSlurper().parseText(path(workflow.out.contrastfel_json[0][1]).text)
-                    
+
                     // Check for correct ContrastFEL settings
                     def settings = json.analysis["settings"]
                     assert settings["site-filter"]["site-filter"] == null
 
                     // Check that ContrastFEL only ran on the selected internal branches
                     def tested = json.tested["0"]
-                    
+
                     assert tested["Node5"] == "Foreground"
                     assert tested["Node6"] == "Foreground"
                     assert tested.findAll { k, v -> v != "Foreground" }.every { k, v -> v == "background" }
@@ -69,9 +69,9 @@ nextflow_workflow {
                 { assert path(workflow.out.relax_json[0][1]).exists() },
                 { assert path(workflow.out.relax_json[0][1]).text.contains('RELAX') },
                 { assert path(workflow.out.relax_json[0][1]).toString().endsWith('.RELAX.json') },
-                { 
+                {
                     def json = new groovy.json.JsonSlurper().parseText(path(workflow.out.relax_json[0][1]).text)
-                    
+
                     // Check for correct RELAX settings
                     // def settings = json.analysis["settings"]
                     // assert settings["site-filter"]["site-filter"] == null

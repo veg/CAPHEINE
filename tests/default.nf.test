@@ -13,7 +13,7 @@ nextflow_pipeline {
         }
 
         then {
-            assert workflow.success 
+            assert workflow.success
         }
     }
 

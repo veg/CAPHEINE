@@ -37,7 +37,7 @@ process HYPHY_FEL {
     //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
     """
     mkdir -p FEL
-    
+
     hyphy fel \\
         --alignment $alignment \\
         --tree $tree \\
@@ -54,10 +54,10 @@ process HYPHY_FEL {
     stub:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    
+
     """
     mkdir -p FEL
-    
+
     touch FEL/${prefix}.FEL.json
 
     cat <<-END_VERSIONS > versions.yml

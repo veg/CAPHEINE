@@ -17,7 +17,7 @@ nextflow_process {
 
         when {
             process {
-                """                
+                """
                 input = [ file("${projectDir}/tests/test_data/P_aeruginosa_cds_short.fasta", checkIfExists: true) ]
                 """
             }
@@ -27,11 +27,11 @@ nextflow_process {
             assertAll(
                 { assert process.success },
                 { assert snapshot(process.out).match() },
-                { 
+                {
                     // Assert that 10 output files are generated
                     def outputFiles = process.out.gene_fastas.flatten().collect { it.toString() }
                     assert outputFiles.size() == 10
-                    
+
                     // Get all headers from the original file
                     def originalHeaders = []
                     def inputFile = new File("${projectDir}/tests/test_data/P_aeruginosa_cds_short.fasta")
@@ -40,7 +40,7 @@ nextflow_process {
                             originalHeaders.add(line)
                         }
                     }
-                    
+
                     // Assert that each output file contains exactly one header from the original file
                     outputFiles.each { outputFile ->
                         def foundHeaders = []
@@ -60,7 +60,7 @@ nextflow_process {
 
     // TODO nf-core: Change the test name preferably indicating the test-data and file-format used but keep the " - stub" suffix.
     test("P_aeruginosa_cds_short.fasta - 10 CDS - stub") {
-        
+
         options "-stub"
 
         when {
@@ -75,7 +75,7 @@ nextflow_process {
             assertAll(
                 { assert process.success },
                 { assert snapshot(process.out).match() },
-                // { 
+                // {
                 //     // Assert that 3 output files are generated
                 //     def outputFiles = process.out.gene_fastas.collect { it.toString() }
                 //     assert outputFiles.size() == 3

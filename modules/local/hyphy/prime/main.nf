@@ -23,7 +23,7 @@ process HYPHY_PRIME {
     def args = task.ext.args ?: ''
     """
     mkdir -p PRIME
-    
+
     hyphy prime \\
         --alignment $alignment \\
         --tree $tree \\
@@ -40,10 +40,10 @@ process HYPHY_PRIME {
     stub:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    
+
     """
     mkdir -p PRIME
-    
+
     touch PRIME/${prefix}.PRIME.json
 
     cat <<-END_VERSIONS > versions.yml

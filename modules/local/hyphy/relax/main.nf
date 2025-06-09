@@ -24,7 +24,7 @@ process HYPHY_RELAX {
     def args = task.ext.args ?: ''
     """
     mkdir -p RELAX
-    
+
     hyphy relax \\
         --alignment $alignment \\
         --tree $tree \\
@@ -46,7 +46,7 @@ process HYPHY_RELAX {
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     mkdir -p RELAX
-    
+
     touch RELAX/${prefix}.RELAX.json
 
     cat <<-END_VERSIONS > versions.yml

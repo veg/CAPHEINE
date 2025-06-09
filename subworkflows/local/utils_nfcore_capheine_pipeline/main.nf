@@ -81,7 +81,7 @@ workflow PIPELINE_INITIALISATION {
     // ch_samplesheet = Channel.fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
     ch_reference_genes = file(reference_genes, checkIfExists: true)
     ch_unaligned_seqs = file(unaligned_seqs, checkIfExists: true)
-    
+
     if (params.foreground_list) {
         ch_foreground_list         = file(params.foreground_list, checkIfExists: true)
         ch_foreground_regexp       = []

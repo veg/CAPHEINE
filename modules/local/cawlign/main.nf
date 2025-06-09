@@ -27,7 +27,7 @@ process CAWLIGN {
 
     script:
     def prefix = task.ext.prefix ?: reference.baseName
-    
+
     """
     cawlign \\
         -t codon \\

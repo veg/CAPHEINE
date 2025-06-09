@@ -24,7 +24,7 @@ process HYPHY_CONTRASTFEL {
     def args = task.ext.args ?: ''
     """
     mkdir -p CONTRASTFEL
-    
+
     hyphy contrast-fel \\
         --alignment $alignment \\
         --tree $tree \\
@@ -43,7 +43,7 @@ process HYPHY_CONTRASTFEL {
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     mkdir -p CONTRASTFEL
-    
+
     touch CONTRASTFEL/${prefix}.CONTRASTFEL.json
 
     cat <<-END_VERSIONS > versions.yml

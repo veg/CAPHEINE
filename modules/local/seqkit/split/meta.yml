@@ -15,7 +15,7 @@ tools:
       documentation: "https://bioinf.shenwei.me/seqkit/usage/#split"
       tool_dev_url: "https://github.com/shenwei356/seqkit"
       doi: "10.1371/journal.pone.0163962"
-      licence: ['MIT']
+      licence: ["MIT"]
       identifier: biotools:seqkit
 
 input:
@@ -35,10 +35,10 @@ output:
       ontologies:
         - edam: "http://edamontology.org/format_1929"
   - versions:
-    - "versions.yml":
-        type: file
-        description: File containing software versions
-        pattern: "versions.yml"
+      - "versions.yml":
+          type: file
+          description: File containing software versions
+          pattern: "versions.yml"
 
 authors:
   - "@hverdonk"

@@ -38,7 +38,7 @@ template:
   name: CAPHEINE
   description: Automated evolutionary annotation of existing datasets using Nextflow
   author: Hannah Verdonk, Danielle Callan
-  version: '1.1'
+  version: "1.1"
   force: true
   outdir: .
   is_nfcore: true

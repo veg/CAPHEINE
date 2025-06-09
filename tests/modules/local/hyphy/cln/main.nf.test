@@ -31,7 +31,7 @@ nextflow_process {
         }
     }
 
-     test("denv1 - fasta") {
+    test("denv1 - fasta") {
         when {
             process {
                 """

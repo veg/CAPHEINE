@@ -42,7 +42,7 @@ nextflow_workflow {
             )
         }
     }
-    
+
     test("denv1 - fasta - nonmatching foreground regexp") {
         when {
             params {

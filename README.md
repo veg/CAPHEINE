@@ -35,8 +35,6 @@
    - [RELAX](https://hyphy.org/methods/selection-methods/#RELAX)
 7. Report generation ([`MultiQC`](http://multiqc.info/))
 
-
-
 ## Usage
 
 > [!NOTE]
@@ -46,17 +44,17 @@
 
 The main input parameters for the CAPHEINE pipeline are:
 
-| Parameter             | Description                                                                 | Required |
-|-----------------------|-----------------------------------------------------------------------------|----------|
-| `--reference_genes`   | Path to FASTA file of gene reference sequences                              | Yes      |
-| `--unaligned_seqs`    | Path to FASTA file of unaligned DNA sequences                               | Yes      |
-| `--outdir`            | Output directory for results                                                | Yes      |
-| `--email`             | Email address for completion summary                                        | No       |
-| `--multiqc_title`     | Title for the MultiQC report                                                | No       |
-| `--validate_params`   | Boolean, validate parameters against the schema at runtime (default: true)  | No       |
-| `--monochrome_logs`   | Boolean, do not use colored log outputs                                     | No       |
-| `--hook_url`          | URL for notification hooks (if used)                                        | No       |
-| `-params-file`        | YAML/JSON file specifying parameters (recommended for reproducibility)      | No       |
+| Parameter           | Description                                                                | Required |
+| ------------------- | -------------------------------------------------------------------------- | -------- |
+| `--reference_genes` | Path to FASTA file of gene reference sequences                             | Yes      |
+| `--unaligned_seqs`  | Path to FASTA file of unaligned DNA sequences                              | Yes      |
+| `--outdir`          | Output directory for results                                               | Yes      |
+| `--email`           | Email address for completion summary                                       | No       |
+| `--multiqc_title`   | Title for the MultiQC report                                               | No       |
+| `--validate_params` | Boolean, validate parameters against the schema at runtime (default: true) | No       |
+| `--monochrome_logs` | Boolean, do not use colored log outputs                                    | No       |
+| `--hook_url`        | URL for notification hooks (if used)                                       | No       |
+| `-params-file`      | YAML/JSON file specifying parameters (recommended for reproducibility)     | No       |
 
 Additional advanced and institutional config parameters are available; see the documentation for details.
 
@@ -71,11 +69,13 @@ nextflow run CAPHEINE \
 ```
 
 Where:
+
 - `reference_genes`: Path to FASTA file of gene reference sequences.
 - `unaligned_seqs`: Path to FASTA file of unaligned DNA sequences.
 - `outdir`: Output directory for results.
 
 You can also provide additional parameters:
+
 - `foreground_list`: (Optional) Path to a text file with a newline-separated list of foreground taxa.
 - `foreground_regexp`: (Optional) Regular expression to match foreground taxa.
 
@@ -92,9 +92,9 @@ nextflow run CAPHEINE \
 Where `params.yaml` might contain:
 
 ```yaml
-treference_genes: './reference_genes.fasta'
-unaligned_seqs: './unaligned_seqs.fasta'
-outdir: './results/'
+treference_genes: "./reference_genes.fasta"
+unaligned_seqs: "./unaligned_seqs.fasta"
+outdir: "./results/"
 # other parameters as needed
 ```
 

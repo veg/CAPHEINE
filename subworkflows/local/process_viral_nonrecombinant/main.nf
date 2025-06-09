@@ -19,7 +19,6 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
     main:
     ch_versions = Channel.empty()
     ch_out_tree = Channel.empty()
-        
 
     // Remove sequences with ambiguous bases "-clean.fasta"
     REMOVEAMBIGSEQS (
@@ -84,7 +83,6 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
                 log.warn "No internal branches were labeled in the tree file ${tree}. Check your foreground sequences."
             }
         }
-    
 
     emit:
     deduplicated  = HYPHY_CLN.out.deduplicated_seqs    // channel: [ val(meta), [ deduplicated_sequences ] ]
