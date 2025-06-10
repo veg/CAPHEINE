@@ -27,6 +27,7 @@ process CAWLIGN {
 
     script:
     def prefix = task.ext.prefix ?: reference.baseName
+    def args = task.ext.args ?: ''
 
     """
     cawlign \\
@@ -35,6 +36,7 @@ process CAWLIGN {
         -f refmap \\
         -s BLOSUM62 \\
         \"${unaligned}\" \\
+        ${args} \\
         > ${prefix}-aligned.fasta
 
     cat <<-END_VERSIONS > versions.yml
