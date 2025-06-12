@@ -4,4 +4,4 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - "bioconda::biopython=1.79"
+  - "conda-forge::biopython=1.79"
