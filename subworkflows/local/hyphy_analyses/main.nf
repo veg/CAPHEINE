@@ -8,8 +8,7 @@ include { HYPHY_RELAX   } from '../../../modules/local/hyphy/relax/main'
 workflow HYPHY_ANALYSES {
 
     take:
-    ch_aln // channel: [ val(meta), [ aln ] ]
-    ch_tree // channel: [ val(meta), [ tree ] ]
+    ch_input // channel: [ val(meta), aln, tree ]
 
     main:
     ch_versions = Channel.empty()
@@ -17,38 +16,34 @@ workflow HYPHY_ANALYSES {
 
     // Run FEL analysis
     HYPHY_FEL (
-        ch_aln,
-        ch_tree
+        ch_input
     )
     ch_versions = ch_versions.mix(HYPHY_FEL.out.versions.first())
 
     // Run MEME analysis
     HYPHY_MEME (
-        ch_aln,
-        ch_tree
+        ch_input
     )
     ch_versions = ch_versions.mix(HYPHY_MEME.out.versions.first())
 
     // Run PRIME analysis
     HYPHY_PRIME (
-        ch_aln,
-        ch_tree
+        ch_input
     )
     ch_versions = ch_versions.mix(HYPHY_PRIME.out.versions.first())
 
     // Run BUSTED analysis
     HYPHY_BUSTED (
-        ch_aln,
-        ch_tree
+        ch_input
     )
     ch_versions = ch_versions.mix(HYPHY_BUSTED.out.versions.first())
 
     // Run Contrast-FEL and RELAX analyses if branch set is provided
     if (has_foreground) {
         // confirm that the tree is labeled
-        ch_tree
+        ch_input
             .map { it ->
-                def tree = it[1]
+                def tree = it[2]
                 if (tree.text.contains("Foreground")) {
                     true
                 } else {
@@ -58,16 +53,14 @@ workflow HYPHY_ANALYSES {
 
         // Run Contrast-FEL analysis
         HYPHY_CONTRASTFEL (
-            ch_aln,
-            ch_tree,
+            ch_input,
             "Foreground"
         )
         ch_versions = ch_versions.mix(HYPHY_CONTRASTFEL.out.versions.first())
 
         // Run RELAX analysis
         HYPHY_RELAX (
-            ch_aln,
-            ch_tree,
+            ch_input,
             "Foreground"
         )
         ch_versions = ch_versions.mix(HYPHY_RELAX.out.versions.first())
