@@ -9,8 +9,7 @@ process HYPHY_PRIME {
         'biocontainers/hyphy:2.5.73--he91c24d_0' }"
 
     input:
-    tuple val(meta), path(alignment)
-    tuple val(meta), path(tree)
+    tuple val(meta), path(alignment), path(tree)
 
     output:
     tuple val(meta), path("PRIME/${meta.id}.PRIME.json"), emit: prime_json
@@ -28,6 +27,7 @@ process HYPHY_PRIME {
         --alignment $alignment \\
         --tree $tree \\
         --branches 'Internal' \\
+        --property-set 'Atchley' \\
         --output PRIME/${meta.id}.PRIME.json \\
         $args
 

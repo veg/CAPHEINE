@@ -9,8 +9,7 @@ process HYPHY_MEME {
         'biocontainers/hyphy:2.5.73--he91c24d_0' }"
 
     input:
-    tuple val(meta), path(alignment)
-    tuple val(meta), path(tree)
+    tuple val(meta), path(alignment), path(tree)
 
     output:
     tuple val(meta), path("MEME/${meta.id}.MEME.json"), emit: meme_json

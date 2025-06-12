@@ -9,8 +9,9 @@ nextflow_process {
         when {
             process {
                 """
-                input[0] = [[id: 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'], file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true)]
-                input[1] = [[id: 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'], file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)]
+                input[0] = [[id: 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'], \
+                file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true), \
+                file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)]
                 """
             }
         }
@@ -25,8 +26,8 @@ nextflow_process {
                     def json = new groovy.json.JsonSlurper().parseText(path(process.out.prime_json[0][1]).text)
 
                     // Check for correct PRIME settings
-                    def settings = json.analysis
-                    assert settings["residue_properties"] == "Atchley"
+                    def residue_properties = json.model.residue_properties.keySet().toList()
+                    assert residue_properties[0] == "Factor I bipolar"
 
                     // Check that PRIME only ran on internal branches
                     def tested = json.tested["0"]
@@ -53,8 +54,9 @@ nextflow_process {
         when {
             process {
                 """
-                input[0] = [[id: 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'], file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true)]
-                input[1] = [[id: 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'], file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)]
+                input[0] = [[id: 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'], \
+                file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true), \
+                file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)]
                 """
             }
         }

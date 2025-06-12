@@ -19,8 +19,7 @@ process HYPHY_FEL {
         'biocontainers/hyphy:2.5.73--he91c24d_0' }"
 
     input:
-    tuple val(meta), path(alignment)
-    tuple val(meta), path(tree)
+    tuple val(meta), path(alignment), path(tree)
 
     output:
     tuple val(meta), path("FEL/${meta.id}.FEL.json"), emit: fel_json

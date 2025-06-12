@@ -9,8 +9,7 @@ process HYPHY_CONTRASTFEL {
         'biocontainers/hyphy:2.5.73--he91c24d_0' }"
 
     input:
-    tuple val(meta), path(alignment)
-    tuple val(meta), path(tree)
+    tuple val(meta), path(alignment), path(tree)
     val(branch_set_tag)
 
     output:

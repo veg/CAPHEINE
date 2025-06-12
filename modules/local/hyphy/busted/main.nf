@@ -9,8 +9,7 @@ process HYPHY_BUSTED {
         'biocontainers/hyphy:2.5.73--he91c24d_0' }"
 
     input:
-    tuple val(meta), path(alignment)
-    tuple val(meta), path(tree)
+    tuple val(meta), path(alignment), path(tree)
 
     output:
     tuple val(meta), path("BUSTED/${meta.id}.BUSTED.json"), emit: busted_json
