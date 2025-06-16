@@ -18,25 +18,25 @@ workflow HYPHY_ANALYSES {
     HYPHY_FEL (
         ch_input
     )
-    ch_versions = ch_versions.mix(HYPHY_FEL.out.versions.first())
+    ch_versions = ch_versions.mix(HYPHY_FEL.out.versions)
 
     // Run MEME analysis
     HYPHY_MEME (
         ch_input
     )
-    ch_versions = ch_versions.mix(HYPHY_MEME.out.versions.first())
+    ch_versions = ch_versions.mix(HYPHY_MEME.out.versions)
 
     // Run PRIME analysis
     HYPHY_PRIME (
         ch_input
     )
-    ch_versions = ch_versions.mix(HYPHY_PRIME.out.versions.first())
+    ch_versions = ch_versions.mix(HYPHY_PRIME.out.versions)
 
     // Run BUSTED analysis
     HYPHY_BUSTED (
         ch_input
     )
-    ch_versions = ch_versions.mix(HYPHY_BUSTED.out.versions.first())
+    ch_versions = ch_versions.mix(HYPHY_BUSTED.out.versions)
 
     // Run Contrast-FEL and RELAX analyses if branch set is provided
     if (has_foreground) {
@@ -56,14 +56,14 @@ workflow HYPHY_ANALYSES {
             ch_input,
             "Foreground"
         )
-        ch_versions = ch_versions.mix(HYPHY_CONTRASTFEL.out.versions.first())
+        ch_versions = ch_versions.mix(HYPHY_CONTRASTFEL.out.versions)
 
         // Run RELAX analysis
         HYPHY_RELAX (
             ch_input,
             "Foreground"
         )
-        ch_versions = ch_versions.mix(HYPHY_RELAX.out.versions.first())
+        ch_versions = ch_versions.mix(HYPHY_RELAX.out.versions)
     }
 
     emit:

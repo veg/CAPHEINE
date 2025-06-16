@@ -24,26 +24,26 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
     REMOVEAMBIGSEQS (
         ch_unaligned
     )
-    ch_versions = ch_versions.mix(REMOVEAMBIGSEQS.out.versions.first())
+    ch_versions = ch_versions.mix(REMOVEAMBIGSEQS.out.versions)
 
     // Split reference gene into individual genes
     SEQKIT_SPLIT (
         ch_reference
     )
-    ch_versions = ch_versions.mix(SEQKIT_SPLIT.out.versions.first())
+    ch_versions = ch_versions.mix(SEQKIT_SPLIT.out.versions)
 
     // Align sequences using cawlign "-aligned.fasta" Adds metadata to the sequences
     CAWLIGN (
         SEQKIT_SPLIT.out.gene_fastas.flatten(),
         REMOVEAMBIGSEQS.out.cleaned_seqs
     )
-    ch_versions = ch_versions.mix(CAWLIGN.out.versions.first())
+    ch_versions = ch_versions.mix(CAWLIGN.out.versions)
 
     // Remove duplicate sequences and clean up sequence names "-nodups${in_msa.extension}"
     HYPHY_CLN (
         CAWLIGN.out.aligned_seqs.map { gene_name, file -> [[id: gene_name], file] }  // Convert metadata string to metadata map
     )
-    ch_versions = ch_versions.mix(HYPHY_CLN.out.versions.first())
+    ch_versions = ch_versions.mix(HYPHY_CLN.out.versions)
 
 
     // Generate phylogenetic tree with IQTree
@@ -52,7 +52,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
         HYPHY_CLN.out.deduplicated_seqs
     )
     ch_out_tree = IQTREE.out.phylogeny
-    ch_versions = ch_versions.mix(IQTREE.out.versions.first())
+    ch_versions = ch_versions.mix(IQTREE.out.versions)
 
     // Label tree with foreground sequences
     if (params.foreground_regexp) {
@@ -61,7 +61,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
             ch_foreground_regexp
         )
         ch_out_tree = HYPHY_LABELTREE_REGEXP.out.labeled_tree
-        ch_versions = ch_versions.mix(HYPHY_LABELTREE_REGEXP.out.versions.first())
+        ch_versions = ch_versions.mix(HYPHY_LABELTREE_REGEXP.out.versions)
     }
     if (params.foreground_list) {
         HYPHY_LABELTREE_LIST (
@@ -69,7 +69,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
             ch_foreground_list
         )
         ch_out_tree = HYPHY_LABELTREE_LIST.out.labeled_tree
-        ch_versions = ch_versions.mix(HYPHY_LABELTREE_LIST.out.versions.first())
+        ch_versions = ch_versions.mix(HYPHY_LABELTREE_LIST.out.versions)
     }
 
     // Check if the string "Foreground" is present in the tree file
