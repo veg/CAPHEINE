@@ -15,21 +15,23 @@
 
 - [BUSTED](https://doi.org/10.1093/molbev/msv035)
 
-> Murrell B, Weaver S, Smith MD, Wertheim JO, Murrell S, Aylward A, et al. Gene-wide identification of episodic selection. Molecular Biology and Evolution. 2015 Feb 19;32(5):1365–71. doi:10.1093/molbev/msv035 
+> Murrell B, Weaver S, Smith MD, Wertheim JO, Murrell S, Aylward A, et al. Gene-wide identification of episodic selection. Molecular Biology and Evolution. 2015 Feb 19;32(5):1365–71. doi:10.1093/molbev/msv035
 
 - [Cawlign](https://github.com/veg/cawlign/tree/main)
 
 - [Contrast-FEL](https://doi.org/10.1093/molbev/msaa263)
 
-> Kosakovsky Pond SL, Wisotsky SR, Escalante A, Magalis BR, Weaver S. Contrast-FEL—a test for differences in selective pressures at individual sites among clades and sets of branches. Molecular Biology and Evolution. 2020 Oct 16;38(3):1184–98. doi:10.1093/molbev/msaa263 
+> Kosakovsky Pond SL, Wisotsky SR, Escalante A, Magalis BR, Weaver S. Contrast-FEL—a test for differences in selective pressures at individual sites among clades and sets of branches. Molecular Biology and Evolution. 2020 Oct 16;38(3):1184–98. doi:10.1093/molbev/msaa263
+
+- [DRHIP](https://github.com/veg/DRHIP)
 
 - [FEL](https://doi.org/10.1093/molbev/msi105)
 
-> Kosakovsky Pond SL, Frost SD. Not so different after all: A comparison of methods for detecting amino acid sites under selection. Molecular Biology and Evolution. 2005 Feb 9;22(5):1208–22. doi:10.1093/molbev/msi105 
+> Kosakovsky Pond SL, Frost SD. Not so different after all: A comparison of methods for detecting amino acid sites under selection. Molecular Biology and Evolution. 2005 Feb 9;22(5):1208–22. doi:10.1093/molbev/msi105
 
 - [HyPhy](https://doi.org/10.1093/molbev/msz197)
 
-> Kosakovsky Pond SL, Poon AF, Velazquez R, Weaver S, Hepler NL, Murrell B, et al. Hyphy 2.5—a customizable platform for evolutionary hypothesis testing using phylogenies. Molecular Biology and Evolution. 2019 Aug 27;37(1):295–9. doi:10.1093/molbev/msz197 
+> Kosakovsky Pond SL, Poon AF, Velazquez R, Weaver S, Hepler NL, Murrell B, et al. Hyphy 2.5—a customizable platform for evolutionary hypothesis testing using phylogenies. Molecular Biology and Evolution. 2019 Aug 27;37(1):295–9. doi:10.1093/molbev/msz197
 
 - [IQ-TREE](https://doi.org/10.1093/molbev/msaa015)
 
@@ -37,7 +39,7 @@
 
 - [MEME](https://doi.org/10.1371/journal.pgen.1002764)
 
-> Murrell B, Wertheim JO, Moola S, Weighill T, Scheffler K, Kosakovsky Pond SL. Detecting individual sites subject to episodic diversifying selection. PLoS Genetics. 2012 Jul 12;8(7). doi:10.1371/journal.pgen.1002764 
+> Murrell B, Wertheim JO, Moola S, Weighill T, Scheffler K, Kosakovsky Pond SL. Detecting individual sites subject to episodic diversifying selection. PLoS Genetics. 2012 Jul 12;8(7). doi:10.1371/journal.pgen.1002764
 
 - [MultiQC](https://pubmed.ncbi.nlm.nih.gov/27312411/)
 
