@@ -59,14 +59,14 @@ workflow CAPHEINE {
     )
     ch_processed_aln = ch_processed_aln.mix(PROCESS_VIRAL_NONRECOMBINANT.out.deduplicated)
     ch_processed_trees = ch_processed_trees.mix(PROCESS_VIRAL_NONRECOMBINANT.out.tree)
-    ch_versions = ch_versions.mix(PROCESS_VIRAL_NONRECOMBINANT.out.versions.first())
+    ch_versions = ch_versions.mix(PROCESS_VIRAL_NONRECOMBINANT.out.versions)
 
     //
     // PROCESSING: Merge alignments & trees into a single channel for HYPHY analyses
     //
     // Combine channels using join, matching on the meta.id
     ch_processed_aln
-        .merge(ch_processed_trees, by: 0)
+        .combine(ch_processed_trees, by: 0)
         .map { meta, aln, tree ->
             if (!aln) {
                 log.warn "Skipping ${meta.id}: missing alignment file"
@@ -81,7 +81,6 @@ workflow CAPHEINE {
         .filter { it != null }
         .set { ch_hyphy_input }
 
-
     //
     // SUBWORKFLOW: Run Hyphy Analyses
     //
@@ -94,7 +93,7 @@ workflow CAPHEINE {
     ch_busted   = ch_busted.mix(HYPHY_ANALYSES.out.busted_json)
     ch_contrastfel = ch_contrastfel.mix(HYPHY_ANALYSES.out.contrastfel_json)
     ch_relax    = ch_relax.mix(HYPHY_ANALYSES.out.relax_json)
-    ch_versions = ch_versions.mix(HYPHY_ANALYSES.out.versions.first())
+    ch_versions = ch_versions.mix(HYPHY_ANALYSES.out.versions)
 
     //TODO: create a final subworkflow to process the hyphy data into something clean and useful
 
