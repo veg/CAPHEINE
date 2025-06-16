@@ -62,11 +62,31 @@ workflow CAPHEINE {
     ch_versions = ch_versions.mix(PROCESS_VIRAL_NONRECOMBINANT.out.versions.first())
 
     //
+    // PROCESSING: Merge alignments & trees into a single channel for HYPHY analyses
+    //
+    // Combine channels using join, matching on the meta.id
+    ch_processed_aln
+        .merge(ch_processed_trees, by: 0)
+        .map { meta, aln, tree ->
+            if (!aln) {
+                log.warn "Skipping ${meta.id}: missing alignment file"
+                return null
+            }
+            if (!tree) {
+                log.warn "Skipping ${meta.id}: missing tree file"
+                return null
+            }
+            return [meta, aln, tree]
+        }
+        .filter { it != null }
+        .set { ch_hyphy_input }
+
+
+    //
     // SUBWORKFLOW: Run Hyphy Analyses
     //
     HYPHY_ANALYSES (
-        ch_processed_aln,
-        ch_processed_trees
+        ch_hyphy_input
     )
     ch_fel      = ch_fel.mix(HYPHY_ANALYSES.out.fel_json)
     ch_meme     = ch_meme.mix(HYPHY_ANALYSES.out.meme_json)
