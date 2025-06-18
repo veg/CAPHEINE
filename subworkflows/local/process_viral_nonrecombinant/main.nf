@@ -45,6 +45,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
     )
     ch_versions = ch_versions.mix(HYPHY_CLN.out.versions)
 
+    // check sequences for any outlier distances to other sequences, as a bad alignment QC step?
 
     // Generate phylogenetic tree with IQTree
     // -T [num_cpu_cores] when using multiple cores
@@ -64,6 +65,8 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
         ch_versions = ch_versions.mix(HYPHY_LABELTREE_REGEXP.out.versions)
     }
     if (params.foreground_list) {
+        // clean up fasta IDs in list to match how hyphy_cln cleans up sequence IDs
+
         HYPHY_LABELTREE_LIST (
             IQTREE.out.phylogeny,
             ch_foreground_list

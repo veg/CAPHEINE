@@ -241,7 +241,7 @@ def toolCitationText() {
             "RELAX (Wertheim et al., 2014)",
             "SeqKit (Shen et al., 2024)",
             "."
-        }.join(' ').trim()
+    ].join(' ').trim()
 
     return citation_text
 }
