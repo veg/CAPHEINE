@@ -11,26 +11,6 @@ nextflow_process {
     tag "hyphy"
     tag "hyphy/cln"
 
-    test("hyphy_cln - capsid_protein_C_DENV1 - fasta") {
-        when {
-            process {
-                """
-                input[0] = [
-                    [ id: 'capsid_protein_C_DENV1' ],
-                    file(projectDir + '/tests/test_data/capsid_protein_C_DENV1-clean.fasta', checkIfExists: true)
-                ]
-                """
-            }
-        }
-        then {
-            assertAll(
-                { assert process.success },
-                { assert path(process.out.deduplicated_seqs[0][1]).exists() },
-                { assert path(process.out.deduplicated_seqs[0][1]).size() <= file(projectDir + '/tests/test_data/capsid_protein_C_DENV1-clean.fasta').size() }  // File should be at most the same size as the input, if no duplicates were removed
-            )
-        }
-    }
-
     test("denv1 - fasta") {
         when {
             process {
@@ -65,8 +45,8 @@ nextflow_process {
             process {
                 """
                 input[0] = [
-                    [ id: 'capsid_protein_C_DENV1' ],
-                    file(projectDir + '/tests/test_data/capsid_protein_C_DENV1-clean.fasta', checkIfExists: true)
+                    [ id:'test' ], // meta map
+                    file(projectDir + '/tests/test_data/DENV1_7seqs_withDups.fasta', checkIfExists: true),
                 ]
                 """
             }

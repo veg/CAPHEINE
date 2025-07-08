@@ -5,32 +5,32 @@
                 "0": [
                     [
                         {
-                            "id": "capsid_protein_C_DENV1"
+                            "id": "test"
                         },
-                        "capsid_protein_C_DENV1-nodups.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "test-nodups.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "1": [
-                    "versions.yml:md5,be323484fe9c12fa2a3857d0885ad669"
+                    "versions.yml:md5,750a753a95b35c55fc711d91f46e4b84"
                 ],
                 "deduplicated_seqs": [
                     [
                         {
-                            "id": "capsid_protein_C_DENV1"
+                            "id": "test"
                         },
-                        "capsid_protein_C_DENV1-nodups.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "test-nodups.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,be323484fe9c12fa2a3857d0885ad669"
+                    "versions.yml:md5,750a753a95b35c55fc711d91f46e4b84"
                 ]
             }
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.6"
+            "nextflow": "25.04.6"
         },
-        "timestamp": "2025-05-08T12:52:41.727797"
+        "timestamp": "2025-07-08T17:33:10.704986"
     },
     "denv1 - fasta": {
         "content": [
@@ -44,7 +44,7 @@
                     ]
                 ],
                 "1": [
-                    "versions.yml:md5,be323484fe9c12fa2a3857d0885ad669"
+                    "versions.yml:md5,750a753a95b35c55fc711d91f46e4b84"
                 ],
                 "deduplicated_seqs": [
                     [
@@ -55,14 +55,14 @@
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,be323484fe9c12fa2a3857d0885ad669"
+                    "versions.yml:md5,750a753a95b35c55fc711d91f46e4b84"
                 ]
             }
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.6"
+            "nextflow": "25.04.6"
         },
-        "timestamp": "2025-05-08T12:52:38.986812"
+        "timestamp": "2025-07-08T17:31:09.684998"
     }
 }
