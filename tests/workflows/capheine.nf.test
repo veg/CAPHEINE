@@ -8,18 +8,17 @@ nextflow_workflow {
 
         when {
             params {
-                // define parameters here. Example:
-                // outdir = "tests/results"
+                foreground_list = null
+                foreground_regexp = '_2023_09_'
+                outdir = "$outputDir"
             }
             workflow {
                 // TODO: fix input format & ensure input format matches planned sample sheet format
                 """
-                input = [
-                    'capsid_protein_C',
-                    file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true),
-                    file(projectDir + '/tests/test_data/capsid_protein_C_DENV1_ref.fasta', checkIfExists: true),
-                    '*_2023_09_*'
-                ]
+                input[0] = file(projectDir + '/tests/test_data/pretend_DENV1_ref.fasta', checkIfExists: true)
+                input[1] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
+                input[2] = []
+                input[3] = ['_2023_09_']
                 """
             }
         }
@@ -28,26 +27,31 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 // Check FEL output exists
-                { assert path(workflow.out.fel_json[0][1]).exists() },
-                { assert path(workflow.out.fel_json[0][1]).text.contains('FEL') },
+                { assert path(workflow.out.fel_results[0][1]).exists() },
+                { assert path(workflow.out.fel_results[0][1]).text.contains('FEL') },
                 // Check MEME output exists
-                { assert path(workflow.out.meme_json[0][1]).exists() },
-                { assert path(workflow.out.meme_json[0][1]).text.contains('MEME') },
+                { assert path(workflow.out.meme_results[0][1]).exists() },
+                { assert path(workflow.out.meme_results[0][1]).text.contains('MEME') },
                 // Check PRIME output exists
-                { assert path(workflow.out.prime_json[0][1]).exists() },
-                { assert path(workflow.out.prime_json[0][1]).text.contains('PRIME') },
+                { assert path(workflow.out.prime_results[0][1]).exists() },
+                { assert path(workflow.out.prime_results[0][1]).text.contains('PRIME') },
                 // Check BUSTED output exists
-                { assert path(workflow.out.busted_json[0][1]).exists() },
-                { assert path(workflow.out.busted_json[0][1]).text.contains('BUSTED') },
+                { assert path(workflow.out.busted_results[0][1]).exists() },
+                { assert path(workflow.out.busted_results[0][1]).text.contains('BUSTED') },
                 // Check Contrast-FEL output exists
-                { assert path(workflow.out.contrastfel_json[0][1]).exists() },
-                { assert path(workflow.out.contrastfel_json[0][1]).text.contains('Contrast-FEL') },
+                { assert path(workflow.out.contrastfel_results[0][1]).exists() },
+                { assert path(workflow.out.contrastfel_results[0][1]).text.contains('Contrast-FEL') },
                 // Check RELAX output exists
-                { assert path(workflow.out.relax_json[0][1]).exists() },
-                { assert path(workflow.out.relax_json[0][1]).text.contains('RELAX') },
+                { assert path(workflow.out.relax_results[0][1]).exists() },
+                { assert path(workflow.out.relax_results[0][1]).text.contains('RELAX') },
+                // Check DRHIP output exists
+                { assert path(workflow.out.summary_csv[0]).exists() },
+                { assert path(workflow.out.sites_csv[0]).exists() },
+                { assert path(workflow.out.comparison_summary_csv[0]).exists() },
+                { assert path(workflow.out.comparison_sites_csv[0]).exists() },
                 // Check versions file
                 { assert path(workflow.out.versions[0]).exists() },
-                { assert workflow.out.versions.size() == 12 }
+                { assert workflow.out.versions.size() == 23 }
             )
         }
 

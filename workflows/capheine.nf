@@ -10,6 +10,7 @@ include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_capheine_pipeline'
+include { DRHIP                  } from '../modules/local/drhip/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -41,11 +42,11 @@ workflow CAPHEINE {
     ch_contrastfel = Channel.empty()
     ch_relax = Channel.empty()
 
-    if (params.foreground_list || params.foreground_regexp) {
-        has_foreground_list        = true
-    } else {
-        has_foreground_list        = false
-    }
+    // if (params.foreground_list || params.foreground_regexp) {
+    //     has_foreground_list        = true
+    // } else {
+    //     has_foreground_list        = false
+    // }
 
 
     //
@@ -95,7 +96,24 @@ workflow CAPHEINE {
     ch_relax    = ch_relax.mix(HYPHY_ANALYSES.out.relax_json)
     ch_versions = ch_versions.mix(HYPHY_ANALYSES.out.versions)
 
-    //TODO: create a final subworkflow to process the hyphy data into something clean and useful
+    //
+    // MODULE: Run DRHIP to process the hyphy data into csv files
+    //
+    
+    DRHIP(
+        // Extract only the file paths from [meta, file] tuples
+        ch_fel.map{ meta, file -> file }.collect(),
+        ch_meme.map{ meta, file -> file }.collect(),
+        ch_prime.map{ meta, file -> file }.collect(),
+        ch_busted.map{ meta, file -> file }.collect(),
+        ch_contrastfel.map{ meta, file -> file }.collect(),
+        ch_relax.map{ meta, file -> file }.collect()
+    )
+    def ch_summary_csv = DRHIP.out.summary_csv
+    def ch_sites_csv = DRHIP.out.sites_csv
+    def ch_comparison_summary_csv = DRHIP.out.comparison_summary_csv
+    def ch_comparison_sites_csv = DRHIP.out.comparison_sites_csv
+    ch_versions = ch_versions.mix(DRHIP.out.versions)
 
     //
     // Collate and save software versions
@@ -163,6 +181,10 @@ workflow CAPHEINE {
         busted_results   = ch_busted
         contrastfel_results = ch_contrastfel
         relax_results    = ch_relax
+        summary_csv            = ch_summary_csv
+        sites_csv              = ch_sites_csv
+        comparison_summary_csv = ch_comparison_summary_csv
+        comparison_sites_csv   = ch_comparison_sites_csv
         versions       = ch_versions                 // channel: [ path(versions.yml) ]
 
 }

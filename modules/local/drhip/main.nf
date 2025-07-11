@@ -16,40 +16,36 @@
 //               list (`[]`) instead of a file can be used to work around this issue.
 
 process DRHIP {
-    tag "$meta.id"
     label 'process_low'
 
     // TODO nf-core: See section in main README for further information regarding finding and adding container addresses to the section below.
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/YOUR-TOOL-HERE':
-        'biocontainers/YOUR-TOOL-HERE' }"
+        'https://depot.galaxyproject.org/singularity/drhip:0.1.1--pyhdfd78af_0':
+        'biocontainers/drhip:0.1.1--pyhdfd78af_0' }"
 
     input:
-    tuple val(meta),
-        path(fel_results),  // collected results from FEL analysis (not used directly, but here so the module waits for FEL to finish)
-        path(meme_results),
-        path(prime_results),
-        path(busted_results),
-        path(relax_results),
-        path(contrastfel_results)
+    path fel_results
+    path meme_results
+    path prime_results
+    path busted_results
+    path contrastfel_results
+    path relax_results
 
     output:
-    path "combined_summary.csv", emit: summary_csv
-    path "combined_sites.csv", emit: sites_csv
-    path "combined_comparison_summary.csv", emit: comparison_summary_csv
-    path "combined_comparison_sites.csv", emit: comparison_sites_csv
-    path "versions.yml"           , emit: versions
+    path "${params.outdir}/combined_summary.csv",              emit: summary_csv
+    path "${params.outdir}/combined_sites.csv",                emit: sites_csv
+    path "${params.outdir}/combined_comparison_summary.csv",   optional: true, emit: comparison_summary_csv
+    path "${params.outdir}/combined_comparison_sites.csv",     optional: true, emit: comparison_sites_csv
+    path "${params.outdir}/versions.yml",                      emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
     """
     drhip \\
-        $args \\
         --input ${params.outdir} \\
         --output ${params.outdir}
 
@@ -61,9 +57,7 @@ process DRHIP {
 
     stub:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
-    """
-    
+    """    
     touch ${params.outdir}/combined_summary.csv
     touch ${params.outdir}/combined_sites.csv
     touch ${params.outdir}/combined_comparison_summary.csv
@@ -74,4 +68,4 @@ process DRHIP {
         drhip: \$(drhip --version | sed 's/drhip //g')
     END_VERSIONS
     """
-}
+    }

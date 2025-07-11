@@ -37,7 +37,7 @@ nextflow_workflow {
                 { assert path(workflow.out.tree[0][1]).toString().endsWith('.treefile') },
                 // no labeled tree should be generated
                 { assert !path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
-                { assert workflow.out.versions.size() == 5 },
+                { assert workflow.out.versions.size() == 8 },
                 // hacky check, but this test should also generate a warning that no internal branches could be labeled
             )
         }
@@ -67,7 +67,7 @@ nextflow_workflow {
                 { assert path(workflow.out.deduplicated[0][1]).toString().endsWith('-nodups.fasta') },
                 { assert path(workflow.out.tree[0][1]).exists() },
                 { assert path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
-                { assert workflow.out.versions.size() == 6 },
+                { assert workflow.out.versions.size() == 10 },
                 // hacky check, but this test should also generate a warning that no internal branches could be labeled
             )
         }
@@ -99,7 +99,7 @@ nextflow_workflow {
                 { assert path(workflow.out.tree[0][1]).toString().endsWith('.treefile') },
                 // check if tree is labeled
                 { assert path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
-                { assert workflow.out.versions.size() == 6 },
+                { assert workflow.out.versions.size() == 10 },
             )
         }
     }
@@ -129,7 +129,7 @@ nextflow_workflow {
                 { assert path(workflow.out.tree[0][1]).toString().endsWith('.treefile') },
                 // check if tree is labeled
                 { assert path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
-                { assert workflow.out.versions.size() == 6 },
+                { assert workflow.out.versions.size() == 10 },
                 //{ assert path(workflow.out.versions[2]).text.contains('iqtree:') },
                 //{ assert path(workflow.out.versions[0]).text.contains('cawlign:') },
             )

@@ -66,6 +66,10 @@ workflow HYPHY_CAPHEINE {
     busted_results   = CAPHEINE.out.busted_results
     contrastfel_results = CAPHEINE.out.contrastfel_results
     relax_results    = CAPHEINE.out.relax_results
+    summary_csv            = CAPHEINE.out.summary_csv
+    sites_csv              = CAPHEINE.out.sites_csv
+    comparison_summary_csv = CAPHEINE.out.comparison_summary_csv
+    comparison_sites_csv   = CAPHEINE.out.comparison_sites_csv
     versions       = CAPHEINE.out.versions
 }
 /*

@@ -9,4 +9,5 @@ testing*
 null/
 .nf-test/*
 .nf-test.log
-test_results/*
+test_results/
+.windsurf/
