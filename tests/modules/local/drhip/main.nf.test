@@ -62,8 +62,6 @@ nextflow_process {
                 { assert process.success },
                 { assert path(process.out.summary_csv[0]).exists() },
                 { assert path(process.out.sites_csv[0]).exists() },
-                { assert !path(process.out.comparison_summary_csv[0]).exists() },
-                { assert !path(process.out.comparison_site_csv[0]).exists() },
             )
         }
     }

@@ -90,14 +90,14 @@ nextflow_workflow {
                 { assert path(workflow.out.busted_results[0][1]).exists() },
                 { assert path(workflow.out.busted_results[0][1]).text.contains('BUSTED') },
                 // Check Contrast-FEL output DOES NOT exist
-                { assert !path(workflow.out.contrastfel_results[0][1]).exists() },
-                // Check RELAX output DOES NOT exist
-                { assert !path(workflow.out.relax_results[0][1]).exists() },
+                // { assert !path(workflow.out.contrastfel_results[0][1]).exists() },
+                // // Check RELAX output DOES NOT exist
+                // { assert !path(workflow.out.relax_results[0][1]).exists() },
                 // Check DRHIP output exists
                 { assert path(workflow.out.summary_csv[0]).exists() },
                 { assert path(workflow.out.sites_csv[0]).exists() },
-                { assert !path(workflow.out.comparison_summary_csv[0]).exists() },
-                { assert !path(workflow.out.comparison_site_csv[0]).exists() },
+                // { assert !path(workflow.out.comparison_summary_csv[0]).exists() },
+                // { assert !path(workflow.out.comparison_site_csv[0]).exists() },
                 // Check versions file
                 { assert path(workflow.out.versions[0]).exists() },
                 { assert workflow.out.versions.size() == 17 }

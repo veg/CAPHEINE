@@ -99,29 +99,20 @@ workflow CAPHEINE {
     //
     // MODULE: Run DRHIP to process the hyphy data into csv files
     //
-    
+
     DRHIP(
         // Extract only the file paths from [meta, file] tuples
         ch_fel.map{ meta, file -> file }.collect(),
         ch_meme.map{ meta, file -> file }.collect(),
         ch_prime.map{ meta, file -> file }.collect(),
         ch_busted.map{ meta, file -> file }.collect(),
-        ch_contrastfel.map{ meta, file -> file }.collect(),
-        ch_relax.map{ meta, file -> file }.collect()
+        ch_contrastfel ? ch_contrastfel.map{ meta, file -> file }.collect() : Channel.empty(),  // null pointer exception is happening here, I think
+        ch_relax    ? ch_relax.map{ meta, file -> file }.collect() : Channel.empty()  // I think the mapping fails if the channel is empty
     )
-    //     DRHIP(
-    //     // Extract only the file paths from [meta, file] tuples
-    //     ch_fel.map{ meta, file -> file },
-    //     ch_meme.map{ meta, file -> file },
-    //     ch_prime.map{ meta, file -> file },
-    //     ch_busted.map{ meta, file -> file },
-    //     ch_contrastfel.map{ meta, file -> file },
-    //     ch_relax.map{ meta, file -> file }
-    // )
     def ch_summary_csv = DRHIP.out.summary_csv
     def ch_sites_csv = DRHIP.out.sites_csv
-    def ch_comparison_summary_csv = DRHIP.out.comparison_summary_csv
-    def ch_comparison_site_csv = DRHIP.out.comparison_site_csv
+    def ch_comparison_summary_csv = DRHIP.out.comparison_summary_csv ?: Channel.empty()
+    def ch_comparison_site_csv    = DRHIP.out.comparison_site_csv    ?: Channel.empty()
     ch_versions = ch_versions.mix(DRHIP.out.versions)
 
     //
