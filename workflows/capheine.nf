@@ -109,10 +109,19 @@ workflow CAPHEINE {
         ch_contrastfel.map{ meta, file -> file }.collect(),
         ch_relax.map{ meta, file -> file }.collect()
     )
+    //     DRHIP(
+    //     // Extract only the file paths from [meta, file] tuples
+    //     ch_fel.map{ meta, file -> file },
+    //     ch_meme.map{ meta, file -> file },
+    //     ch_prime.map{ meta, file -> file },
+    //     ch_busted.map{ meta, file -> file },
+    //     ch_contrastfel.map{ meta, file -> file },
+    //     ch_relax.map{ meta, file -> file }
+    // )
     def ch_summary_csv = DRHIP.out.summary_csv
     def ch_sites_csv = DRHIP.out.sites_csv
     def ch_comparison_summary_csv = DRHIP.out.comparison_summary_csv
-    def ch_comparison_sites_csv = DRHIP.out.comparison_sites_csv
+    def ch_comparison_site_csv = DRHIP.out.comparison_site_csv
     ch_versions = ch_versions.mix(DRHIP.out.versions)
 
     //
@@ -184,7 +193,7 @@ workflow CAPHEINE {
         summary_csv            = ch_summary_csv
         sites_csv              = ch_sites_csv
         comparison_summary_csv = ch_comparison_summary_csv
-        comparison_sites_csv   = ch_comparison_sites_csv
+        comparison_site_csv   = ch_comparison_site_csv
         versions       = ch_versions                 // channel: [ path(versions.yml) ]
 
 }

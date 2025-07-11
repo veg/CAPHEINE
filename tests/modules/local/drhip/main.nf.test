@@ -1,0 +1,104 @@
+// TODO nf-core: Once you have added the required tests, please run the following command to build this file:
+// nf-core modules test cawlign
+nextflow_process {
+
+    name "Test Process DRHIP"
+    script "modules/local/drhip/main.nf"
+    process "DRHIP"
+
+    tag "modules"
+    tag "modules_"
+    tag "drhip"
+
+    test("drhip - all hyphy analyses") {
+        when {
+            process {
+                """
+                input[0] = [projectDir + '/tests/test_data/hyphy_data/FEL/pretend_DENV1_ref.part_NC_001477.1__capsid_protein_C__95-394_DENV1.FEL.json',
+                            projectDir + '/tests/test_data/hyphy_data/FEL/pretend_DENV1_ref.part_NC_001477.1__membrane_glycoprotein.FEL.json']
+                input[1] = [projectDir + '/tests/test_data/hyphy_data/MEME/pretend_DENV1_ref.part_NC_001477.1__capsid_protein_C__95-394_DENV1.MEME.json',
+                            projectDir + '/tests/test_data/hyphy_data/MEME/pretend_DENV1_ref.part_NC_001477.1__membrane_glycoprotein.MEME.json']
+                input[2] = [projectDir + '/tests/test_data/hyphy_data/PRIME/pretend_DENV1_ref.part_NC_001477.1__capsid_protein_C__95-394_DENV1.PRIME.json',
+                            projectDir + '/tests/test_data/hyphy_data/PRIME/pretend_DENV1_ref.part_NC_001477.1__membrane_glycoprotein.PRIME.json']
+                input[3] = [projectDir + '/tests/test_data/hyphy_data/BUSTED/pretend_DENV1_ref.part_NC_001477.1__capsid_protein_C__95-394_DENV1.BUSTED.json',
+                            projectDir + '/tests/test_data/hyphy_data/BUSTED/pretend_DENV1_ref.part_NC_001477.1__membrane_glycoprotein.BUSTED.json']
+                input[4] = [projectDir + '/tests/test_data/hyphy_data/CONTRASTFEL/pretend_DENV1_ref.part_NC_001477.1__capsid_protein_C__95-394_DENV1.CONTRASTFEL.json',
+                            projectDir + '/tests/test_data/hyphy_data/CONTRASTFEL/pretend_DENV1_ref.part_NC_001477.1__membrane_glycoprotein.CONTRASTFEL.json']
+                input[5] = [projectDir + '/tests/test_data/hyphy_data/RELAX/pretend_DENV1_ref.part_NC_001477.1__capsid_protein_C__95-394_DENV1.RELAX.json',
+                            projectDir + '/tests/test_data/hyphy_data/RELAX/pretend_DENV1_ref.part_NC_001477.1__membrane_glycoprotein.RELAX.json']
+                """
+            }
+        }
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.summary_csv[0]).exists() },
+                { assert path(process.out.sites_csv[0]).exists() },
+                { assert path(process.out.comparison_summary_csv[0]).exists() },
+                { assert path(process.out.comparison_site_csv[0]).exists() },
+            )
+        }
+    }
+
+    test("drhip - no RELAX, no CFEL") {
+        when {
+            process {
+                """
+                input[0] = [projectDir + '/tests/test_data/hyphy_data/FEL/pretend_DENV1_ref.part_NC_001477.1__capsid_protein_C__95-394_DENV1.FEL.json',
+                            projectDir + '/tests/test_data/hyphy_data/FEL/pretend_DENV1_ref.part_NC_001477.1__membrane_glycoprotein.FEL.json']
+                input[1] = [projectDir + '/tests/test_data/hyphy_data/MEME/pretend_DENV1_ref.part_NC_001477.1__capsid_protein_C__95-394_DENV1.MEME.json',
+                            projectDir + '/tests/test_data/hyphy_data/MEME/pretend_DENV1_ref.part_NC_001477.1__membrane_glycoprotein.MEME.json']
+                input[2] = [projectDir + '/tests/test_data/hyphy_data/PRIME/pretend_DENV1_ref.part_NC_001477.1__capsid_protein_C__95-394_DENV1.PRIME.json',
+                            projectDir + '/tests/test_data/hyphy_data/PRIME/pretend_DENV1_ref.part_NC_001477.1__membrane_glycoprotein.PRIME.json']
+                input[3] = [projectDir + '/tests/test_data/hyphy_data/BUSTED/pretend_DENV1_ref.part_NC_001477.1__capsid_protein_C__95-394_DENV1.BUSTED.json',
+                            projectDir + '/tests/test_data/hyphy_data/BUSTED/pretend_DENV1_ref.part_NC_001477.1__membrane_glycoprotein.BUSTED.json']
+                input[4] = []
+                input[5] = []
+                """
+            }
+        }
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.summary_csv[0]).exists() },
+                { assert path(process.out.sites_csv[0]).exists() },
+                { assert !path(process.out.comparison_summary_csv[0]).exists() },
+                { assert !path(process.out.comparison_site_csv[0]).exists() },
+            )
+        }
+    }
+
+    // TODO nf-core: Change the test name preferably indicating the test-data and file-format used but keep the " - stub" suffix.
+    test("cawlign - capsid_protein_C - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [projectDir + '/tests/test_data/hyphy_data/FEL/pretend_DENV1_ref.part_NC_001477.1__capsid_protein_C__95-394_DENV1.FEL.json',
+                            projectDir + '/tests/test_data/hyphy_data/FEL/pretend_DENV1_ref.part_NC_001477.1__membrane_glycoprotein.FEL.json']
+                input[1] = [projectDir + '/tests/test_data/hyphy_data/MEME/pretend_DENV1_ref.part_NC_001477.1__capsid_protein_C__95-394_DENV1.MEME.json',
+                            projectDir + '/tests/test_data/hyphy_data/MEME/pretend_DENV1_ref.part_NC_001477.1__membrane_glycoprotein.MEME.json']
+                input[2] = [projectDir + '/tests/test_data/hyphy_data/PRIME/pretend_DENV1_ref.part_NC_001477.1__capsid_protein_C__95-394_DENV1.PRIME.json',
+                            projectDir + '/tests/test_data/hyphy_data/PRIME/pretend_DENV1_ref.part_NC_001477.1__membrane_glycoprotein.PRIME.json']
+                input[3] = [projectDir + '/tests/test_data/hyphy_data/BUSTED/pretend_DENV1_ref.part_NC_001477.1__capsid_protein_C__95-394_DENV1.BUSTED.json',
+                            projectDir + '/tests/test_data/hyphy_data/BUSTED/pretend_DENV1_ref.part_NC_001477.1__membrane_glycoprotein.BUSTED.json']
+                input[4] = [projectDir + '/tests/test_data/hyphy_data/CONTRASTFEL/pretend_DENV1_ref.part_NC_001477.1__capsid_protein_C__95-394_DENV1.CONTRASTFEL.json',
+                            projectDir + '/tests/test_data/hyphy_data/CONTRASTFEL/pretend_DENV1_ref.part_NC_001477.1__membrane_glycoprotein.CONTRASTFEL.json']
+                input[5] = [projectDir + '/tests/test_data/hyphy_data/RELAX/pretend_DENV1_ref.part_NC_001477.1__capsid_protein_C__95-394_DENV1.RELAX.json',
+                            projectDir + '/tests/test_data/hyphy_data/RELAX/pretend_DENV1_ref.part_NC_001477.1__membrane_glycoprotein.RELAX.json']
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+
+    }
+
+}
