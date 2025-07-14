@@ -69,7 +69,7 @@ workflow HYPHY_CAPHEINE {
     summary_csv            = CAPHEINE.out.summary_csv
     sites_csv              = CAPHEINE.out.sites_csv
     comparison_summary_csv = CAPHEINE.out.comparison_summary_csv
-    comparison_sites_csv   = CAPHEINE.out.comparison_sites_csv
+    comparison_site_csv   = CAPHEINE.out.comparison_site_csv
     versions       = CAPHEINE.out.versions
 }
 /*

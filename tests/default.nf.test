@@ -3,7 +3,7 @@ nextflow_pipeline {
     name "Test pipeline with default settings"
     script "../main.nf"
 
-    test("Params: default") {
+    test("Simple test, no foreground provided. Params: default") {
         when {
             params {
                 outdir = "$outputDir"
