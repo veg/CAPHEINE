@@ -34,21 +34,6 @@ workflow CAPHEINE {
     ch_processed_aln = Channel.empty()
     ch_processed_trees = Channel.empty()
 
-    // hyphy output channels
-    ch_fel = Channel.empty()
-    ch_meme = Channel.empty()
-    ch_prime = Channel.empty()
-    ch_busted = Channel.empty()
-    ch_contrastfel = Channel.empty()
-    ch_relax = Channel.empty()
-
-    // if (params.foreground_list || params.foreground_regexp) {
-    //     has_foreground_list        = true
-    // } else {
-    //     has_foreground_list        = false
-    // }
-
-
     //
     // SUBWORKFLOW: Run preprocessing of viral non-recombinant viral data
     //
@@ -88,17 +73,27 @@ workflow CAPHEINE {
     HYPHY_ANALYSES (
         ch_hyphy_input
     )
-    ch_fel      = ch_fel.mix(HYPHY_ANALYSES.out.fel_json)
-    ch_meme     = ch_meme.mix(HYPHY_ANALYSES.out.meme_json)
-    ch_prime    = ch_prime.mix(HYPHY_ANALYSES.out.prime_json)
-    ch_busted   = ch_busted.mix(HYPHY_ANALYSES.out.busted_json)
-    ch_contrastfel = ch_contrastfel.mix(HYPHY_ANALYSES.out.contrastfel_json)
-    ch_relax    = ch_relax.mix(HYPHY_ANALYSES.out.relax_json)
+    def ch_fel      = HYPHY_ANALYSES.out.fel_json
+    def ch_meme     = HYPHY_ANALYSES.out.meme_json
+    def ch_prime    = HYPHY_ANALYSES.out.prime_json
+    def ch_busted   = HYPHY_ANALYSES.out.busted_json
+    def ch_contrastfel =  HYPHY_ANALYSES.out.contrastfel_json
+    def ch_relax    = HYPHY_ANALYSES.out.relax_json
     ch_versions = ch_versions.mix(HYPHY_ANALYSES.out.versions)
 
     //
     // MODULE: Run DRHIP to process the hyphy data into csv files
     //
+
+    if (params.foreground_list || params.foreground_regexp) {
+       ch_contrastfel = ch_contrastfel.map{ m,f -> f }.collect()
+       ch_relax = ch_relax.map{ m,f -> f }.collect()
+    } else {
+        ch_contrastfel = Channel.value([])
+        ch_relax = Channel.value([])
+    }
+    // def cf_list = ch_contrastfel.map{ m,f -> f }.collect()  ?: Channel.value([])
+    // def relax_list = ch_relax.map{ m,f -> f }.collect()    ?: Channel.value([])
 
     DRHIP(
         // Extract only the file paths from [meta, file] tuples
@@ -106,8 +101,8 @@ workflow CAPHEINE {
         ch_meme.map{ meta, file -> file }.collect(),
         ch_prime.map{ meta, file -> file }.collect(),
         ch_busted.map{ meta, file -> file }.collect(),
-        ch_contrastfel ? ch_contrastfel.map{ meta, file -> file }.collect() : Channel.empty(),  // null pointer exception is happening here, I think
-        ch_relax    ? ch_relax.map{ meta, file -> file }.collect() : Channel.empty()  // I think the mapping fails if the channel is empty
+        ch_contrastfel,
+        ch_relax
     )
     def ch_summary_csv = DRHIP.out.summary_csv
     def ch_sites_csv = DRHIP.out.sites_csv

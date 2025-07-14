@@ -126,9 +126,9 @@ nextflow_workflow {
                 { assert path(workflow.out.busted_json[0][1]).text.contains('BUSTED') },
                 { assert path(workflow.out.busted_json[0][1]).toString().endsWith('.BUSTED.json') },
                 // Check that Contrast-FEL output does not exist
-                { assert workflow.out.contrastfel_json[0].empty },
+                { assert workflow.out.contrastfel_json.empty },
                 // Check that RELAX output does not exist
-                { assert workflow.out.relax_json[0].empty },
+                { assert workflow.out.relax_json.empty },
                 // Check versions file
                 { assert path(workflow.out.versions[0]).exists() },
                 { assert path(workflow.out.versions[0]).text.contains('hyphy:') }

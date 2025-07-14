@@ -71,8 +71,7 @@ workflow HYPHY_ANALYSES {
     meme_json     = HYPHY_MEME.out.meme_json        // channel: [ val(meta), [ meme_json ] ]
     prime_json    = HYPHY_PRIME.out.prime_json      // channel: [ val(meta), [ prime_json ] ]
     busted_json   = HYPHY_BUSTED.out.busted_json    // channel: [ val(meta), [ busted_json ] ]
-    contrastfel_json = has_foreground ? HYPHY_CONTRASTFEL.out.contrastfel_json : [] // channel: [ val(meta), [ contrastfel_json ] ]
-    relax_json    = has_foreground ? HYPHY_RELAX.out.relax_json : []                // channel: [ val(meta), [ relax_json ] ]
+    contrastfel_json = has_foreground ? HYPHY_CONTRASTFEL.out.contrastfel_json : Channel.empty() // channel: [ val(meta), [ contrastfel_json ] ]
+    relax_json    = has_foreground ? HYPHY_RELAX.out.relax_json : Channel.empty()                // channel: [ val(meta), [ relax_json ] ]
     versions      = ch_versions                     // channel: [ versions.yml ]
 }
-
