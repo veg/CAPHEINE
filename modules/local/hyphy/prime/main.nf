@@ -1,5 +1,5 @@
 process HYPHY_PRIME {
-    tag "$meta.id"
+    tag "$meta"
     label 'process_single'
     cache 'deep'
 
@@ -12,7 +12,7 @@ process HYPHY_PRIME {
     tuple val(meta), path(alignment), path(tree)
 
     output:
-    tuple val(meta), path("PRIME/${meta.id}.PRIME.json"), emit: prime_json
+    tuple val(meta), path("PRIME/${meta}.PRIME.json"), emit: prime_json
     path "versions.yml"                           , emit: versions
 
     when:
@@ -28,7 +28,7 @@ process HYPHY_PRIME {
         --tree $tree \\
         --branches 'Internal' \\
         --property-set 'Atchley' \\
-        --output PRIME/${meta.id}.PRIME.json \\
+        --output PRIME/${meta}.PRIME.json \\
         $args
 
     cat <<-END_VERSIONS > versions.yml
@@ -39,7 +39,7 @@ process HYPHY_PRIME {
 
     stub:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta}"
 
     """
     mkdir -p PRIME

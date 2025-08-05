@@ -19,7 +19,7 @@ process CAWLIGN {
     path unaligned  // path to bulk unaligned sequences in FASTA format
 
     output:
-    tuple val(reference.baseName), path("${reference.baseName}-aligned.fasta") , emit: aligned_seqs
+    tuple val("${reference.baseName}"), path("${reference.baseName}-aligned.fasta") , emit: aligned_seqs
     path "versions.yml"                                , emit: versions
 
     when:

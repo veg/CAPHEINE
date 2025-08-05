@@ -16,8 +16,8 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = Channel.of([
-                    [ id:'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'],
-                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true),
+                    'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups', \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true), \
                     file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
                 ])
                 """
@@ -97,8 +97,8 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = Channel.of([
-                    [ id:'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'],
-                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true),
+                    'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups', \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true), \
                     file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
                 ])
                 """

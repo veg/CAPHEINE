@@ -1,5 +1,5 @@
 process REMOVEAMBIGSEQS {
-    tag "${input_seqs.baseName}"
+    tag "${meta}"
     label 'process_single'
 
     // TODO nf-core: List required Conda package(s).
@@ -12,10 +12,11 @@ process REMOVEAMBIGSEQS {
         'biocontainers/biopython:1.79' }"
 
     input:
-    path input_seqs
+    tuple val(meta), path(alignment) 
+    //path input_seqs
 
     output:
-    path "${input_seqs.baseName}-clean.fasta"      , emit: cleaned_seqs
+    tuple val(meta), path("${meta}-clean.${alignment.extension}")      , emit: no_ambigs
     path "versions.yml"                            , emit: versions
 
     when:
@@ -23,10 +24,10 @@ process REMOVEAMBIGSEQS {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${input_seqs.baseName}"
+    def prefix = task.ext.prefix ?: "${meta}"
     """
     python ${projectDir}/bin/filter-ambig-sequences.py \\
-        -i ${input_seqs} \\
+        -i ${alignment} \\
         -o ${prefix} \\
         ${args}
 
@@ -40,7 +41,7 @@ process REMOVEAMBIGSEQS {
 
     stub:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${input_seqs.baseName}"
+    def prefix = task.ext.prefix ?: "${meta}"
     // TODO nf-core: A stub section should mimic the execution of the original module as best as possible
     //               Have a look at the following examples:
     //               Simple example: https://github.com/nf-core/modules/blob/818474a292b4860ae8ff88e149fbcda68814114d/modules/nf-core/bcftools/annotate/main.nf#L47-L63

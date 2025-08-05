@@ -9,9 +9,11 @@ nextflow_process {
         when {
             process {
                 """
-                input[0] = [[id: 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'], \
-                file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true), \
-                file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)]
+                input[0] = [
+                    'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups', \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true), \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ]
                 input[1] = 'Foreground'
                 """
             }
@@ -38,7 +40,7 @@ nextflow_process {
                     assert tested.findAll { k, v -> v != "Foreground" }.every { k, v -> v == "background" }
                 },
                 // Verify metadata matches input
-                { assert process.out.contrastfel_json[0][0] == [id:'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'] },
+                { assert process.out.contrastfel_json[0][0] == 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups' },
                 // Check version file exists and has correct format
                 { assert path(process.out.versions[0]).exists() },
                 { assert path(process.out.versions[0]).text.contains('hyphy:') }
@@ -53,9 +55,11 @@ nextflow_process {
         when {
             process {
                 """
-                input[0] = [[id: 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'], \
-                file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true), \
-                file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)]
+                input[0] = [
+                    'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups', \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true), \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ]
                 input[1] = 'Foreground'
                 """
             }
@@ -67,7 +71,7 @@ nextflow_process {
                 // For stub test, just verify files exist with correct names
                 { assert path(process.out.contrastfel_json[0][1]).exists() },
                 { assert path(process.out.contrastfel_json[0][1]).toString().endsWith('.CONTRASTFEL.json') },
-                { assert process.out.contrastfel_json[0][0] == [id:'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups'] },
+                { assert process.out.contrastfel_json[0][0] == 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups' },
                 { assert path(process.out.versions[0]).exists() },
                 { assert path(process.out.versions[0]).text.contains('hyphy:') }
             )

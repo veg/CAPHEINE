@@ -9,7 +9,7 @@
 //               list (`[]`) instead of a file can be used to work around this issue.
 
 process HYPHY_FEL {
-    tag "$meta.id"
+    tag "$meta"
     label 'process_single'
     cache 'deep'
 
@@ -22,7 +22,7 @@ process HYPHY_FEL {
     tuple val(meta), path(alignment), path(tree)
 
     output:
-    tuple val(meta), path("FEL/${meta.id}.FEL.json"), emit: fel_json
+    tuple val(meta), path("FEL/${meta}.FEL.json"), emit: fel_json
     path "versions.yml"                         , emit: versions
 
     when:
@@ -41,7 +41,7 @@ process HYPHY_FEL {
         --alignment $alignment \\
         --tree $tree \\
         --branches 'Internal' \\
-        --output FEL/${meta.id}.FEL.json \\
+        --output FEL/${meta}.FEL.json \\
         ${args}
 
     cat <<-END_VERSIONS > versions.yml
@@ -52,7 +52,7 @@ process HYPHY_FEL {
 
     stub:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta}"
 
     """
     mkdir -p FEL

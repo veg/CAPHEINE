@@ -1,5 +1,5 @@
 process IQTREE {
-    tag "$meta.id"
+    tag "$meta"
     label 'process_medium'
     cache 'deep'
     // duplicate removal is somewhat stochastic (random duplicate is removed)
@@ -44,7 +44,7 @@ process IQTREE {
     script:
     def args                        = task.ext.args           ?: ''
     def alignment_arg               = alignment               ? "-s ${alignment.join(',')}"     : ''
-    def prefix                      = task.ext.prefix         ?: meta.id
+    def prefix                      = task.ext.prefix         ?: meta
     def memory                      = task.memory.toString().replaceAll(' ', '')
     """
     iqtree \\
@@ -62,7 +62,7 @@ process IQTREE {
     """
 
     stub:
-    def prefix = task.ext.prefix ?: meta.id
+    def prefix = task.ext.prefix ?: meta
     """
     touch "${prefix}.treefile"
     touch "${prefix}.iqtree"

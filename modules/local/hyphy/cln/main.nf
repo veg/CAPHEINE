@@ -1,5 +1,5 @@
 process HYPHY_CLN {
-    tag "$meta.id"
+    tag "${meta}"
     label 'process_single'
 
 
@@ -12,7 +12,7 @@ process HYPHY_CLN {
     tuple val(meta), path(alignment)
 
     output:
-    tuple val(meta), path("CLN/${meta.id}-nodups.${alignment.extension}"), emit: deduplicated_seqs
+    tuple val(meta), path("CLN/${meta}-nodups.${alignment.extension}"), emit: deduplicated_seqs
     path "versions.yml"                             , emit: versions
 
     when:
@@ -20,7 +20,7 @@ process HYPHY_CLN {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta}"
     // TODO nf-core: If the tool supports multi-threading then you MUST provide the appropriate parameter
     //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
     """
@@ -35,7 +35,7 @@ process HYPHY_CLN {
 
     stub:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta}"
     """
     mkdir -p CLN
     touch CLN/${prefix}-nodups.${alignment.extension}

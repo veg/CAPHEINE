@@ -16,7 +16,7 @@ nextflow_process {
             process {
                 """
                 input[0] = [
-                    [ id:'test' ], // meta map
+                    'DENV1_7seqs_withDups', // meta data
                     file(projectDir + '/tests/test_data/DENV1_7seqs_withDups.fasta', checkIfExists: true),
                 ]
                 """
@@ -45,7 +45,7 @@ nextflow_process {
             process {
                 """
                 input[0] = [
-                    [ id:'test' ], // meta map
+                    'DENV1_7seqs_withDups', // meta data
                     file(projectDir + '/tests/test_data/DENV1_7seqs_withDups.fasta', checkIfExists: true),
                 ]
                 """

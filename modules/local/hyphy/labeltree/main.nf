@@ -16,7 +16,7 @@
 //               list (`[]`) instead of a file can be used to work around this issue.
 
 process HYPHY_LABELTREE_REGEXP {
-    tag "$meta.id"
+    tag "$meta"
     label 'process_single'
     cache 'deep'
 
@@ -30,7 +30,7 @@ process HYPHY_LABELTREE_REGEXP {
     val(regexp)
 
     output:
-    tuple val(meta), path("LABELTREE/${meta.id}-labeled.${in_tree.extension}"), emit: labeled_tree
+    tuple val(meta), path("LABELTREE/${meta}-labeled.${in_tree.extension}"), emit: labeled_tree
     path "versions.yml"                                             , emit: versions
 
     when:
@@ -38,7 +38,7 @@ process HYPHY_LABELTREE_REGEXP {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta}"
     def out_tree = "${prefix}-labeled.${in_tree.extension}"
 
     """
@@ -60,7 +60,7 @@ process HYPHY_LABELTREE_REGEXP {
 
     stub:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta}"
     def out_tree = "${prefix}-labeled.${in_tree.extension}"
     """
     mkdir -p LABELTREE
@@ -74,7 +74,7 @@ process HYPHY_LABELTREE_REGEXP {
 }
 
 process HYPHY_LABELTREE_LIST {
-    tag "$meta.id"
+    tag "$meta"
     label 'process_single'
 
     conda "${moduleDir}/environment.yml"
@@ -87,7 +87,7 @@ process HYPHY_LABELTREE_LIST {
     path(in_list)
 
     output:
-    tuple val(meta), path("LABELTREE/${meta.id}-labeled.${in_tree.extension}"), emit: labeled_tree
+    tuple val(meta), path("LABELTREE/${meta}-labeled.${in_tree.extension}"), emit: labeled_tree
     path "versions.yml"                                             , emit: versions
 
     when:
@@ -95,7 +95,7 @@ process HYPHY_LABELTREE_LIST {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta}"
     def out_tree = "${prefix}-labeled.${in_tree.extension}"
 
     """
@@ -117,7 +117,7 @@ process HYPHY_LABELTREE_LIST {
 
     stub:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta}"
     def out_tree = "${prefix}-labeled.${in_tree.extension}"
     """
     mkdir -p LABELTREE

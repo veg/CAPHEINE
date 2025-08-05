@@ -1,5 +1,5 @@
 process HYPHY_MEME {
-    tag "$meta.id"
+    tag "$meta"
     label 'process_single'
     cache 'deep'
 
@@ -12,7 +12,7 @@ process HYPHY_MEME {
     tuple val(meta), path(alignment), path(tree)
 
     output:
-    tuple val(meta), path("MEME/${meta.id}.MEME.json"), emit: meme_json
+    tuple val(meta), path("MEME/${meta}.MEME.json"), emit: meme_json
     path "versions.yml"                          , emit: versions
 
     when:
@@ -27,7 +27,7 @@ process HYPHY_MEME {
         --alignment $alignment \\
         --tree $tree \\
         --branches 'Internal' \\
-        --output MEME/${meta.id}.MEME.json \\
+        --output MEME/${meta}.MEME.json \\
         $args
 
     cat <<-END_VERSIONS > versions.yml
@@ -38,7 +38,7 @@ process HYPHY_MEME {
 
     stub:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta}"
 
     """
     mkdir -p MEME

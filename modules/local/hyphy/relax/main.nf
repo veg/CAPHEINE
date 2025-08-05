@@ -1,5 +1,5 @@
 process HYPHY_RELAX {
-    tag "$meta.id"
+    tag "$meta"
     label 'process_single'
     cache 'deep'
 
@@ -13,7 +13,7 @@ process HYPHY_RELAX {
     val(test_tag)
 
     output:
-    tuple val(meta), path("RELAX/${meta.id}.RELAX.json"), emit: relax_json
+    tuple val(meta), path("RELAX/${meta}.RELAX.json"), emit: relax_json
     path "versions.yml"                           , emit: versions
 
     when:
@@ -27,7 +27,7 @@ process HYPHY_RELAX {
     hyphy relax \\
         --alignment $alignment \\
         --tree $tree \\
-        --output RELAX/${meta.id}.RELAX.json \\
+        --output RELAX/${meta}.RELAX.json \\
         --mode "Classic mode" \\
         --test $test_tag \\
         --reference "Reference" \\
@@ -42,7 +42,7 @@ process HYPHY_RELAX {
 
     stub:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta}"
     """
     mkdir -p RELAX
 

@@ -20,12 +20,6 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
     ch_versions = Channel.empty()
     ch_out_tree = Channel.empty()
 
-    // Remove sequences with ambiguous bases "-clean.fasta"
-    REMOVEAMBIGSEQS (
-        ch_unaligned
-    )
-    ch_versions = ch_versions.mix(REMOVEAMBIGSEQS.out.versions)
-
     // Split reference gene into individual genes
     SEQKIT_SPLIT (
         ch_reference
@@ -35,13 +29,19 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
     // Align sequences using cawlign "-aligned.fasta" Adds metadata to the sequences
     CAWLIGN (
         SEQKIT_SPLIT.out.gene_fastas.flatten(),
-        REMOVEAMBIGSEQS.out.cleaned_seqs
+        ch_unaligned
     )
     ch_versions = ch_versions.mix(CAWLIGN.out.versions)
 
+    // Remove sequences with ambiguous bases "-clean.fasta"
+    REMOVEAMBIGSEQS (
+        CAWLIGN.out.aligned_seqs
+    )
+    ch_versions = ch_versions.mix(REMOVEAMBIGSEQS.out.versions)
+
     // Remove duplicate sequences and clean up sequence names "-nodups${in_msa.extension}"
     HYPHY_CLN (
-        CAWLIGN.out.aligned_seqs.map { gene_name, file -> [[id: gene_name], file] }  // Convert metadata string to metadata map
+        REMOVEAMBIGSEQS.out.no_ambigs
     )
     ch_versions = ch_versions.mix(HYPHY_CLN.out.versions)
 

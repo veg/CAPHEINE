@@ -1,5 +1,5 @@
 process HYPHY_BUSTED {
-    tag "$meta.id"
+    tag "$meta"
     label 'process_single'
     cache 'deep'
 
@@ -12,7 +12,7 @@ process HYPHY_BUSTED {
     tuple val(meta), path(alignment), path(tree)
 
     output:
-    tuple val(meta), path("BUSTED/${meta.id}.BUSTED.json"), emit: busted_json
+    tuple val(meta), path("BUSTED/${meta}.BUSTED.json"), emit: busted_json
     path "versions.yml"                            , emit: versions
 
     when:
@@ -29,7 +29,7 @@ process HYPHY_BUSTED {
         --branches 'Internal' \\
         --srv Yes \\
         --error-sink Yes \\
-        --output BUSTED/${meta.id}.BUSTED.json \\
+        --output BUSTED/${meta}.BUSTED.json \\
         $args
 
     cat <<-END_VERSIONS > versions.yml
@@ -40,7 +40,7 @@ process HYPHY_BUSTED {
 
     stub:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta}"
 
     """
     mkdir -p BUSTED
