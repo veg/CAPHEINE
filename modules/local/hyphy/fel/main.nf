@@ -10,7 +10,7 @@
 
 process HYPHY_FEL {
     tag "$meta"
-    label 'process_single'
+    label 'process_medium'
     cache 'deep'
 
     conda "${moduleDir}/environment.yml"
