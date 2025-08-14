@@ -9,6 +9,7 @@
 > Di Tommaso P, Chatzou M, Floden EW, Barja PP, Palumbo E, Notredame C. Nextflow enables reproducible computational workflows. Nat Biotechnol. 2017 Apr 11;35(4):316-319. doi: 10.1038/nbt.3820. PubMed PMID: 28398311.
 
 ## Pipeline tools
+
 - [BioPython](https://biopython.org/)
 
 > Cock PJ, Antao T, Chang JT, Chapman BA, Cox CJ, Dalke A, et al. Biopython: Freely available python tools for Computational Molecular Biology and Bioinformatics. Bioinformatics. 2009 Mar 20;25(11):1422–3. doi:10.1093/bioinformatics/btp163
@@ -47,15 +48,15 @@
 
 - PRIME
 
-*Citation forthcoming*
+_Citation forthcoming_
 
 - [RELAX](https://doi.org/10.1093/molbev/msu400)
 
-> Wertheim JO, Murrell B, Smith MD, Kosakovsky Pond SL, Scheffler K. Relax: Detecting relaxed selection in a phylogenetic framework. Molecular Biology and Evolution. 2014 Dec 23;32(3):820–32. doi:10.1093/molbev/msu400 
+> Wertheim JO, Murrell B, Smith MD, Kosakovsky Pond SL, Scheffler K. Relax: Detecting relaxed selection in a phylogenetic framework. Molecular Biology and Evolution. 2014 Dec 23;32(3):820–32. doi:10.1093/molbev/msu400
 
 - [SeqKit](https://onlinelibrary.wiley.com/doi/10.1002/imt2.191)
 
-> Shen W, Sipos B, Zhao L. Seqkit2: A Swiss Army knife for sequence and alignment processing. iMeta. 2024 Apr 5;3(3). doi:10.1002/imt2.191 
+> Shen W, Sipos B, Zhao L. Seqkit2: A Swiss Army knife for sequence and alignment processing. iMeta. 2024 Apr 5;3(3). doi:10.1002/imt2.191
 
 ## Software packaging/containerisation tools
 
