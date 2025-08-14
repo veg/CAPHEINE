@@ -106,8 +106,8 @@ workflow CAPHEINE {
     )
     def ch_summary_csv = DRHIP.out.summary_csv
     def ch_sites_csv = DRHIP.out.sites_csv
-    def ch_comparison_summary_csv = DRHIP.out.comparison_summary_csv.ifEmpty(Channel.empty())
-    def ch_comparison_site_csv    = DRHIP.out.comparison_site_csv.ifEmpty(Channel.empty())
+    def ch_comparison_summary_csv = DRHIP.out.comparison_summary_csv
+    def ch_comparison_site_csv    = DRHIP.out.comparison_site_csv
     ch_versions = ch_versions.mix(DRHIP.out.versions)
 
     //

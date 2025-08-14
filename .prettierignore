@@ -8,7 +8,6 @@ results/
 .DS_Store
 testing/
 testing*
-tests/test_data/*
 *.pyc
 bin/
 ro-crate-metadata.json
