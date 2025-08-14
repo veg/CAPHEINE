@@ -12,7 +12,7 @@ process REMOVEAMBIGSEQS {
         'biocontainers/biopython:1.79' }"
 
     input:
-    tuple val(meta), path(alignment) 
+    tuple val(meta), path(alignment)
     //path input_seqs
 
     output:

@@ -50,7 +50,7 @@ process DRHIP {
     def contrastfel_files = contrastfel_results != null ? contrastfel_results.join(' ') : ''
     def relax_files = relax_results != null ? relax_results.join(' ') : ''
 
-    
+
     """
     # Build expected hyphy directory structure for drhip
     mkdir -p hyphy/{FEL,MEME,PRIME,BUSTED}
@@ -83,7 +83,7 @@ process DRHIP {
 
     stub:
     def args = task.ext.args ?: ''
-    """    
+    """
     touch combined_summary.csv
     touch combined_sites.csv
     touch combined_comparison_summary.csv

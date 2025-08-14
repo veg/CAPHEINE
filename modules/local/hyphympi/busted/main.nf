@@ -43,7 +43,7 @@ process HYPHYMPI_BUSTED {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    
+
     touch BUSTED/${prefix}.BUSTED.json
 
     cat <<-END_VERSIONS > versions.yml

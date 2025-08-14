@@ -86,8 +86,8 @@ workflow CAPHEINE {
     //
 
     if (params.foreground_list || params.foreground_regexp) {
-       ch_contrastfel = ch_contrastfel.map{ m,f -> f }.collect()
-       ch_relax = ch_relax.map{ m,f -> f }.collect()
+        ch_contrastfel = ch_contrastfel.map{ m,f -> f }.collect()
+        ch_relax = ch_relax.map{ m,f -> f }.collect()
     } else {
         ch_contrastfel = Channel.value([])
         ch_relax = Channel.value([])
@@ -106,8 +106,8 @@ workflow CAPHEINE {
     )
     def ch_summary_csv = DRHIP.out.summary_csv
     def ch_sites_csv = DRHIP.out.sites_csv
-    def ch_comparison_summary_csv = DRHIP.out.comparison_summary_csv ?: Channel.empty()
-    def ch_comparison_site_csv    = DRHIP.out.comparison_site_csv    ?: Channel.empty()
+    def ch_comparison_summary_csv = DRHIP.out.comparison_summary_csv.ifEmpty(Channel.empty())
+    def ch_comparison_site_csv    = DRHIP.out.comparison_site_csv.ifEmpty(Channel.empty())
     ch_versions = ch_versions.mix(DRHIP.out.versions)
 
     //
