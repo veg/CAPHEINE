@@ -5,6 +5,7 @@
 */
 include { PROCESS_VIRAL_NONRECOMBINANT } from '../subworkflows/local/process_viral_nonrecombinant/main'
 include { HYPHY_ANALYSES         } from '../subworkflows/local/hyphy_analyses/main'
+include { HYPHYMPI_ANALYSES      } from '../subworkflows/local/hyphy_mpi_analyses/main'
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
 include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -70,16 +71,37 @@ workflow CAPHEINE {
     //
     // SUBWORKFLOW: Run Hyphy Analyses
     //
-    HYPHY_ANALYSES (
-        ch_hyphy_input
-    )
-    def ch_fel      = HYPHY_ANALYSES.out.fel_json
-    def ch_meme     = HYPHY_ANALYSES.out.meme_json
-    def ch_prime    = HYPHY_ANALYSES.out.prime_json
-    def ch_busted   = HYPHY_ANALYSES.out.busted_json
-    def ch_contrastfel =  HYPHY_ANALYSES.out.contrastfel_json
-    def ch_relax    = HYPHY_ANALYSES.out.relax_json
-    ch_versions = ch_versions.mix(HYPHY_ANALYSES.out.versions)
+    def ch_fel
+    def ch_meme
+    def ch_prime
+    def ch_busted
+    def ch_contrastfel
+    def ch_relax
+
+    if (params.use_mpi) {
+        log.info "Using MPI-enabled HyPhy subworkflow (HYPHYMPI_ANALYSES)"
+        HYPHYMPI_ANALYSES (
+            ch_hyphy_input
+        )
+        ch_fel        = HYPHYMPI_ANALYSES.out.fel_json
+        ch_meme       = HYPHYMPI_ANALYSES.out.meme_json
+        ch_prime      = HYPHYMPI_ANALYSES.out.prime_json
+        ch_busted     = HYPHYMPI_ANALYSES.out.busted_json
+        ch_contrastfel= HYPHYMPI_ANALYSES.out.contrastfel_json
+        ch_relax      = HYPHYMPI_ANALYSES.out.relax_json
+        ch_versions   = ch_versions.mix(HYPHYMPI_ANALYSES.out.versions)
+    } else {
+        HYPHY_ANALYSES (
+            ch_hyphy_input
+        )
+        ch_fel        = HYPHY_ANALYSES.out.fel_json
+        ch_meme       = HYPHY_ANALYSES.out.meme_json
+        ch_prime      = HYPHY_ANALYSES.out.prime_json
+        ch_busted     = HYPHY_ANALYSES.out.busted_json
+        ch_contrastfel= HYPHY_ANALYSES.out.contrastfel_json
+        ch_relax      = HYPHY_ANALYSES.out.relax_json
+        ch_versions   = ch_versions.mix(HYPHY_ANALYSES.out.versions)
+    }
 
     //
     // MODULE: Run DRHIP to process the hyphy data into csv files
