@@ -1,7 +1,6 @@
 process HYPHY_BUSTED {
     tag "$meta"
-    label 'process_single'
-    cache 'deep'
+    label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
