@@ -18,7 +18,6 @@
 process HYPHY_LABELTREE_REGEXP {
     tag "$meta"
     label 'process_single'
-    cache 'deep'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -26,8 +25,12 @@ process HYPHY_LABELTREE_REGEXP {
         'biocontainers/hyphy:2.5.73--he91c24d_0' }"
 
     input:
-    tuple val(meta), path(in_tree)
-    val(regexp)
+    tuple val(meta), path(in_tree)      // input tree to be labeled
+    val(regexp)     // regexp to match sequences to label
+    val(invert)     // whether or not to invert the match (ie. match everything except the regexp). "Yes" or "No"
+    val(label)      // label to apply
+    val(internal_nodes)     // how to label internal nodes. "All descendants" or "None"
+    val(leaf_nodes)     // how to label leaf nodes. "Label" or "Skip"
 
     output:
     tuple val(meta), path("LABELTREE/${meta}-labeled.${in_tree.extension}"), emit: labeled_tree
@@ -47,10 +50,12 @@ process HYPHY_LABELTREE_REGEXP {
     hyphy label-tree \\
         --tree ${in_tree} \\
         --regexp '${regexp}' \\
-        --label 'Foreground' \\
+        --invert '${invert}' \\
+        --label '${label}' \\
+        --internal-nodes '${internal_nodes}' \\
+        --leaf-nodes '${leaf_nodes}' \\
         --output LABELTREE/${out_tree} \\
-        --internal-nodes 'All descendants' \\
-        --leaf-nodes 'Skip'
+        ${args}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -83,8 +88,13 @@ process HYPHY_LABELTREE_LIST {
         'biocontainers/hyphy:2.5.71--he91c24d_0' }"
 
     input:
-    tuple val(meta), path(in_tree)
-    path(in_list)
+    tuple val(meta), path(in_tree)      // input tree to be labeled
+    path(in_list)                        // list of sequences to label
+    val(invert)     // whether or not to invert the match (ie. match everything except the regexp). "Yes" or "No"
+    val(label)      // label to apply
+    val(internal_nodes)     // how to label internal nodes. "All descendants" or "None"
+    val(leaf_nodes)     // how to label leaf nodes. "Label" or "Skip"
+    
 
     output:
     tuple val(meta), path("LABELTREE/${meta}-labeled.${in_tree.extension}"), emit: labeled_tree
@@ -104,10 +114,12 @@ process HYPHY_LABELTREE_LIST {
     hyphy label-tree \\
         --tree ${in_tree} \\
         --list ${in_list} \\
-        --label 'Foreground' \\
+        --invert '${invert}' \\
+        --label '${label}' \\
+        --internal-nodes '${internal_nodes}' \\
+        --leaf-nodes '${leaf_nodes}' \\
         --output LABELTREE/${out_tree} \\
-        --internal-nodes 'All descendants' \\
-        --leaf-nodes 'Skip'
+        ${args}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

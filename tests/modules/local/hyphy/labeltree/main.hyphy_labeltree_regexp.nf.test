@@ -4,7 +4,7 @@ nextflow_process {
     script "modules/local/hyphy/labeltree/main.nf"
     process "HYPHY_LABELTREE_REGEXP"
 
-    test("labeltree - treefile - regexp") {
+    test("label foreground - no inversion - internal nodes only") {
 
         // TODO nf-core: If you are created a test for a chained module
         // (the module requires running more than one process to generate the required output)
@@ -18,7 +18,11 @@ nextflow_process {
                     'FBgn0000055_NT_033779.5_10_species_12_seqs',
                     file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-unlabeled.fasta.treefile', checkIfExists: true),
                 ]
-                input[1] = ['D_su*']
+                input[1] = 'D_su'
+                input[2] = 'No'
+                input[3] = 'Foreground'
+                input[4] = 'All descendants'
+                input[5] = 'Skip'
                 """
             }
         }
@@ -33,9 +37,15 @@ nextflow_process {
                 // Check that the output tree matches the expected tree
                 {
                     def tree = path(process.out.labeled_tree[0][1]).text
-                    def regex = ~/\{Foreground\}:0\.014817/
-                    assert tree =~ regex
 
+                    // only one internal branch should be labeled
+                    def regex = ~/\{Foreground\}/
+                    def matches = tree.findAll(regex)
+                    assert matches.size() == 1
+
+                    //check that the correct branch is labeled
+                    def regex2 = ~/\{Foreground\}:0\.014817/
+                    assert tree =~ regex2
                 },
                 // Check version file exists and has correct format
                 { assert path(process.out.versions[0]).exists() },
@@ -45,7 +55,58 @@ nextflow_process {
 
     }
 
-    test("labeltree - treefile - stub") {
+    test("label foreground - inversion - internal nodes only") {
+
+        // TODO nf-core: If you are created a test for a chained module
+        // (the module requires running more than one process to generate the required output)
+        // add the 'setup' method here.
+        // You can find more information about how to use a 'setup' method in the docs (https://nf-co.re/docs/contributing/modules#steps-for-creating-nf-test-for-chained-modules).
+
+        when {
+            process {
+                """
+                input[0] = [
+                    'FBgn0000055_NT_033779.5_10_species_12_seqs',
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-unlabeled.fasta.treefile', checkIfExists: true),
+                ]
+                input[1] = 'D_su'
+                input[2] = 'Yes'
+                input[3] = 'Background'
+                input[4] = 'All descendants'
+                input[5] = 'Skip'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.labeled_tree[0][1]).exists() },
+                { assert path(process.out.labeled_tree[0][1]).toString().endsWith('.treefile') },
+                { assert process.out.labeled_tree[0][0] == 'FBgn0000055_NT_033779.5_10_species_12_seqs' },
+                { assert path(process.out.labeled_tree[0][1]).text.contains('(') }, // crude check for newick
+                // Check that the output tree matches the expected tree
+                {
+                    def tree = path(process.out.labeled_tree[0][1]).text
+
+                    // 8 internal branches should be labeled
+                    def regex = ~/\{Background\}/
+                    def matches = tree.findAll(regex)
+                    assert matches.size() == 4
+
+                    //check that one of the correct branches is labeled
+                    def regex2 = ~/\{Background\}:0\.009691/
+                    assert tree =~ regex2
+                },
+                // Check version file exists and has correct format
+                { assert path(process.out.versions[0]).exists() },
+                { assert path(process.out.versions[0]).text.contains('hyphy:') }
+            )
+        }
+
+    }
+
+    test("labeltree - stub") {
 
         options "-stub"
 
@@ -56,7 +117,11 @@ nextflow_process {
                     'FBgn0000055_NT_033779.5_10_species_12_seqs',
                     file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-unlabeled.fasta.treefile', checkIfExists: true),
                 ]
-                input[1] = ['D_su*']
+                input[1] = 'D_su'
+                input[2] = 'No'
+                input[3] = 'Foreground'
+                input[4] = 'All descendants'
+                input[5] = 'Skip'
                 """
             }
         }
