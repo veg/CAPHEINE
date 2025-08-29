@@ -5,8 +5,11 @@ include { REMOVEAMBIGSEQS } from '../../../modules/local/removeambigseqs/main'
 include { CAWLIGN         } from '../../../modules/local/cawlign/main'
 include { HYPHY_CLN       } from '../../../modules/local/hyphy/cln/main'
 include { IQTREE          } from '../../../modules/local/iqtree/main'
-include { HYPHY_LABELTREE_LIST       } from '../../../modules/local/hyphy/labeltree/main'
-include { HYPHY_LABELTREE_REGEXP     } from '../../../modules/local/hyphy/labeltree/main'
+include { HYPHY_LABELTREE_LIST as LABEL_FOREGROUND_LIST } from '../../../modules/local/hyphy/labeltree/main'
+include { HYPHY_LABELTREE_LIST as LABEL_BACKGROUND_LIST } from '../../../modules/local/hyphy/labeltree/main'
+include { HYPHY_LABELTREE_REGEXP as LABEL_FOREGROUND_REGEXP } from '../../../modules/local/hyphy/labeltree/main'
+include { HYPHY_LABELTREE_REGEXP as LABEL_BACKGROUND_REGEXP } from '../../../modules/local/hyphy/labeltree/main'
+include { HYPHY_LABELTREE_REGEXP as LABEL_NUISANCE_REGEXP } from '../../../modules/local/hyphy/labeltree/main'
 
 workflow PROCESS_VIRAL_NONRECOMBINANT {
 
@@ -55,24 +58,76 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
     ch_out_tree = IQTREE.out.phylogeny
     ch_versions = ch_versions.mix(IQTREE.out.versions)
 
-    // Label tree with foreground sequences
+    // Label foreground (internal), background (internal), and leaf branches
     if (params.foreground_regexp) {
-        HYPHY_LABELTREE_REGEXP (
-            IQTREE.out.phylogeny,
-            ch_foreground_regexp
+        // label foreground branches
+        LABEL_FOREGROUND_REGEXP (
+            tree=IQTREE.out.phylogeny,
+            regexp=ch_foreground_regexp,
+            invert=Channel.value("No"),
+            label=Channel.value("Foreground"),
+            internal_nodes=Channel.value("All descendants"),
+            leaf_nodes=Channel.value("Skip")
         )
-        ch_out_tree = HYPHY_LABELTREE_REGEXP.out.labeled_tree
-        ch_versions = ch_versions.mix(HYPHY_LABELTREE_REGEXP.out.versions)
+
+        // label background branches
+        LABEL_BACKGROUND_REGEXP (
+            tree=LABEL_FOREGROUND_REGEXP.out.labeled_tree,
+            regexp=ch_foreground_regexp,
+            invert=Channel.value("Yes"),
+            label=Channel.value("Background"),
+            internal_nodes=Channel.value("All descendants"),
+            leaf_nodes=Channel.value("Skip")
+        )
+
+        // label leaves
+        LABEL_NUISANCE_REGEXP (
+            tree=LABEL_BACKGROUND_REGEXP.out.labeled_tree,
+            regexp=Channel.value('Node'),
+            invert=Channel.value("Yes"),
+            label=Channel.value("Nuisance"),
+            internal_nodes=Channel.value("None"),
+            leaf_nodes=Channel.value("Label")
+        )
+        ch_out_tree = LABEL_NUISANCE_REGEXP.out.labeled_tree
+
+        ch_versions = ch_versions.mix(LABEL_NUISANCE_REGEXP.out.versions)
     }
     if (params.foreground_list) {
         // clean up fasta IDs in list to match how hyphy_cln cleans up sequence IDs
 
-        HYPHY_LABELTREE_LIST (
-            IQTREE.out.phylogeny,
-            ch_foreground_list
+        // label foreground branches
+        LABEL_FOREGROUND_LIST (
+            tree=IQTREE.out.phylogeny,
+            list=ch_foreground_list,
+            invert=Channel.value("No"),
+            label=Channel.value("Foreground"),
+            internal_nodes=Channel.value("All descendants"),
+            leaf_nodes=Channel.value("Skip")
         )
-        ch_out_tree = HYPHY_LABELTREE_LIST.out.labeled_tree
-        ch_versions = ch_versions.mix(HYPHY_LABELTREE_LIST.out.versions)
+
+        // label background branches
+        LABEL_BACKGROUND_LIST (
+            tree=LABEL_FOREGROUND_LIST.out.labeled_tree,
+            list=ch_foreground_list,
+            invert=Channel.value("Yes"),
+            label=Channel.value("Background"),
+            internal_nodes=Channel.value("All descendants"),
+            leaf_nodes=Channel.value("Skip")
+        )
+        ch_versions = ch_versions.mix(LABEL_BACKGROUND_LIST.out.versions)
+
+        // label leaves
+        LABEL_NUISANCE_REGEXP (
+            tree=LABEL_BACKGROUND_LIST.out.labeled_tree,
+            regexp=Channel.value('Node'),
+            invert=Channel.value("Yes"),
+            label=Channel.value("Nuisance"),
+            internal_nodes=Channel.value("None"),
+            leaf_nodes=Channel.value("Label")
+        )
+        ch_out_tree = LABEL_NUISANCE_REGEXP.out.labeled_tree
+        ch_versions = ch_versions.mix(LABEL_NUISANCE_REGEXP.out.versions)
     }
 
     // Check if the string "Foreground" is present in the tree file

@@ -99,7 +99,7 @@ nextflow_workflow {
                 { assert path(workflow.out.tree[0][1]).toString().endsWith('.treefile') },
                 // check if tree is labeled
                 { assert path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
-                { assert workflow.out.versions.size() == 11 },
+                { assert workflow.out.versions.size() == 13 },
             )
         }
     }
