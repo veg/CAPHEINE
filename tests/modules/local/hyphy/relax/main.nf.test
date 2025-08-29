@@ -33,6 +33,9 @@ nextflow_process {
                     // assert settings["site-filter"]["site-filter"] == null
 
                     // Check that RELAX only ran on the selected internal branches
+                    // regardless of branch tags, HyPhy will label test branches as "test" and reference branches as 
+                    // "reference" in the output json. Branches that are neither test nor reference will be 
+                    // labeled as "Unclassified" in the output, regardless of other tags in the tree itself.
                     def tested = json.tested["0"]
 
                     assert tested["Node5"] == "Test"

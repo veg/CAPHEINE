@@ -30,7 +30,7 @@ process HYPHY_RELAX {
         --output RELAX/${meta}.RELAX.json \\
         --mode "Classic mode" \\
         --test $test_tag \\
-        --reference "Reference" \\
+        --reference "Background" \\
         --srv Yes \\
         ${args}
 
