@@ -15,6 +15,7 @@ nextflow_process {
                     file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
                 ]
                 input[1] = 'Foreground'
+                input[2] = 'Reference'
                 """
             }
         }
@@ -37,7 +38,7 @@ nextflow_process {
 
                     assert tested["Node5"] == "Foreground"
                     assert tested["Node6"] == "Foreground"
-                    assert tested.findAll { k, v -> v != "Foreground" }.every { k, v -> v == "background" }
+                    assert tested.findAll { k, v -> v != "Foreground" }.findAll { k, v -> v != "Reference" }.every { k, v -> v == "background" }
                 },
                 // Verify metadata matches input
                 { assert process.out.contrastfel_json[0][0] == 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups' },
@@ -61,6 +62,7 @@ nextflow_process {
                     file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
                 ]
                 input[1] = 'Foreground'
+                input[2] = 'Reference'
                 """
             }
         }
