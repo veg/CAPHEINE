@@ -111,7 +111,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
             tree=LABEL_FOREGROUND_LIST.out.labeled_tree,
             list=ch_foreground_list,
             invert=Channel.value("Yes"),
-            label=Channel.value("Background"),
+            label=Channel.value("Reference"),
             internal_nodes=Channel.value("All descendants"),
             leaf_nodes=Channel.value("Skip")
         )
@@ -140,7 +140,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
                 //println "[WARN] No internal branches were labeled in the tree file ${tree}. Check your foreground sequences."
                 log.warn "No foreground branches were labeled in the tree file ${tree}."
             }
-            if (tree.text.contains("Background")) {
+            if (tree.text.contains("Reference")) {
                 true
             } else {
                 //println "[WARN] No internal branches were labeled in the tree file ${tree}. Check your foreground sequences."

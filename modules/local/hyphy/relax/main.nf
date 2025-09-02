@@ -10,7 +10,8 @@ process HYPHY_RELAX {
 
     input:
     tuple val(meta), path(alignment), path(tree)
-    val(test_tag)
+    val(foreground_tag)
+    val(reference_tag)
 
     output:
     tuple val(meta), path("RELAX/${meta}.RELAX.json"), emit: relax_json
@@ -29,8 +30,8 @@ process HYPHY_RELAX {
         --tree $tree \\
         --output RELAX/${meta}.RELAX.json \\
         --mode "Classic mode" \\
-        --test $test_tag \\
-        --reference "Background" \\
+        --test $foreground_tag \\
+        --reference $reference_tag \\
         --srv Yes \\
         ${args}
 

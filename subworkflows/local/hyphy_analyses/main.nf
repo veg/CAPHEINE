@@ -54,14 +54,16 @@ workflow HYPHY_ANALYSES {
         // Run Contrast-FEL analysis
         HYPHY_CONTRASTFEL (
             ch_input,
-            "Foreground"
+            foreground_tag="Foreground",
+            reference_tag="Reference"
         )
         ch_versions = ch_versions.mix(HYPHY_CONTRASTFEL.out.versions)
 
         // Run RELAX analysis
         HYPHY_RELAX (
             ch_input,
-            "Foreground"
+            foreground_tag="Foreground",
+            reference_tag="Reference"
         )
         ch_versions = ch_versions.mix(HYPHY_RELAX.out.versions)
     }

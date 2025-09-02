@@ -1,5 +1,5 @@
 process {
-  withName: 'HYPHYMPI_BUSTED' {
-    cpus = 4
-  }
+    withName: 'HYPHYMPI_BUSTED' {
+        cpus = 4
+    }
 }

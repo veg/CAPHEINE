@@ -94,7 +94,7 @@ process HYPHY_LABELTREE_LIST {
     val(label)      // label to apply
     val(internal_nodes)     // how to label internal nodes. "All descendants" or "None"
     val(leaf_nodes)     // how to label leaf nodes. "Label" or "Skip"
-    
+
 
     output:
     tuple val(meta), path("LABELTREE/${meta}-labeled.${in_tree.extension}"), emit: labeled_tree

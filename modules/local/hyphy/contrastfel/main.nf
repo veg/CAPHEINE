@@ -10,7 +10,8 @@ process HYPHY_CONTRASTFEL {
 
     input:
     tuple val(meta), path(alignment), path(tree)
-    val(branch_set_tag)
+    val(foreground_tag)
+    val(reference_tag)
 
     output:
     tuple val(meta), path("CONTRASTFEL/${meta}.CONTRASTFEL.json"), emit: contrastfel_json
@@ -27,7 +28,8 @@ process HYPHY_CONTRASTFEL {
     hyphy contrast-fel \\
         --alignment $alignment \\
         --tree $tree \\
-        --branch-set $branch_set_tag \\
+        --branch-set $foreground_tag \\
+        --branch-set $reference_tag \\
         --output CONTRASTFEL/${meta}.CONTRASTFEL.json \\
         ${args}
 
