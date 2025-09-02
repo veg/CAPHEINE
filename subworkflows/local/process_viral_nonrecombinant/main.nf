@@ -75,7 +75,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
             tree=LABEL_FOREGROUND_REGEXP.out.labeled_tree,
             regexp=ch_foreground_regexp,
             invert=Channel.value("Yes"),
-            label=Channel.value("Background"),
+            label=Channel.value("Reference"),
             internal_nodes=Channel.value("All descendants"),
             leaf_nodes=Channel.value("Skip")
         )
