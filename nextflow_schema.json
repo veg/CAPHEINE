@@ -10,7 +10,7 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["reference_genes", "unaligned_seqs", "outdir"],
+            "required": ["outdir"],
             "properties": {
                 "reference_genes": {
                     "type": "string",
@@ -24,6 +24,12 @@
                     "format": "file-path",
                     "mimetype": "text/fasta",
                     "fa_icon": "fas fa-file"
+                },
+                "hyphy_dir": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "Path to a directory containing alignment files (e.g. .fasta/.fa/.aln). If provided, CAPHEINE will skip preprocessing and run HyPhy analyses directly. For each alignment file X, an optional corresponding tree is expected at X.treefile.",
+                    "fa_icon": "fas fa-folder-open"
                 },
                 "foreground_list": {
                     "type": "string",
@@ -249,6 +255,23 @@
         },
         {
             "$ref": "#/$defs/generic_options"
+        },
+        {
+            "oneOf": [
+                {
+                    "required": ["hyphy_dir"],
+                    "not": {
+                        "anyOf": [
+                            { "required": ["reference_genes"] },
+                            { "required": ["unaligned_seqs"] }
+                        ]
+                    }
+                },
+                {
+                    "required": ["reference_genes", "unaligned_seqs"],
+                    "not": { "required": ["hyphy_dir"] }
+                }
+            ]
         }
     ]
 }

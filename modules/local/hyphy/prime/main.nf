@@ -20,12 +20,13 @@ process HYPHY_PRIME {
 
     script:
     def args = task.ext.args ?: ''
+    def tree_arg = (tree && !(tree instanceof List && tree.isEmpty())) ? "--tree ${tree}" : ''
     """
     mkdir -p PRIME
 
     hyphy prime \\
         --alignment $alignment \\
-        --tree $tree \\
+        $tree_arg \\
         --branches 'Internal' \\
         --property-set 'Atchley' \\
         --output PRIME/${meta}.PRIME.json \\

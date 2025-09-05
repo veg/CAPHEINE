@@ -40,14 +40,18 @@ workflow HYPHY_ANALYSES {
 
     // Run Contrast-FEL and RELAX analyses if branch set is provided
     if (has_foreground) {
-        // confirm that the tree is labeled
+        // confirm that the provided tree is labeled, or if no separate tree is provided, that the alignment (with embedded tree) is labeled
         ch_input
             .map { it ->
+                def aln = it[1]
                 def tree = it[2]
-                if (tree.text.contains("Foreground")) {
+                def hasTreeFile = tree && !(tree instanceof List && tree.isEmpty())
+                def content = hasTreeFile ? tree.text : aln.text
+                if (content.contains("Foreground")) {
                     true
                 } else {
-                    error "No branches were labeled as 'Foreground' in the tree file ${tree}, but branch set was provided."
+                    def src = hasTreeFile ? "tree file ${tree}" : "alignment file ${aln}"
+                    error "No branches were labeled as 'Foreground' in the ${src}, but branch set was provided."
                 }
             }
 

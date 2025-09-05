@@ -36,37 +36,78 @@ workflow CAPHEINE {
     ch_processed_trees = Channel.empty()
 
     //
-    // SUBWORKFLOW: Run preprocessing of viral non-recombinant viral data
+    // SUBWORKFLOW: Run preprocessing of viral non-recombinant viral data, if hyphy_dir is not specified
     //
-    PROCESS_VIRAL_NONRECOMBINANT (
-        ch_unaligned,
-        ch_reference,
-        ch_foreground_list,
-        ch_foreground_regexp
-    )
-    ch_processed_aln = ch_processed_aln.mix(PROCESS_VIRAL_NONRECOMBINANT.out.deduplicated)
-    ch_processed_trees = ch_processed_trees.mix(PROCESS_VIRAL_NONRECOMBINANT.out.tree)
-    ch_versions = ch_versions.mix(PROCESS_VIRAL_NONRECOMBINANT.out.versions)
+    if (!params.hyphy_dir) {
+        // Run preprocessing of viral non-recombinant viral data
+        PROCESS_VIRAL_NONRECOMBINANT (
+            ch_unaligned,
+            ch_reference,
+            ch_foreground_list,
+            ch_foreground_regexp
+        )
+        ch_processed_aln = ch_processed_aln.mix(PROCESS_VIRAL_NONRECOMBINANT.out.deduplicated)
+        ch_processed_trees = ch_processed_trees.mix(PROCESS_VIRAL_NONRECOMBINANT.out.tree)
+        ch_versions = ch_versions.mix(PROCESS_VIRAL_NONRECOMBINANT.out.versions)
 
-    //
-    // PROCESSING: Merge alignments & trees into a single channel for HYPHY analyses
-    //
-    // Combine channels using join, matching on the meta.id
-    ch_processed_aln
-        .combine(ch_processed_trees, by: 0)
-        .map { meta, aln, tree ->
-            if (!aln) {
-                log.warn "Skipping ${meta.id}: missing alignment file"
-                return null
+        // Merge alignments & trees into a single channel for HYPHY analyses
+        // Combine channels using join, matching on the meta.id
+        ch_processed_aln
+            .combine(ch_processed_trees, by: 0)
+            .map { meta, aln, tree ->
+                if (!aln) {
+                    log.warn "Skipping ${meta.id}: missing alignment file"
+                    return null
+                }
+                if (!tree) {
+                    log.warn "Skipping ${meta.id}: missing tree file"
+                    return null
+                }
+                return [meta, aln, tree]
             }
-            if (!tree) {
-                log.warn "Skipping ${meta.id}: missing tree file"
-                return null
+            .filter { it != null }
+            .set { ch_hyphy_input }
+    } else {
+        // Build HyPhy input directly from provided directory of alignments
+        Channel
+            .fromPath("${params.hyphy_dir}/*.{fasta,fa,aln,msa,phy,phylip,nex,nexus}", checkIfExists: true)
+            .map { aln ->
+                def meta = aln.baseName
+                def ext = (aln.extension ?: '').toLowerCase()
+                def candidates = [
+                    file("${aln}.treefile"),
+                    file("${aln.parent}/${aln.baseName}.treefile"),
+                    file("${aln.parent}/${aln.baseName}.contree"),
+                    file("${aln.parent}/${aln.baseName}.nwk"),
+                    file("${aln.parent}/${aln.baseName}.newick"),
+                    file("${aln.parent}/${aln.baseName}.tre"),
+                    file("${aln.parent}/${aln.baseName}.tree")
+                ]
+                def tree = candidates.find { it.exists() }
+                // For Nexus/PHYLIP formats, allow embedded trees by passing an empty list so modules omit --tree
+                if (!tree && (ext in ['nex','nexus','phy','phylip'])) {
+                    tree = []
+                }
+                return [meta, aln, tree]
             }
-            return [meta, aln, tree]
-        }
-        .filter { it != null }
-        .set { ch_hyphy_input }
+            .map { meta, aln, tree ->
+                if (!aln) {
+                    log.warn "Skipping ${meta}: missing alignment file"
+                    return null
+                }
+                def ext = (aln.extension ?: '').toLowerCase()
+                if (!tree && !(ext in ['phy','phylip','nex','nexus'])) {
+                    log.warn "Skipping ${meta}: missing tree file for alignment ${aln} (expected e.g., ${aln}.treefile)"
+                    return null
+                }
+                if (!tree && (ext in ['phy','phylip','nex','nexus'])) {
+                    log.warn "No separate tree file found for ${aln}; proceeding anyway (HyPhy will use embedded tree if present)."
+                }
+                return [meta, aln, tree]
+            }
+            .filter { it != null }
+            .set { ch_hyphy_input }
+    }
 
     //
     // SUBWORKFLOW: Run Hyphy Analyses

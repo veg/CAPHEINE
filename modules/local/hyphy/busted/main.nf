@@ -19,12 +19,13 @@ process HYPHY_BUSTED {
 
     script:
     def args = task.ext.args ?: ''
+    def tree_arg = (tree && !(tree instanceof List && tree.isEmpty())) ? "--tree ${tree}" : ''
     """
     mkdir -p BUSTED
 
     hyphy busted \\
         --alignment $alignment \\
-        --tree $tree \\
+        $tree_arg \\
         --branches 'Internal' \\
         --srv Yes \\
         --error-sink Yes \\

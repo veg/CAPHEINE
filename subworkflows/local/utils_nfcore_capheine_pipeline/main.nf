@@ -79,8 +79,13 @@ workflow PIPELINE_INITIALISATION {
     // Create channels from input files provided through params.input
     //
     // ch_samplesheet = Channel.fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-    ch_reference_genes = file(reference_genes, checkIfExists: true)
-    ch_unaligned_seqs = file(unaligned_seqs, checkIfExists: true)
+    if (params.hyphy_dir) {
+        ch_reference_genes = []
+        ch_unaligned_seqs = []
+    } else {
+        ch_reference_genes = file(reference_genes, checkIfExists: true)
+        ch_unaligned_seqs = file(unaligned_seqs, checkIfExists: true)
+    }
 
     if (params.foreground_list) {
         ch_foreground_list         = file(params.foreground_list, checkIfExists: true)
@@ -160,6 +165,7 @@ workflow PIPELINE_COMPLETION {
 //
 def validateInputParameters() {
     foregroundError()
+    hyphyInputError()
 }
 
 //
@@ -215,6 +221,28 @@ def foregroundError() {
         def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
             "  ERROR: either a file of foreground sequences OR a regular expression matching foreground " +
             "  sequences can be provided, not both. Please ensure that only one parameter is provided." +
+            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        error(error_string)
+    }
+}
+
+// Ensure that either `--hyphy-dir` OR both `--reference-genes` and `--unaligned-seqs` are provided, but not all three
+def hyphyInputError() {
+    def hasHyphyDir = params.hyphy_dir
+    def hasRef      = params.reference_genes
+    def hasUnaln    = params.unaligned_seqs
+
+    if (hasHyphyDir && (hasRef || hasUnaln)) {
+        def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            "  ERROR: Please provide EITHER --hyphy-dir OR BOTH --reference-genes and --unaligned-seqs.\n" +
+            "  You have specified --hyphy-dir together with one or both of the other inputs.\n" +
+            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        error(error_string)
+    }
+    if (!hasHyphyDir && !(hasRef && hasUnaln)) {
+        def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            "  ERROR: Please provide EITHER --hyphy-dir OR BOTH --reference-genes and --unaligned-seqs.\n" +
+            "  No valid input combination was detected.\n" +
             "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
         error(error_string)
     }

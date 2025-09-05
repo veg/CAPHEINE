@@ -20,12 +20,13 @@ process HYPHY_MEME {
 
     script:
     def args = task.ext.args ?: ''
+    def tree_arg = (tree && !(tree instanceof List && tree.isEmpty())) ? "--tree ${tree}" : ''
     """
     mkdir -p MEME
 
     hyphy meme \\
         --alignment $alignment \\
-        --tree $tree \\
+        $tree_arg \\
         --branches 'Internal' \\
         --output MEME/${meta}.MEME.json \\
         $args

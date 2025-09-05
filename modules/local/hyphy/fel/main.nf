@@ -30,6 +30,7 @@ process HYPHY_FEL {
 
     script:
     def args = task.ext.args ?: ''
+    def tree_arg = (tree && !(tree instanceof List && tree.isEmpty())) ? "--tree ${tree}" : ''
 
     // TODO nf-core: It MUST be possible to pass additional parameters to the tool as a command-line string via the "task.ext.args" directive
     // TODO nf-core: If the tool supports multi-threading then you MUST provide the appropriate parameter
@@ -39,7 +40,7 @@ process HYPHY_FEL {
 
     hyphy fel \\
         --alignment $alignment \\
-        --tree $tree \\
+        $tree_arg \\
         --branches 'Internal' \\
         --output FEL/${meta}.FEL.json \\
         ${args}

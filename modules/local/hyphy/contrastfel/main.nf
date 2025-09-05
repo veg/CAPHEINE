@@ -22,12 +22,13 @@ process HYPHY_CONTRASTFEL {
 
     script:
     def args = task.ext.args ?: ''
+    def tree_arg = (tree && !(tree instanceof List && tree.isEmpty())) ? "--tree ${tree}" : ''
     """
     mkdir -p CONTRASTFEL
 
     hyphy contrast-fel \\
         --alignment $alignment \\
-        --tree $tree \\
+        $tree_arg \\
         --branch-set $foreground_tag \\
         --branch-set $reference_tag \\
         --output CONTRASTFEL/${meta}.CONTRASTFEL.json \\

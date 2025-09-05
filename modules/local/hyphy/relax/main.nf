@@ -22,12 +22,13 @@ process HYPHY_RELAX {
 
     script:
     def args = task.ext.args ?: ''
+    def tree_arg = (tree && !(tree instanceof List && tree.isEmpty())) ? "--tree ${tree}" : ''
     """
     mkdir -p RELAX
 
     hyphy relax \\
         --alignment $alignment \\
-        --tree $tree \\
+        $tree_arg \\
         --output RELAX/${meta}.RELAX.json \\
         --mode "Classic mode" \\
         --test $foreground_tag \\
