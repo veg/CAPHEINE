@@ -1,5 +1,6 @@
 // Subworkflow to process viral non-recombinant sequences
 
+include { REMOVETERMINALSTOPCODON } from '../../../modules/local/removeterminalstopcodon/main'
 include { SEQKIT_SPLIT } from '../../../modules/local/seqkit/split/main'
 include { REMOVEAMBIGSEQS } from '../../../modules/local/removeambigseqs/main'
 include { CAWLIGN         } from '../../../modules/local/cawlign/main'
@@ -23,9 +24,15 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
     ch_versions = Channel.empty()
     ch_out_tree = Channel.empty()
 
+    // Remove terminal stop codons
+    REMOVETERMINALSTOPCODON (
+        ch_reference
+    )
+    ch_versions = ch_versions.mix(REMOVETERMINALSTOPCODON.out.versions)
+
     // Split reference gene into individual genes
     SEQKIT_SPLIT (
-        ch_reference
+        REMOVETERMINALSTOPCODON.out.clean_ref_fasta
     )
     ch_versions = ch_versions.mix(SEQKIT_SPLIT.out.versions)
 
