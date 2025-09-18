@@ -12,12 +12,12 @@ workflow HYPHYMPI_ANALYSES {
     has_foreground = params.foreground_list || params.foreground_regexp
 
     // Empty outputs for now to keep pipeline compilable
-    def ch_fel         = Channel.empty()
-    def ch_meme        = Channel.empty()
-    def ch_prime       = Channel.empty()
-    def ch_busted      = Channel.empty()
-    def ch_contrastfel = has_foreground ? Channel.empty() : Channel.empty()
-    def ch_relax       = has_foreground ? Channel.empty() : Channel.empty()
+    ch_fel         = Channel.empty()
+    ch_meme        = Channel.empty()
+    ch_prime       = Channel.empty()
+    ch_busted      = Channel.empty()
+    ch_contrastfel = has_foreground ? Channel.empty() : Channel.empty()
+    ch_relax       = has_foreground ? Channel.empty() : Channel.empty()
 
     emit:
     fel_json        = ch_fel           // channel: [ val(meta), [ fel_json ] ]
