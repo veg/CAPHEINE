@@ -15,7 +15,7 @@ nextflow_process {
         when {
             process {
                 // H5N1 reference
-                """                
+                """
                 input[0] = file(projectDir + '/tests/test_data/cds_from_genomic.fna', checkIfExists: true)
                 """
             }
@@ -37,7 +37,7 @@ nextflow_process {
         when {
             process {
                 // P. aeruginosa reference
-                """                
+                """
                 input[0] = file(projectDir + '/tests/test_data/GCF_000006765_1_cds_from_genomic.fna', checkIfExists: true)
                 """
             }

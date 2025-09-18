@@ -11,3 +11,4 @@ null/
 .nf-test.log
 test_results/
 .windsurf/
+.secrets

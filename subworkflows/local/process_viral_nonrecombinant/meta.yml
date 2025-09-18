@@ -9,11 +9,13 @@ keywords:
   - molecular evolution
 components:
   - removeambigseqs
+  - removeterminalstopcodon
   - seqkit/split
   - cawlign
   - hyphy/cln
   - iqtree
-  - hyphy/labeltree
+  - hyphy/labeltree/list
+  - hyphy/labeltree/regexp
 input:
   - ch_unaligned:
       type: file
@@ -60,3 +62,4 @@ authors:
   - "@hverdonk"
 maintainers:
   - "@hverdonk"
+  - "@d-callan"
