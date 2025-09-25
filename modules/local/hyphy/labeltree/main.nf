@@ -21,8 +21,8 @@ process HYPHY_LABELTREE_REGEXP {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/hyphy:2.5.73--he91c24d_0' :
-        'biocontainers/hyphy:2.5.73--he91c24d_0' }"
+        'https://depot.galaxyproject.org/singularity/hyphy:2.5.81--hbee74ec_0' :
+        'biocontainers/hyphy:2.5.81--hbee74ec_0' }"
 
     input:
     tuple val(meta), path(in_tree)      // input tree to be labeled
