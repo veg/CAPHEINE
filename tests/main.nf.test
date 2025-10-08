@@ -57,8 +57,8 @@ nextflow_pipeline {
 
         when {
             params {
-                reference_genes = '${projectDir}/tests/test_data/pretend_DENV1_ref.fasta'
-                unaligned_seqs = '${projectDir}/tests/test_data/pretend-raw-seqs.fasta'
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
                 foreground_regexp = '_2023_09_'
                 outdir = "$outputDir"
                 test_branches = 'internal'
