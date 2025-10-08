@@ -44,18 +44,18 @@
 
 The main input parameters for the CAPHEINE pipeline are:
 
-| Parameter           | Description                                                                | Required |
-| ------------------- | -------------------------------------------------------------------------- | -------- |
-| `--reference_genes` | Path to FASTA file of gene reference sequences                             | Yes      |
-| `--unaligned_seqs`  | Path to FASTA file of unaligned DNA sequences                              | Yes      |
-| `--outdir`          | Output directory for results                                               | Yes      |
-| `--test_branches`  | Branch selection for HyPhy site-wise analyses. Use 'internal' to test only internal branches, or 'all' to test all branches. If unset, HyPhy defaults to all branches. | No       |
-| `--email`           | Email address for completion summary                                       | No       |
-| `--multiqc_title`   | Title for the MultiQC report                                               | No       |
-| `--validate_params` | Boolean, validate parameters against the schema at runtime (default: true) | No       |
-| `--monochrome_logs` | Boolean, do not use colored log outputs                                    | No       |
-| `--hook_url`        | URL for notification hooks (if used)                                       | No       |
-| `-params-file`      | YAML/JSON file specifying parameters (recommended for reproducibility)     | No       |
+| Parameter           | Description                                                                                                                                                            | Required |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `--reference_genes` | Path to FASTA file of gene reference sequences                                                                                                                         | Yes      |
+| `--unaligned_seqs`  | Path to FASTA file of unaligned DNA sequences                                                                                                                          | Yes      |
+| `--outdir`          | Output directory for results                                                                                                                                           | Yes      |
+| `--test_branches`   | Branch selection for HyPhy site-wise analyses. Use 'internal' to test only internal branches, or 'all' to test all branches. If unset, HyPhy defaults to all branches. | No       |
+| `--email`           | Email address for completion summary                                                                                                                                   | No       |
+| `--multiqc_title`   | Title for the MultiQC report                                                                                                                                           | No       |
+| `--validate_params` | Boolean, validate parameters against the schema at runtime (default: true)                                                                                             | No       |
+| `--monochrome_logs` | Boolean, do not use colored log outputs                                                                                                                                | No       |
+| `--hook_url`        | URL for notification hooks (if used)                                                                                                                                   | No       |
+| `-params-file`      | YAML/JSON file specifying parameters (recommended for reproducibility)                                                                                                 | No       |
 
 Additional advanced and institutional config parameters are available; see the documentation for details.
 
