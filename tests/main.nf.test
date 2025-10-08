@@ -10,13 +10,29 @@ nextflow_pipeline {
                 outdir = "$outputDir"
                 reference_genes = '/Users/hverdonk/CAPHEINE/tests/test_data/pretend_DENV1_ref.fasta'
                 unaligned_seqs = '/Users/hverdonk/CAPHEINE/tests/test_data/pretend-raw-seqs.fasta'
+                hyphy_branches = 'internal'
             }
         }
 
         then {
             assert workflow.success
         }
+    }
 
+    test("bad branches parameter (typo)") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                reference_genes = '/Users/hverdonk/CAPHEINE/tests/test_data/pretend_DENV1_ref.fasta'
+                unaligned_seqs = '/Users/hverdonk/CAPHEINE/tests/test_data/pretend-raw-seqs.fasta'
+                hyphy_branches = 'inernal'
+            }
+        }
+
+        then {
+            assert !workflow.success
+        }
     }
 
     test("Forbid foreground_list AND foreground_regexp") {
@@ -28,13 +44,13 @@ nextflow_pipeline {
                 unaligned_seqs = '/Users/hverdonk/CAPHEINE/tests/test_data/pretend-raw-seqs.fasta'
                 foreground_list = '/Users/hverdonk/CAPHEINE/tests/test_data/pretend-foreground-seqs.txt'
                 foreground_regexp = '_2023_09_'
+                hyphy_branches = 'internal'
             }
         }
 
         then {
             assert !workflow.success
         }
-
     }
 
     test("Foreground - regexp provided") {
@@ -45,6 +61,7 @@ nextflow_pipeline {
                 unaligned_seqs = '/Users/hverdonk/CAPHEINE/tests/test_data/pretend-raw-seqs.fasta'
                 foreground_regexp = '_2023_09_'
                 outdir = "$outputDir"
+                hyphy_branches = 'internal'
             }
         }
 

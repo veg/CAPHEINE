@@ -49,6 +49,7 @@ The main input parameters for the CAPHEINE pipeline are:
 | `--reference_genes` | Path to FASTA file of gene reference sequences                             | Yes      |
 | `--unaligned_seqs`  | Path to FASTA file of unaligned DNA sequences                              | Yes      |
 | `--outdir`          | Output directory for results                                               | Yes      |
+| `--hyphy_branches`  | Branch selection for HyPhy site-wise analyses. Use 'internal' to test only internal branches, or 'all' to test all branches. If unset, HyPhy defaults to all branches. | No       |
 | `--email`           | Email address for completion summary                                       | No       |
 | `--multiqc_title`   | Title for the MultiQC report                                               | No       |
 | `--validate_params` | Boolean, validate parameters against the schema at runtime (default: true) | No       |
@@ -77,6 +78,7 @@ Where:
 You can also provide additional parameters:
 
 - `foreground_list`: (Optional) Path to a text file with a newline-separated list of foreground taxa.
+- `hyphy_branches`: (Optional) Branch selection for HyPhy site-wise analyses. Use `internal` to test only internal branches, or `all` to test all branches. If unset, no flag is passed and HyPhy defaults to all branches.
 - `foreground_regexp`: (Optional) Regular expression to match foreground taxa.
 
 Only one of `foreground_list` or `foreground_regexp` should be provided per row.
@@ -92,10 +94,13 @@ nextflow run CAPHEINE \
 Where `params.yaml` might contain:
 
 ```yaml
-treference_genes: "./reference_genes.fasta"
+reference_genes: "./reference_genes.fasta"
 unaligned_seqs: "./unaligned_seqs.fasta"
 outdir: "./results/"
-# other parameters as needed
+# Optional parameters
+# hyphy_branches: internal   # or 'all'; if unset, HyPhy runs on all branches by default
+# foreground_list: "./foreground_taxa.txt"
+# foreground_regexp: "^Homo.*"
 ```
 
 > [!WARNING]

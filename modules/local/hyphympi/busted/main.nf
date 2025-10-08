@@ -26,7 +26,6 @@ process HYPHYMPI_BUSTED {
     mpirun -np $task.cpus HYPHYMPI busted \\
         --alignment $alignment \\
         --tree $tree \\
-        --branches 'Internal' \\
         --srv Yes \\
         --error-sink Yes \\
         --output BUSTED/${meta}.BUSTED.json \\

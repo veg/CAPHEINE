@@ -26,7 +26,6 @@ process HYPHY_PRIME {
     hyphy prime \\
         --alignment $alignment \\
         --tree $tree \\
-        --branches 'Internal' \\
         --property-set 'Atchley' \\
         --output PRIME/${meta}.PRIME.json \\
         $args
