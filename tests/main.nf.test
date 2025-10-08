@@ -8,8 +8,8 @@ nextflow_pipeline {
         when {
             params {
                 outdir = "$outputDir"
-                reference_genes = '${projectDir}/tests/test_data/pretend_DENV1_ref.fasta'
-                unaligned_seqs = '${projectDir}/tests/test_data/pretend-raw-seqs.fasta'
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
                 test_branches = 'internal'
             }
         }
@@ -24,8 +24,8 @@ nextflow_pipeline {
         when {
             params {
                 outdir = "$outputDir"
-                reference_genes = '${projectDir}/tests/test_data/pretend_DENV1_ref.fasta'
-                unaligned_seqs = '${projectDir}/tests/test_data/pretend-raw-seqs.fasta'
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
                 test_branches = 'inernal'
             }
         }
@@ -40,9 +40,9 @@ nextflow_pipeline {
         when {
             params {
                 outdir = "$outputDir"
-                reference_genes = '${projectDir}/tests/test_data/pretend_DENV1_ref.fasta'
-                unaligned_seqs = '${projectDir}/tests/test_data/pretend-raw-seqs.fasta'
-                foreground_list = '${projectDir}/tests/test_data/pretend-foreground-seqs.txt'
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
+                foreground_list = "${projectDir}/tests/test_data/pretend-foreground-seqs.txt"
                 foreground_regexp = '_2023_09_'
                 test_branches = 'internal'
             }
