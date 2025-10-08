@@ -222,15 +222,15 @@ def foregroundError() {
 }
 
 //
-// Exit pipeline if invalid hyphy_branches value provided
+// Exit pipeline if invalid test_branches value provided
 //
 def hyphyBranchesError() {
-    if (params.hyphy_branches) {
-        def b = params.hyphy_branches.toString().toLowerCase()
+    if (params.test_branches) {
+        def b = params.test_branches.toString().toLowerCase()
         if (!(b in ['internal', 'all'])) {
             def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-                "  ERROR: --hyphy_branches must be one of: 'internal', 'all'.\n" +
-                "  You provided: '${params.hyphy_branches}'.\n" +
+                "  ERROR: --test_branches must be one of: 'internal', 'all'.\n" +
+                "  You provided: '${params.test_branches}'.\n" +
                 "  Leave this parameter unset to pass no flag and let HyPhy default to all branches.\n" +
                 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
             error(error_string)

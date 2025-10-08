@@ -8,11 +8,11 @@ nextflow_workflow {
 
         when {
             params {
-                foreground_list = null
-                foreground_regexp = '_2023_09_'
+                foreground_list = '${projectDir}/tests/test_data/pretend-foreground-seqs.txt'
+                foreground_regexp = null
+                test_branches = 'internal'
             }
             workflow {
-                // TODO: fix input format & ensure input format matches planned sample sheet format
                 """
                 input[0] = file(projectDir + '/tests/test_data/pretend_DENV1_ref.fasta', checkIfExists: true)
                 input[1] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
@@ -62,6 +62,7 @@ nextflow_workflow {
             params {
                 foreground_list = null
                 foreground_regexp = null
+                test_branches = 'internal'
             }
             workflow {
                 // TODO: fix input format & ensure input format matches planned sample sheet format
