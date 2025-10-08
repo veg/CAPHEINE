@@ -21,15 +21,15 @@ process REMOVETERMINALSTOPCODON {
     def args = task.ext.args ?: ''
 
     """
-    python ${projectDir}/bin/remove-terminal-stop-codon.py \\
+    python3 ${projectDir}/bin/remove-terminal-stop-codon.py \\
     --input ${ref_fasta} \\
     --output ${ref_fasta.baseName}-noStopCodons.${ref_fasta.extension} \\
     --table 'Standard'
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python --version | sed 's/Python //g')
-        biopython: \$(python -c "import Bio; print(Bio.__version__)")
+        python: \$(python3 --version | sed 's/Python //g')
+        biopython: \$(python3 -c "import Bio; print(Bio.__version__)")
     END_VERSIONS
     """
 
@@ -42,8 +42,8 @@ process REMOVETERMINALSTOPCODON {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python --version | sed 's/Python //g')
-        biopython: \$(python -c "import Bio; print(Bio.__version__)")
+        python: \$(python3 --version | sed 's/Python //g')
+        biopython: \$(python3 -c "import Bio; print(Bio.__version__)")
     END_VERSIONS
     """
 }

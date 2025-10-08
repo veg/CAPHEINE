@@ -7,8 +7,8 @@ nextflow_pipeline {
         when {
             params {
                 outdir = "$outputDir"
-                reference_genes = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend_DENV1_ref.fasta'
-                unaligned_seqs = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-raw-seqs.fasta'
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
             }
         }
 
