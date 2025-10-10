@@ -1,7 +1,7 @@
 <h1>
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/images/CAPHEINE-logo.png">
-    <img alt="CAPHEINE" src="docs/images/CAPHEINE-logo.png">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/CAPHEINE-subway-diagram.png">
+    <img alt="CAPHEINE" src="docs/images/CAPHEINE-subway-diagram.png">
   </picture>
 </h1>
 
@@ -44,17 +44,18 @@
 
 The main input parameters for the CAPHEINE pipeline are:
 
-| Parameter           | Description                                                                | Required |
-| ------------------- | -------------------------------------------------------------------------- | -------- |
-| `--reference_genes` | Path to FASTA file of gene reference sequences                             | Yes      |
-| `--unaligned_seqs`  | Path to FASTA file of unaligned DNA sequences                              | Yes      |
-| `--outdir`          | Output directory for results                                               | Yes      |
-| `--email`           | Email address for completion summary                                       | No       |
-| `--multiqc_title`   | Title for the MultiQC report                                               | No       |
-| `--validate_params` | Boolean, validate parameters against the schema at runtime (default: true) | No       |
-| `--monochrome_logs` | Boolean, do not use colored log outputs                                    | No       |
-| `--hook_url`        | URL for notification hooks (if used)                                       | No       |
-| `-params-file`      | YAML/JSON file specifying parameters (recommended for reproducibility)     | No       |
+| Parameter           | Description                                                                                                                                                            | Required |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `--reference_genes` | Path to FASTA file of gene reference sequences                                                                                                                         | Yes      |
+| `--unaligned_seqs`  | Path to FASTA file of unaligned DNA sequences                                                                                                                          | Yes      |
+| `--outdir`          | Output directory for results                                                                                                                                           | Yes      |
+| `--test_branches`   | Branch selection for HyPhy site-wise analyses. Use 'internal' to test only internal branches, or 'all' to test all branches. If unset, HyPhy defaults to all branches. | No       |
+| `--email`           | Email address for completion summary                                                                                                                                   | No       |
+| `--multiqc_title`   | Title for the MultiQC report                                                                                                                                           | No       |
+| `--validate_params` | Boolean, validate parameters against the schema at runtime (default: true)                                                                                             | No       |
+| `--monochrome_logs` | Boolean, do not use colored log outputs                                                                                                                                | No       |
+| `--hook_url`        | URL for notification hooks (if used)                                                                                                                                   | No       |
+| `-params-file`      | YAML/JSON file specifying parameters (recommended for reproducibility)                                                                                                 | No       |
 
 Additional advanced and institutional config parameters are available; see the documentation for details.
 
@@ -77,6 +78,7 @@ Where:
 You can also provide additional parameters:
 
 - `foreground_list`: (Optional) Path to a text file with a newline-separated list of foreground taxa.
+- `test_branches`: (Optional) Branch selection for HyPhy site-wise analyses. Use `internal` to test only internal branches, or `all` to test all branches. If unset, no flag is passed and HyPhy defaults to all branches.
 - `foreground_regexp`: (Optional) Regular expression to match foreground taxa.
 
 Only one of `foreground_list` or `foreground_regexp` should be provided per row.
@@ -92,10 +94,13 @@ nextflow run CAPHEINE \
 Where `params.yaml` might contain:
 
 ```yaml
-treference_genes: "./reference_genes.fasta"
+reference_genes: "./reference_genes.fasta"
 unaligned_seqs: "./unaligned_seqs.fasta"
 outdir: "./results/"
-# other parameters as needed
+# Optional parameters
+# test_branches: internal   # or 'all'; if unset, HyPhy runs on all branches by default
+# foreground_list: "./foreground_taxa.txt"
+# foreground_regexp: "^Homo.*"
 ```
 
 > [!WARNING]

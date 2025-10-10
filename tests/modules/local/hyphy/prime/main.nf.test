@@ -31,14 +31,15 @@ nextflow_process {
                     def residue_properties = json.model.residue_properties.keySet().toList()
                     assert residue_properties[0] == "Factor I bipolar"
 
-                    // Check that PRIME only ran on internal branches
-                    def tested = json.tested["0"]
+                    // internal branch testing is now handled with ext.args, which can't be passed or tested here
+                    // // Check that PRIME only ran on internal branches
+                    // def tested = json.tested["0"]
 
-                    // All test branches should contain 'node'
-                    assert tested.findAll { k, v -> v == "test" }.every { k, v -> k.toLowerCase().contains("node") }
+                    // // All test branches should contain 'node'
+                    // assert tested.findAll { k, v -> v == "test" }.every { k, v -> k.toLowerCase().contains("node") }
 
-                    // No background branches should contain 'node'
-                    assert tested.findAll { k, v -> v == "background" }.every { k, v -> !k.toLowerCase().contains("node") }
+                    // // No background branches should contain 'node'
+                    // assert tested.findAll { k, v -> v == "background" }.every { k, v -> !k.toLowerCase().contains("node") }
                 },
                 // Verify metadata matches input
                 { assert process.out.prime_json[0][0] == 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups' },

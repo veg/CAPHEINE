@@ -25,11 +25,10 @@ process HYPHY_BUSTED {
     hyphy busted \\
         --alignment $alignment \\
         --tree $tree \\
-        --branches 'Internal' \\
         --srv Yes \\
         --error-sink Yes \\
         --output BUSTED/${meta}.BUSTED.json \\
-        $args
+        ${args}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

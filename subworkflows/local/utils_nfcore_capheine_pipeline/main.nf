@@ -160,6 +160,7 @@ workflow PIPELINE_COMPLETION {
 //
 def validateInputParameters() {
     foregroundError()
+    hyphyBranchesError()
 }
 
 //
@@ -217,6 +218,23 @@ def foregroundError() {
             "  sequences can be provided, not both. Please ensure that only one parameter is provided." +
             "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
         error(error_string)
+    }
+}
+
+//
+// Exit pipeline if invalid test_branches value provided
+//
+def hyphyBranchesError() {
+    if (params.test_branches) {
+        def b = params.test_branches.toString().toLowerCase()
+        if (!(b in ['internal', 'all'])) {
+            def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                "  ERROR: --test_branches must be one of: 'internal', 'all'.\n" +
+                "  You provided: '${params.test_branches}'.\n" +
+                "  Leave this parameter unset to pass no flag and let HyPhy default to all branches.\n" +
+                "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+            error(error_string)
+        }
     }
 }
 //

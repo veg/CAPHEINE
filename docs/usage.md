@@ -13,6 +13,7 @@ The CAPHEINE pipeline requires you to provide input files directly via command l
 - `--outdir` (required): Output directory for results.
 - `--foreground_list` (optional): Path to a text file with a newline-separated list of foreground taxa.
 - `--foreground_regexp` (optional): Regular expression string to match foreground taxa.
+- `--test_branches` (optional): Branch selection for HyPhy site-wise analyses. Use `internal` to test only internal branches, or `all` to test all branches. If unset, no flag is passed and HyPhy defaults to all branches.
 
 Only one of `--foreground_list` or `--foreground_regexp` should be provided per run (if either is used).
 
@@ -44,6 +45,28 @@ nextflow run CAPHEINE \
   --reference_genes ./reference_genes.fasta \
   --unaligned_seqs ./unaligned_seqs.fasta \
   --foreground_regexp '^Homo.*' \
+  --outdir ./results \
+  -profile docker
+```
+
+Selecting HyPhy branches explicitly (internal branches only):
+
+```bash
+nextflow run CAPHEINE \
+  --reference_genes ./reference_genes.fasta \
+  --unaligned_seqs ./unaligned_seqs.fasta \
+  --test_branches internal \
+  --outdir ./results \
+  -profile docker
+```
+
+Selecting HyPhy branches explicitly (all branches):
+
+```bash
+nextflow run CAPHEINE \
+  --reference_genes ./reference_genes.fasta \
+  --unaligned_seqs ./unaligned_seqs.fasta \
+  --test_branches all \
   --outdir ./results \
   -profile docker
 ```
@@ -81,6 +104,7 @@ outdir: "./results/"
 # Optional (uncomment to use):
 # foreground_list: './foreground_taxa.txt'
 # foreground_regexp: '^Homo.*'
+# test_branches: internal   # or 'all'; if unset, HyPhy runs on all branches by default
 ```
 
 You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).

@@ -40,7 +40,7 @@ process HYPHY_FEL {
     hyphy fel \\
         --alignment $alignment \\
         --tree $tree \\
-        --branches 'Internal' \\
+        --srv Yes \\
         --output FEL/${meta}.FEL.json \\
         ${args}
 

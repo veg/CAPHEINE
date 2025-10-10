@@ -146,6 +146,13 @@
                     "description": "Run MPI-enabled HyPhy analyses (uses HYPHYMPI_ANALYSES instead of HYPHY_ANALYSES).",
                     "fa_icon": "fas fa-microchip"
                 },
+                "test_branches": {
+                    "type": "string",
+                    "description": "Branch selection for HyPhy site-wise analyses (FEL, MEME, PRIME, BUSTED).",
+                    "help_text": "Choose 'internal' to test only internal branches, or 'all' to test all branches. If unset, the pipeline passes no flag and HyPhy defaults to all branches.",
+                    "fa_icon": "fas fa-code-branch",
+                    "enum": ["internal", "all"]
+                },
                 "version": {
                     "type": "boolean",
                     "description": "Display version and exit.",
