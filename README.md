@@ -1,7 +1,7 @@
 <h1>
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/images/CAPHEINE-logo.png">
-    <img alt="CAPHEINE" src="docs/images/CAPHEINE-logo.png">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/CAPHEINE-subway-diagram.png">
+    <img alt="CAPHEINE" src="docs/images/CAPHEINE-subway-diagram.png">
   </picture>
 </h1>
 
