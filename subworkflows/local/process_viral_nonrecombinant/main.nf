@@ -5,7 +5,7 @@ include { SEQKIT_SPLIT } from '../../../modules/local/seqkit/split/main'
 include { REMOVEAMBIGSEQS } from '../../../modules/local/removeambigseqs/main'
 include { CAWLIGN         } from '../../../modules/local/cawlign/main'
 include { HYPHY_CLN       } from '../../../modules/local/hyphy/cln/main'
-include { IQTREE          } from '../../../modules/local/iqtree/main'
+include { IQTREE          } from '../../../modules/nf-core/iqtree/main'
 include { HYPHY_LABELTREE_LIST as LABEL_FOREGROUND_LIST } from '../../../modules/local/hyphy/labeltree/main'
 include { HYPHY_LABELTREE_LIST as LABEL_BACKGROUND_LIST } from '../../../modules/local/hyphy/labeltree/main'
 include { HYPHY_LABELTREE_REGEXP as LABEL_FOREGROUND_REGEXP } from '../../../modules/local/hyphy/labeltree/main'
@@ -59,17 +59,50 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
 
     // Generate phylogenetic tree with IQTree
     // -T [num_cpu_cores] when using multiple cores
+    def ch_iqtree_in = HYPHY_CLN.out.deduplicated_seqs
+        .map { meta, aln -> tuple([ id: meta.toString() ], aln, []) }
+
+
+    def ch_tree_te = Channel.value([]); 
+    def ch_lmclust = Channel.value([]); 
+    def ch_mdef = Channel.value([]); 
+    def ch_partitions_equal = Channel.value([]); 
+    def ch_partitions_proportional = Channel.value([]); 
+    def ch_partitions_unlinked = Channel.value([]); 
+    def ch_guide_tree = Channel.value([]); 
+    def ch_sitefreq_in = Channel.value([]); 
+    def ch_constraint_tree = Channel.value([]); 
+    def ch_trees_z = Channel.value([]); 
+    def ch_suptree = Channel.value([]); 
+    def ch_trees_rf = Channel.value([])
+
     IQTREE (
-        HYPHY_CLN.out.deduplicated_seqs
+        ch_iqtree_in,
+        ch_tree_te,
+        ch_lmclust,
+        ch_mdef,
+        ch_partitions_equal,
+        ch_partitions_proportional,
+        ch_partitions_unlinked,
+        ch_guide_tree,
+        ch_sitefreq_in,
+        ch_constraint_tree,
+        ch_trees_z,
+        ch_suptree,
+        ch_trees_rf
     )
     ch_out_tree = IQTREE.out.phylogeny
     ch_versions = ch_versions.mix(IQTREE.out.versions)
 
+
     // Label foreground (internal), background (internal), and leaf branches
+    def ch_labeltree_in = IQTREE.out.phylogeny
+        .map { meta, tree -> tuple(meta.id.toString(), tree) }
+
     if (params.foreground_regexp) {
         // label foreground branches
         LABEL_FOREGROUND_REGEXP (
-            tree=IQTREE.out.phylogeny,
+            tree=ch_labeltree_in,
             regexp=ch_foreground_regexp,
             invert=Channel.value("No"),
             label=Channel.value("Foreground"),
@@ -105,7 +138,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
 
         // label foreground branches
         LABEL_FOREGROUND_LIST (
-            tree=IQTREE.out.phylogeny,
+            tree=ch_labeltree_in,
             list=ch_foreground_list,
             invert=Channel.value("No"),
             label=Channel.value("Foreground"),
