@@ -5,5 +5,5 @@ channels:
   - bioconda
 dependencies:
   # Software MUST be pinned to channel and version; exclude build strings.
-  - "conda-forge::python=3.13"
-  - "conda-forge::biopython=1.79"
+  - "conda-forge::python=3.14"
+  - "conda-forge::biopython=1.85"

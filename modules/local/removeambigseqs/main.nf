@@ -26,15 +26,15 @@ process REMOVEAMBIGSEQS {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta}"
     """
-    python3 ${projectDir}/bin/filter-ambig-sequences.py \\
+    python ${projectDir}/bin/filter-ambig-sequences.py \\
         -i ${alignment} \\
         -o ${prefix} \\
         ${args}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python3 --version | sed 's/Python //g')
-        biopython: \$(python3 -c "import Bio; print(Bio.__version__)")
+        python: \$(python --version | sed 's/Python //g')
+        biopython: \$(python -c "import Bio; print(Bio.__version__)")
     END_VERSIONS
     """
 
@@ -51,8 +51,8 @@ process REMOVEAMBIGSEQS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        python: \$(python3 --version | sed 's/Python //g')
-        biopython: \$(python3 -c "import Bio; print(Bio.__version__)")
+        python: \$(python --version | sed 's/Python //g')
+        biopython: \$(python -c "import Bio; print(Bio.__version__)")
     END_VERSIONS
     """
 }
