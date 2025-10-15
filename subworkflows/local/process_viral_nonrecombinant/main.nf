@@ -63,18 +63,18 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
         .map { meta, aln -> tuple([ id: meta.toString() ], aln, []) }
 
 
-    def ch_tree_te = []; 
-    def ch_lmclust = []; 
-    def ch_mdef = []; 
-    def ch_partitions_equal = []; 
-    def ch_partitions_proportional = []; 
-    def ch_partitions_unlinked = []; 
-    def ch_guide_tree = []; 
-    def ch_sitefreq_in = []; 
-    def ch_constraint_tree = []; 
-    def ch_trees_z = []; 
-    def ch_suptree = []; 
-    def ch_trees_rf = []
+    def ch_tree_te = [];
+    def ch_lmclust = [];
+    def ch_mdef = [];
+    def ch_partitions_equal = [];
+    def ch_partitions_proportional = [];
+    def ch_partitions_unlinked = [];
+    def ch_guide_tree = [];
+    def ch_sitefreq_in = [];
+    def ch_constraint_tree = [];
+    def ch_trees_z = [];
+    def ch_suptree = [];
+    def ch_trees_rf = [];
 
     IQTREE (
         ch_iqtree_in,
