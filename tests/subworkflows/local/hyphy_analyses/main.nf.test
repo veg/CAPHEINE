@@ -157,7 +157,7 @@ nextflow_workflow {
         }
     }
 
-    test("No branch set provided") {
+    test("No branch set provided, test_branches is unset (default to 'all')") {
 
         when {
             params {
@@ -194,6 +194,24 @@ nextflow_workflow {
                 { assert path(workflow.out.busted_json[0][1]).exists() },
                 { assert path(workflow.out.busted_json[0][1]).text.contains('BUSTED') },
                 { assert path(workflow.out.busted_json[0][1]).toString().endsWith('.BUSTED.json') },
+                {
+                    def json = new groovy.json.JsonSlurper().parseText(path(workflow.out.busted_json[0][1]).text)
+
+                    // Check if error sink rate class is included in entries
+                    def rateDistTest = json.fits["Unconstrained model"]["Rate Distributions"].Test
+                    assert rateDistTest.keySet().containsAll(["0", "1", "2", "3"])
+
+                    // Check for correct BUSTED settings
+                    def settings = json.analysis["settings"]
+                    assert settings["error-sink"] == 1
+                    assert settings["srv"] == "Yes"
+
+                    // Check that BUSTED only ran on internal branches
+                    def tested = json.tested["0"]
+
+                    // No background branches should exist; all branches should be tested
+                    assert tested.findAll { k, v -> v == "background" }.isEmpty()
+                },
                 // Check that Contrast-FEL output does not exist
                 { assert workflow.out.contrastfel_json.empty },
                 // Check that RELAX output does not exist
