@@ -144,7 +144,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
             ch_out_tree = LABEL_NUISANCE_REGEXP.out.labeled_tree
             ch_versions = ch_versions.mix(LABEL_NUISANCE_REGEXP.out.versions)
         }
-        
+
     }
     if (params.foreground_list) {
         // clean up fasta IDs in list to match how hyphy_cln cleans up sequence IDs
