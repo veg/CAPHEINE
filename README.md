@@ -49,7 +49,7 @@ The main input parameters for the CAPHEINE pipeline are:
 | `--reference_genes`   | Path to FASTA file of gene reference sequences                                                                                                                                               | Yes      |
 | `--unaligned_seqs`    | Path to FASTA file of unaligned DNA sequences                                                                                                                                                | Yes      |
 | `--outdir`            | Output directory for results                                                                                                                                                                 | Yes      |
-| `--test_branches`     | Branch selection for HyPhy core analyses (BUSTED, MEME, FEL, PRIME). Use 'internal' to test only internal branches, or 'all' to test all branches. If unset, HyPhy defaults to all branches. | No       |
+| `--test_branches`     | Branches to test for HyPhy analyses, either 'internal' or 'all'. Usually set to 'internal' for viral non-recombinant data, to avoid testing non-fixed substitutions in leaf nodes. If used with `--foreground_list` or `--foreground_regexp` HyPhy will test foreground and background internal branches. If unset, HyPhy defaults to all branches for all analyses. | No       |
 | `--foreground_list`   | Path to a text file with a newline-separated list of foreground taxa. Only one of `foreground_list` or `foreground_regexp` should be provided per row.                                       | No       |
 | `--foreground_regexp` | Regular expression to match foreground taxa. Only one of `foreground_list` or `foreground_regexp` should be provided per row.                                                                | No       |
 | `--email`             | Email address for completion summary                                                                                                                                                         | No       |
@@ -79,7 +79,7 @@ Where:
 
 You can also provide additional parameters:
 
-- `test_branches`: (Optional) Branch selection for HyPhy core analyses (BUSTED, MEME, FEL, PRIME). Use `internal` to test only internal branches, or `all` to test all branches. If unset, no flag is passed and HyPhy defaults to all branches.
+- `test_branches`: (Optional) Branch selection for HyPhy analyses. Use `internal` to test only internal branches, or `all` to test all branches. We suggest setting this to `internal` for viral non-recombinant data, to avoid testing non-fixed substitutions in leaf nodes. If used with `--foreground_list` or `--foreground_regexp` HyPhy will test foreground and background internal branches. If unset, no flag is passed and HyPhy defaults to all branches.
 - `foreground_list`: (Optional) Path to a text file with a newline-separated list of foreground taxa.
 - `foreground_regexp`: (Optional) Regular expression to match foreground taxa.
 

@@ -23,6 +23,12 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
     main:
     ch_versions = Channel.empty()
     ch_out_tree = Channel.empty()
+    use_internal_branches_only = false
+    if (params.test_branches) {
+        if (params.test_branches.toString().toLowerCase() =='internal') {
+            use_internal_branches_only = true
+        }
+    }
 
     // Remove terminal stop codons
     REMOVETERMINALSTOPCODON (
@@ -107,7 +113,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
             invert=Channel.value("No"),
             label=Channel.value("Foreground"),
             internal_nodes=Channel.value("All descendants"),
-            leaf_nodes=Channel.value("Skip")
+            leaf_nodes=use_internal_branches_only ? Channel.value("Skip") : Channel.value("Label")
         )
 
         // label background branches
@@ -117,21 +123,28 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
             invert=Channel.value("Yes"),
             label=Channel.value("Reference"),
             internal_nodes=Channel.value("All descendants"),
-            leaf_nodes=Channel.value("Skip")
+            leaf_nodes=use_internal_branches_only ? Channel.value("Skip") : Channel.value("Label")
         )
 
-        // label leaves
-        LABEL_NUISANCE_REGEXP (
-            tree=LABEL_BACKGROUND_REGEXP.out.labeled_tree,
-            regexp=Channel.value('Node'),
-            invert=Channel.value("Yes"),
-            label=Channel.value("Nuisance"),
-            internal_nodes=Channel.value("None"),
-            leaf_nodes=Channel.value("Label")
-        )
-        ch_out_tree = LABEL_NUISANCE_REGEXP.out.labeled_tree
+        ch_out_tree = LABEL_BACKGROUND_REGEXP.out.labeled_tree
+        if (!use_internal_branches_only) {
+            ch_versions = ch_versions.mix(LABEL_NUISANCE_REGEXP.out.versions)
+        }
 
-        ch_versions = ch_versions.mix(LABEL_NUISANCE_REGEXP.out.versions)
+        // label leaves with nuisance tag if we're only analyzing internal branches
+        if (use_internal_branches_only) {
+            LABEL_NUISANCE_REGEXP (
+                tree=LABEL_BACKGROUND_REGEXP.out.labeled_tree,
+                regexp=Channel.value('Node'),
+                invert=Channel.value("Yes"),
+                label=Channel.value("Nuisance"),
+                internal_nodes=Channel.value("None"),
+                leaf_nodes=Channel.value("Label")
+            )
+            ch_out_tree = LABEL_NUISANCE_REGEXP.out.labeled_tree
+            ch_versions = ch_versions.mix(LABEL_NUISANCE_REGEXP.out.versions)
+        }
+        
     }
     if (params.foreground_list) {
         // clean up fasta IDs in list to match how hyphy_cln cleans up sequence IDs
@@ -143,7 +156,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
             invert=Channel.value("No"),
             label=Channel.value("Foreground"),
             internal_nodes=Channel.value("All descendants"),
-            leaf_nodes=Channel.value("Skip")
+            leaf_nodes=use_internal_branches_only ? Channel.value("Skip") : Channel.value("Label")
         )
 
         // label background branches
@@ -153,21 +166,27 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
             invert=Channel.value("Yes"),
             label=Channel.value("Reference"),
             internal_nodes=Channel.value("All descendants"),
-            leaf_nodes=Channel.value("Skip")
+            leaf_nodes=use_internal_branches_only ? Channel.value("Skip") : Channel.value("Label")
         )
-        ch_versions = ch_versions.mix(LABEL_BACKGROUND_LIST.out.versions)
 
-        // label leaves
-        LABEL_NUISANCE_REGEXP (
-            tree=LABEL_BACKGROUND_LIST.out.labeled_tree,
-            regexp=Channel.value('Node'),
-            invert=Channel.value("Yes"),
-            label=Channel.value("Nuisance"),
-            internal_nodes=Channel.value("None"),
-            leaf_nodes=Channel.value("Label")
-        )
-        ch_out_tree = LABEL_NUISANCE_REGEXP.out.labeled_tree
-        ch_versions = ch_versions.mix(LABEL_NUISANCE_REGEXP.out.versions)
+        ch_out_tree = LABEL_BACKGROUND_LIST.out.labeled_tree
+        if (!use_internal_branches_only) {
+            ch_versions = ch_versions.mix(LABEL_BACKGROUND_LIST.out.versions)
+        }
+
+        // label leaves with nuisance tag if we're only analyzing internal branches
+        if (use_internal_branches_only) {
+            LABEL_NUISANCE_REGEXP (
+                tree=LABEL_BACKGROUND_LIST.out.labeled_tree,
+                regexp=Channel.value('Node'),
+                invert=Channel.value("Yes"),
+                label=Channel.value("Nuisance"),
+                internal_nodes=Channel.value("None"),
+                leaf_nodes=Channel.value("Label")
+            )
+            ch_out_tree = LABEL_NUISANCE_REGEXP.out.labeled_tree
+            ch_versions = ch_versions.mix(LABEL_NUISANCE_REGEXP.out.versions)
+        }
     }
 
     // Check if the string "Foreground" is present in the tree file

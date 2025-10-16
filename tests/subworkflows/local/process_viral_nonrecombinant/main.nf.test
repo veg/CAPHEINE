@@ -17,6 +17,7 @@ nextflow_workflow {
             params {
                 foreground_list = null
                 foreground_regexp = null
+                test_branches = "internal"
             }
             workflow {
                 """
@@ -48,6 +49,7 @@ nextflow_workflow {
             params {
                 foreground_list = null
                 foreground_regexp = ['dontmatch']
+                test_branches = "internal"
             }
 
             workflow {
@@ -68,7 +70,9 @@ nextflow_workflow {
                 { assert path(workflow.out.tree[0][1]).exists() },
                 { assert path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
                 { assert workflow.out.versions.size() == 12 },
-                // hacky check, but this test should also generate a warning that no internal branches could be labeled
+                // check that a warning was generated about no foreground branches
+                // this works irl, but not in nf-test for some reason
+                // { assert workflow.stdout.contains("No foreground branches were labeled in the tree file") },
             )
         }
     }
@@ -78,6 +82,7 @@ nextflow_workflow {
             params {
                 foreground_list = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-foreground-seqs.txt'
                 foreground_regexp = null
+                test_branches = "all"
             }
 
             workflow {
@@ -99,7 +104,9 @@ nextflow_workflow {
                 { assert path(workflow.out.tree[0][1]).toString().endsWith('.treefile') },
                 // check if tree is labeled
                 { assert path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
-                { assert workflow.out.versions.size() == 14 },
+                // check that leaf branches were not labeled as nuisance
+                { assert path(workflow.out.tree[0][1]).text.contains('PP563826_1_2023_08_21{Foreground}') },
+                { assert workflow.out.versions.size() == 12 },
             )
         }
     }
@@ -109,6 +116,7 @@ nextflow_workflow {
             params {
                 foreground_list = null
                 foreground_regexp = ['*_2023_09_*']
+                test_branches = "internal"
             }
             workflow {
                 """
@@ -129,6 +137,8 @@ nextflow_workflow {
                 { assert path(workflow.out.tree[0][1]).toString().endsWith('.treefile') },
                 // check if tree is labeled
                 { assert path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
+                // check that leaf branches were not labeled as nuisance
+                { assert path(workflow.out.tree[0][1]).text.contains('PP563826_1_2023_08_21{Nuisance}') },
                 { assert workflow.out.versions.size() == 12 },
                 //{ assert path(workflow.out.versions[2]).text.contains('iqtree:') },
                 //{ assert path(workflow.out.versions[0]).text.contains('cawlign:') },
