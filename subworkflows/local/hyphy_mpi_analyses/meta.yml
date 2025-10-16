@@ -16,9 +16,9 @@ components:
   - hyphympi/fel
   - hyphympi/meme
   - hyphympi/prime
-  - hyphympi/busted
   - hyphympi/contrastfel
-  - hyphympi/relax
+  - hyphy/busted    # BUSTED and RELAX are not trivially parallelizable and do not benefit from mpi
+  - hyphy/relax
 ## List of all the channels used as input with a description and their structure
 input:
   - ch_aln:
@@ -59,6 +59,18 @@ output:
         Channel containing BUSTED (episodic diversifying selection) analysis results
         Structure: [ val(meta), path(json) ]
       pattern: "*.BUSTED.json"
+  - contrastfel_json:
+      type: file
+      description: |
+        Channel containing Contrast-FEL analysis results (emitted only when branch sets are provided)
+        Structure: [ val(meta), path(json) ]
+      pattern: "*.CONTRASTFEL.json"
+  - relax_json:
+      type: file
+      description: |
+        Channel containing RELAX analysis results (emitted only when branch sets are provided)
+        Structure: [ val(meta), path(json) ]
+      pattern: "*.RELAX.json"
   - versions:
       type: file
       description: |

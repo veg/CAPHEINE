@@ -1,0 +1,72 @@
+nextflow_process {
+
+    name "Test Process HYPHYMPI_PRIME"
+    script "modules/local/hyphympi/prime/main.nf"
+    process "HYPHYMPI_PRIME"
+
+    test("Testing if PRIME generates results") {
+
+        when {
+            process {
+                """
+                input[0] = [
+                    'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups', \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true), \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.prime_json[0][1]).exists() },
+                { assert path(process.out.prime_json[0][1]).text.contains('PRIME') },
+                // Check putput json for correctness
+                {
+                    def json = new groovy.json.JsonSlurper().parseText(path(process.out.prime_json[0][1]).text)
+
+                    // Check for correct PRIME settings
+                    def residue_properties = json.model.residue_properties.keySet().toList()
+                    assert residue_properties[0] == "Factor I bipolar"
+
+                },
+                // Verify metadata matches input
+                { assert process.out.prime_json[0][0] == 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups' },
+                // Check version file exists and has correct format
+                { assert path(process.out.versions[0]).exists() },
+                { assert path(process.out.versions[0]).text.contains('hyphy:') }
+            )
+        }
+    }
+
+    test("PRIME stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups', \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true), \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                // For stub test, just verify files exist with correct names
+                { assert path(process.out.prime_json[0][1]).exists() },
+                { assert path(process.out.prime_json[0][1]).toString().endsWith('.PRIME.json') },
+                { assert process.out.prime_json[0][0] == 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups' },
+                { assert path(process.out.versions[0]).exists() },
+                { assert path(process.out.versions[0]).text.contains('hyphy:') }
+            )
+        }
+    }
+}
