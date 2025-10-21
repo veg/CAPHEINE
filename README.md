@@ -18,9 +18,6 @@
 
 **CAPHEINE** is a bioinformatics pipeline designed for comparative analysis of protein-coding genes using the HyPhy software suite. The pipeline ingests FASTA files containing raw DNA sequences along with FASTA files containing reference gene sequences, and performs multiple sequence alignment, phylogenetic tree construction, and various selection analyses. Key outputs include statistical tests for positive selection (BUSTED, FEL, MEME), branch-site models, and comprehensive quality control reports, all presented in an easy-to-interpret MultiQC report.
 
-<!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
-     workflows use the "tube map" design for that. See https://nf-co.re/docs/contributing/design_guidelines#examples for examples.   -->
-
 1. Ambiguous sequence removal
 2. Multiple sequence alignment ([`cawlign`](https://github.com/evolbioinfo/cawlign))
 3. Sequence deduplication and cleaning ([`HyPhy CLN`](https://hyphy.org/methods/selection-methods/))
@@ -33,9 +30,33 @@
 6. Optional branch-specific analyses when foreground branches are specified:
    - [Contrast-FEL](https://hyphy.org/methods/selection-methods/#CONTRAST-FEL)
    - [RELAX](https://hyphy.org/methods/selection-methods/#RELAX)
-7. Report generation ([`MultiQC`](http://multiqc.info/))
+7. Collate and summarize results for all genes and analyses ([`DRHIP`](https://github.com/veg/drhip))
 
 ## Usage
+
+First, ensure that you have Nextflow (version 24.04.2 or later) installed on your system. You can follow the [Nextflow installation guide](https://www.nextflow.io/docs/latest/getstarted.html#installation) to get started.
+
+You will also need to set up one of the following container environments:
+
+- [Docker](https://docs.docker.com/get-docker/)
+- [Singularity](https://sylabs.io/guides/latest/user-guide/)
+- [Conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/)
+
+Once Nextflow and your chosen container environment are installed, you can run CAPHEINE directly via Nextflow. The pipeline will be automatically downloaded at runtime using the following command:
+
+```bash
+nextflow run veg/CAPHEINE \
+    <args>
+```
+
+Where `<args>` are the arguments you want to pass to the pipeline. For example, to run the pipeline with the default parameters, you can use:
+
+```bash
+nextflow run veg/CAPHEINE \
+    --reference_genes <reference_genes.fasta> \
+    --unaligned_seqs <unaligned_seqs.fasta> \
+    --outdir <OUTDIR>
+```
 
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
@@ -64,7 +85,7 @@ Additional advanced and institutional config parameters are available; see the d
 In general, you can run the pipeline with:
 
 ```bash
-nextflow run CAPHEINE \
+nextflow run veg/CAPHEINE \
    -profile <docker/singularity/.../institute> \
    --reference_genes <reference_genes.fasta> \
    --unaligned_seqs <unaligned_seqs.fasta> \
@@ -88,7 +109,7 @@ Only one of `foreground_list` or `foreground_regexp` should be provided per row.
 You can also run CAPHEINE using a parameter file (recommended for reproducibility):
 
 ```bash
-nextflow run CAPHEINE \
+nextflow run veg/CAPHEINE \
    -profile <docker/singularity/.../institute> \
    -params-file params.yaml
 ```
@@ -115,7 +136,7 @@ For more details and further functionality, please refer to the [usage documenta
 To test the pipeline, you can run it with the `-profile test` option. This will run the pipeline with a minimal test dataset to check that it completes without any syntax errors.
 
 ```bash
-nextflow run CAPHEINE \
+nextflow run veg/CAPHEINE \
 -profile test,docker \
 --outdir <OUTDIR>
 ```
@@ -124,6 +145,22 @@ nextflow run CAPHEINE \
 
 For more details about the output files and reports, please refer to the
 [output documentation](docs/output.md).
+
+## Specifying resources
+
+HyPhy analyses are light on memory, but can be heavy on CPU usage for longer alignments. We have set sensible defaults for alignments with roughly 800 sites and 1500 branches in the [`hyphy` profile](conf/hyphy.config). You may wish to customize that profile, or write your own cluster-specific configuration file, if your data or environment require different resources.
+
+For non-HyPhy analysis modules, the pipeline uses nf-core standard process labels (e.g., `process_single`, `process_low`, `process_medium`, `process_high`) wherever possible to improve compatibility and interpretability with existing nf-core infrastructure. These labels define default CPU and memory allocations that can be easily customized in your configuration files. See the [nf-core documentation on process labels](https://nf-co.re/docs/contributing/modules#resource-requirements) for more information.
+
+You can specify the resources to be used by the pipeline using the `-profile` option. For example, to run the pipeline with the default 16 CPUs and 6 GB of memory per HyPhy process, you can use:
+
+```bash
+nextflow run veg/CAPHEINE \
+-profile hyphy,<docker/singularity/.../institute> \
+--outdir <OUTDIR> \
+```
+
+See [usage documentation](docs/usage.md) for more information about running CAPHEINE on your own system and best practices for writing your own profiles.
 
 ## Credits
 
