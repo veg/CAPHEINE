@@ -2,8 +2,6 @@
 
 ## Introduction
 
-<!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
-
 ## Input files and parameters
 
 The CAPHEINE pipeline requires you to provide input files directly via command line flags. There is no longer a samplesheet input.
@@ -17,10 +15,13 @@ The CAPHEINE pipeline requires you to provide input files directly via command l
 
 Only one of `--foreground_list` or `--foreground_regexp` should be provided per run (if either is used).
 
+> [!NOTE]
+> Contrast-FEL and RELAX are run only if you provide either `--foreground_list` or `--foreground_regexp`. Otherwise, these analyses are skipped.
+
 Example usage:
 
 ```bash
-nextflow run CAPHEINE \
+nextflow run veg/CAPHEINE \
   --reference_genes ./reference_genes.fasta \
   --unaligned_seqs ./unaligned_seqs.fasta \
   --outdir ./results \
@@ -30,7 +31,7 @@ nextflow run CAPHEINE \
 With a foreground taxa list:
 
 ```bash
-nextflow run CAPHEINE \
+nextflow run veg/CAPHEINE \
   --reference_genes ./reference_genes.fasta \
   --unaligned_seqs ./unaligned_seqs.fasta \
   --foreground_list ./foreground_taxa.txt \
@@ -41,7 +42,7 @@ nextflow run CAPHEINE \
 With a foreground taxa regular expression:
 
 ```bash
-nextflow run CAPHEINE \
+nextflow run veg/CAPHEINE \
   --reference_genes ./reference_genes.fasta \
   --unaligned_seqs ./unaligned_seqs.fasta \
   --foreground_regexp '^Homo.*' \
@@ -52,7 +53,7 @@ nextflow run CAPHEINE \
 Selecting HyPhy branches explicitly (internal branches only):
 
 ```bash
-nextflow run CAPHEINE \
+nextflow run veg/CAPHEINE \
   --reference_genes ./reference_genes.fasta \
   --unaligned_seqs ./unaligned_seqs.fasta \
   --test_branches internal \
@@ -63,7 +64,7 @@ nextflow run CAPHEINE \
 Selecting HyPhy branches explicitly (all branches):
 
 ```bash
-nextflow run CAPHEINE \
+nextflow run veg/CAPHEINE \
   --reference_genes ./reference_genes.fasta \
   --unaligned_seqs ./unaligned_seqs.fasta \
   --test_branches all \
@@ -92,7 +93,7 @@ Pipeline settings can be provided in a `yaml` or `json` file via `-params-file <
 The above pipeline run specified with a params file in yaml format:
 
 ```bash
-nextflow run CAPHEINE -profile docker -params-file params.yaml
+nextflow run veg/CAPHEINE -profile docker -params-file params.yaml
 ```
 
 with:
@@ -111,10 +112,10 @@ You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-c
 
 ### Updating the pipeline
 
-When you run the above command, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version. When running the pipeline after this, it will always use the cached version if available - even if the pipeline has been updated since. To make sure that you're running the latest version of the pipeline, make sure that you regularly update the cached version of the pipeline:
+When you run the command below, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version. When running the pipeline after this, it will always use the cached version if available - even if the pipeline has been updated since. To make sure that you're running the latest version of the pipeline, make sure that you regularly update the cached version of the pipeline:
 
 ```bash
-nextflow pull CAPHEINE
+nextflow pull veg/CAPHEINE
 ```
 
 ### Reproducibility
@@ -142,7 +143,7 @@ Use this parameter to choose a configuration profile. Profiles can give configur
 Several generic profiles are bundled with the pipeline which instruct the pipeline to use software packaged using different methods (Docker, Singularity, Podman, Shifter, Charliecloud, Apptainer, Conda) - see below.
 
 > [!IMPORTANT]
-> We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility, however when this is not possible, Conda is also supported.
+> We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility. However, when this is not possible, Conda is also supported.
 
 The pipeline also dynamically loads configurations from [https://github.com/nf-core/configs](https://github.com/nf-core/configs) when it runs, making multiple config profiles for various institutional clusters available at run time. For more information and to check if your system is supported, please see the [nf-core/configs documentation](https://github.com/nf-core/configs#documentation).
 
