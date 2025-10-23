@@ -102,7 +102,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
 
 
     // Label foreground (internal), background (internal), and leaf branches
-    def ch_labeltree_in = ch_out_tree
+    ch_labeltree_in = ch_out_tree
 
     if (params.foreground_regexp) {
         // label foreground branches
