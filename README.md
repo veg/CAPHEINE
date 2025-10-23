@@ -71,6 +71,7 @@ The main input parameters for the CAPHEINE pipeline are:
 | `--unaligned_seqs`    | Path to FASTA file of unaligned DNA sequences                                                                                                                                                                                                                                                                                                                        | Yes      |
 | `--outdir`            | Output directory for results                                                                                                                                                                                                                                                                                                                                         | Yes      |
 | `--test_branches`     | Branches to test for HyPhy analyses, either 'internal' or 'all'. Usually set to 'internal' for viral non-recombinant data, to avoid testing non-fixed substitutions in leaf nodes. If used with `--foreground_list` or `--foreground_regexp` HyPhy will test foreground and background internal branches. If unset, HyPhy defaults to all branches for all analyses. | No       |
+| `--use_mpi`           | Boolean. Run MPI-enabled HyPhy analyses (FEL, MEME, PRIME, and Contrast-FEL when applicable). BUSTED and RELAX run without MPI. Default: false.                                                                                                                                                                                                                      | No       |
 | `--foreground_list`   | Path to a text file with a newline-separated list of foreground taxa. Only one of `foreground_list` or `foreground_regexp` should be provided per row.                                                                                                                                                                                                               | No       |
 | `--foreground_regexp` | Regular expression to match foreground taxa. Only one of `foreground_list` or `foreground_regexp` should be provided per row.                                                                                                                                                                                                                                        | No       |
 | `--email`             | Email address for completion summary                                                                                                                                                                                                                                                                                                                                 | No       |
@@ -101,6 +102,7 @@ Where:
 You can also provide additional parameters:
 
 - `test_branches`: (Optional) Branch selection for HyPhy analyses. Use `internal` to test only internal branches, or `all` to test all branches. We suggest setting this to `internal` for viral non-recombinant data, to avoid testing non-fixed substitutions in leaf nodes. If used with `--foreground_list` or `--foreground_regexp` HyPhy will test foreground and background internal branches. If unset, no flag is passed and HyPhy defaults to all branches.
+- `use_mpi`: (Optional) Enable MPI-enabled HyPhy analyses for faster runs on multi-core nodes. FEL, MEME, PRIME, and Contrast-FEL (when foreground branches are supplied) are embarassingly parallel and use MPI. BUSTED and RELAX are not easily parallelized and do not use MPI; when enabled, both analyses are run as usual and produce their normal output files. Requires a container runtime or environment with MPI. The `HYPHYMPI` binary is bundled with the docker containers and the conda packages, and should be available by default. Default: false.
 - `foreground_list`: (Optional) Path to a text file with a newline-separated list of foreground taxa.
 - `foreground_regexp`: (Optional) Regular expression to match foreground taxa.
 
@@ -124,6 +126,7 @@ outdir: "./results/"
 # test_branches: internal   # or 'all'; if unset, HyPhy runs on all branches by default
 # foreground_list: "./foreground_taxa.txt"
 # foreground_regexp: "^Homo.*"
+# use_mpi: true              # enable MPI-enabled HyPhy (default: false)
 ```
 
 > [!WARNING]
@@ -159,6 +162,8 @@ nextflow run veg/CAPHEINE \
 -profile hyphy,<docker/singularity/.../institute> \
 --outdir <OUTDIR> \
 ```
+
+When running with `--use_mpi`, each MPI job uses the number of CPUs configured for the process (`mpirun -np $task.cpus`).
 
 See [usage documentation](docs/usage.md) for more information about running CAPHEINE on your own system and best practices for writing your own profiles.
 

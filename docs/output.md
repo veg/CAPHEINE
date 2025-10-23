@@ -125,6 +125,7 @@ The CAPHEINE pipeline is built using [Nextflow](https://www.nextflow.io/) and pr
 
 - All JSON outputs can be parsed programmatically for downstream analysis
 - Intermediate files are preserved for additional analyses if needed
+- Using `--use_mpi` only changes how HyPhy analyses are executed (parallel MPI where applicable) and may improve performance; it does not change result content or file formats.
 
 For more detailed information about specific analyses, please refer to the respective tool documentation:
 

@@ -17,7 +17,7 @@ components:
   - hyphympi/meme
   - hyphympi/prime
   - hyphympi/contrastfel
-  - hyphy/busted    # BUSTED and RELAX are not trivially parallelizable and do not benefit from mpi
+  - hyphy/busted # BUSTED and RELAX are not trivially parallelizable and do not benefit from mpi
   - hyphy/relax
 ## List of all the channels used as input with a description and their structure
 input:
