@@ -20,8 +20,8 @@ process DRHIP {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/drhip:0.1.1--pyhdfd78af_0':
-        'biocontainers/drhip:0.1.1--pyhdfd78af_0' }"
+        'https://depot.galaxyproject.org/singularity/drhip:0.1.3--pyhdfd78af_0':
+        'biocontainers/drhip:0.1.3--pyhdfd78af_0' }"
 
     input:
     val fel_results
