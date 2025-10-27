@@ -1,5 +1,4 @@
 process REMOVETERMINALSTOPCODON {
-    tag "${meta}"
     label 'process_single'
 
     conda "${moduleDir}/environment.yml"

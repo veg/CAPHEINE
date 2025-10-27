@@ -97,13 +97,12 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
         ch_suptree,
         ch_trees_rf
     )
-    ch_out_tree = IQTREE.out.phylogeny
+    ch_out_tree = IQTREE.out.phylogeny.map { meta, tree -> tuple(meta.id.toString(), tree) }
     ch_versions = ch_versions.mix(IQTREE.out.versions)
 
 
     // Label foreground (internal), background (internal), and leaf branches
-    def ch_labeltree_in = IQTREE.out.phylogeny
-        .map { meta, tree -> tuple(meta.id.toString(), tree) }
+    ch_labeltree_in = ch_out_tree
 
     if (params.foreground_regexp) {
         // label foreground branches
@@ -128,7 +127,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
 
         ch_out_tree = LABEL_BACKGROUND_REGEXP.out.labeled_tree
         if (!use_internal_branches_only) {
-            ch_versions = ch_versions.mix(LABEL_NUISANCE_REGEXP.out.versions)
+            ch_versions = ch_versions.mix(LABEL_BACKGROUND_REGEXP.out.versions)
         }
 
         // label leaves with nuisance tag if we're only analyzing internal branches

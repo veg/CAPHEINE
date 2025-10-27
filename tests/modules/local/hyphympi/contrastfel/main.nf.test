@@ -1,0 +1,83 @@
+nextflow_process {
+
+    name "Test Process HYPHYMPI_CONTRASTFEL"
+    script "modules/local/hyphympi/contrastfel/main.nf"
+    process "HYPHYMPI_CONTRASTFEL"
+
+    test("Testing if ContrastFEL generates results") {
+
+        when {
+            process {
+                """
+                input[0] = [
+                    'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups', \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true), \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ]
+                input[1] = 'Foreground'
+                input[2] = 'Reference'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.contrastfel_json[0][1]).exists() },
+                { assert path(process.out.contrastfel_json[0][1]).toString().endsWith('.CONTRASTFEL.json') },
+                // Check output json for correctness
+                {
+                    def json = new groovy.json.JsonSlurper().parseText(path(process.out.contrastfel_json[0][1]).text)
+
+                    // Check for correct ContrastFEL settings
+                    def settings = json.analysis["settings"]
+                    assert settings["site-filter"]["site-filter"] == null
+
+                    // Check that ContrastFEL only ran on the selected internal branches
+                    def tested = json.tested["0"]
+
+                    assert tested["Node5"] == "Foreground"
+                    assert tested["Node6"] == "Foreground"
+                    assert tested.findAll { k, v -> v != "Foreground" }.findAll { k, v -> v != "Reference" }.every { k, v -> v == "background" }
+                },
+                // Verify metadata matches input
+                { assert process.out.contrastfel_json[0][0] == 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups' },
+                // Check version file exists and has correct format
+                { assert path(process.out.versions[0]).exists() },
+                { assert path(process.out.versions[0]).text.contains('hyphy:') }
+            )
+        }
+    }
+
+    test("CONTRASTFEL stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups', \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true), \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ]
+                input[1] = 'Foreground'
+                input[2] = 'Reference'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                // For stub test, just verify files exist with correct names
+                { assert path(process.out.contrastfel_json[0][1]).exists() },
+                { assert path(process.out.contrastfel_json[0][1]).toString().endsWith('.CONTRASTFEL.json') },
+                { assert process.out.contrastfel_json[0][0] == 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups' },
+                { assert path(process.out.versions[0]).exists() },
+                { assert path(process.out.versions[0]).text.contains('hyphy:') }
+            )
+        }
+
+    }
+}

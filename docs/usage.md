@@ -12,6 +12,7 @@ The CAPHEINE pipeline requires you to provide input files directly via command l
 - `--foreground_list` (optional): Path to a text file with a newline-separated list of foreground taxa.
 - `--foreground_regexp` (optional): Regular expression string to match foreground taxa.
 - `--test_branches` (optional): Branch selection for HyPhy site-wise analyses. Use `internal` to test only internal branches, or `all` to test all branches. If unset, no flag is passed and HyPhy defaults to all branches.
+- `--use_mpi` (optional): Run MPI-enabled HyPhy analyses (FEL, MEME, PRIME; Contrast-FEL when foreground branches are provided). BUSTED and RELAX run without MPI. Default: false.
 
 Only one of `--foreground_list` or `--foreground_regexp` should be provided per run (if either is used).
 
@@ -72,6 +73,20 @@ nextflow run veg/CAPHEINE \
   -profile docker
 ```
 
+Running with MPI-enabled HyPhy:
+
+```bash
+nextflow run veg/CAPHEINE \
+  --reference_genes ./reference_genes.fasta \
+  --unaligned_seqs ./unaligned_seqs.fasta \
+  --use_mpi \
+  --outdir ./results \
+  -profile docker
+```
+
+> [!NOTE]
+> Using `--use_mpi` requires a container runtime or environment with MPI. The `HYPHYMPI` binary is bundled with the docker containers and the conda packages, and should be available by default. Each MPI job uses the number of CPUs configured for the process (`mpirun -np $task.cpus`).
+
 All of the above commands will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
 
 Note that the pipeline will create the following files in your working directory:
@@ -106,6 +121,7 @@ outdir: "./results/"
 # foreground_list: './foreground_taxa.txt'
 # foreground_regexp: '^Homo.*'
 # test_branches: internal   # or 'all'; if unset, HyPhy runs on all branches by default
+# use_mpi: true              # enable MPI-enabled HyPhy (default: false)
 ```
 
 You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).

@@ -1,0 +1,72 @@
+nextflow_process {
+
+    name "Test Process HYPHYMPI_MEME"
+    script "modules/local/hyphympi/meme/main.nf"
+    process "HYPHYMPI_MEME"
+
+    test("Testing if MEME generates results") {
+
+        when {
+            process {
+                """
+                input[0] = [
+                    'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups', \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true), \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.meme_json[0][1]).exists() },
+                { assert path(process.out.meme_json[0][1]).text.contains('MEME') },
+                // Check putput json for correctness
+                {
+                    def json = new groovy.json.JsonSlurper().parseText(path(process.out.meme_json[0][1]).text)
+
+                    // Check for correct MEME settings
+                    def settings = json.analysis["settings"]
+                    assert settings["multihit"] == "None"
+
+                },
+                // Verify metadata matches input
+                { assert process.out.meme_json[0][0] ==  'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups' },
+                // Check version file exists and has correct format
+                { assert path(process.out.versions[0]).exists() },
+                { assert path(process.out.versions[0]).text.contains('hyphy:') }
+            )
+        }
+    }
+
+    test("MEME stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups', \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true), \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                // For stub test, just verify files exist with correct names
+                { assert path(process.out.meme_json[0][1]).exists() },
+                { assert path(process.out.meme_json[0][1]).toString().endsWith('.MEME.json') },
+                { assert process.out.meme_json[0][0] == 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups' },
+                { assert path(process.out.versions[0]).exists() },
+                { assert path(process.out.versions[0]).text.contains('hyphy:') }
+            )
+        }
+    }
+}

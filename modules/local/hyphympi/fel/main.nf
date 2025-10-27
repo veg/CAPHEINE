@@ -1,4 +1,4 @@
-process HYPHYMPI_BUSTED {
+process HYPHYMPI_FEL {
     tag "$meta"
     label 'process_medium'
 
@@ -11,7 +11,7 @@ process HYPHYMPI_BUSTED {
     tuple val(meta), path(alignment), path(tree)
 
     output:
-    tuple val(meta), path("BUSTED/${meta}.BUSTED.json"), emit: busted_json
+    tuple val(meta), path("FEL/${meta}.FEL.json"), emit: fel_json
     path "versions.yml"                            , emit: versions
 
     when:
@@ -21,19 +21,18 @@ process HYPHYMPI_BUSTED {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta}"
     """
-    mkdir -p BUSTED
+    mkdir -p FEL
 
-    mpirun -np $task.cpus HYPHYMPI busted \\
-        --alignment $alignment \\
-        --tree $tree \\
-        --srv Yes \\
-        --error-sink Yes \\
-        --output BUSTED/${meta}.BUSTED.json \\
-        $args
+    mpirun -np $task.cpus HYPHYMPI fel \
+        --alignment $alignment \
+        --tree $tree \
+        --srv Yes \
+        --output FEL/${meta}.FEL.json \
+        ${args}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        hyphympi: \$(HYPHYMPI --version | sed 's/HYPHY //g')
+        hyphy: \$(HYPHYMPI --version | sed 's/HYPHY //g')
     END_VERSIONS
     """
 
@@ -41,13 +40,13 @@ process HYPHYMPI_BUSTED {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta}"
     """
-    mkdir -p BUSTED
+    mkdir -p FEL
 
-    touch BUSTED/${prefix}.BUSTED.json
+    touch FEL/${prefix}.FEL.json
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        hyphympi: \$(HYPHYMPI --version | sed 's/HYPHY //g')
+        hyphy: \$(HYPHYMPI --version | sed 's/HYPHY //g')
     END_VERSIONS
     """
 }
