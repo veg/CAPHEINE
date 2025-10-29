@@ -23,7 +23,7 @@ process REMOVETERMINALSTOPCODON {
     python ${projectDir}/bin/remove-terminal-stop-codon.py \\
     --input ${ref_fasta} \\
     --output ${ref_fasta.baseName}-noStopCodons.${ref_fasta.extension} \\
-    --table 'Standard'
+    ${args}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

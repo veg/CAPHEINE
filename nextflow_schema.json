@@ -153,6 +153,12 @@
                     "fa_icon": "fas fa-code-branch",
                     "enum": ["internal", "all"]
                 },
+                "code": {
+                    "type": "string",
+                    "description": "NCBI/GenBank translation table ID or name to use as the genetic code for all analyses.",
+                    "help_text": "Examples: --code 1 (Standard), --code 2 (Vertebrate mtDNA), --code 'Vertebrate mtDNA'.",
+                    "fa_icon": "fas fa-dna"
+                },
                 "version": {
                     "type": "boolean",
                     "description": "Display version and exit.",
