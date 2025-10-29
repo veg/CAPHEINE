@@ -20,8 +20,6 @@ process SEQKIT_SPLIT {
     script:
     def args = task.ext.args ?: ''
 
-    // TODO nf-core: If the tool supports multi-threading then you MUST provide the appropriate parameter
-    //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
     """
     seqkit split \\
         --by-id \\
