@@ -37,7 +37,7 @@ lint:
     - docs/README.md
 
 template:
-  org: nf-core
+  org: veg
   name: CAPHEINE
   description: Automated evolutionary annotation of existing datasets using Nextflow
   author: Hannah Verdonk, Danielle Callan
