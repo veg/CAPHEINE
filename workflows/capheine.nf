@@ -114,8 +114,6 @@ workflow CAPHEINE {
         ch_contrastfel = Channel.value([])
         ch_relax = Channel.value([])
     }
-    // def cf_list = ch_contrastfel.map{ m,f -> f }.collect()  ?: Channel.value([])
-    // def relax_list = ch_relax.map{ m,f -> f }.collect()    ?: Channel.value([])
 
     DRHIP(
         // Extract only the file paths from [meta, file] tuples
