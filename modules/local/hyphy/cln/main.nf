@@ -21,7 +21,7 @@ process HYPHY_CLN {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta}"
-    
+
     """
     mkdir -p CLN
     hyphy cln Universal ${alignment} "Yes/No" CLN/${prefix}-nodups.${alignment.extension}
