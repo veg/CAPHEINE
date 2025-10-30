@@ -1,4 +1,4 @@
-name: nf-core linting
+name: Pipeline linting
 # This workflow is triggered on pushes and PRs to the repository.
 # It runs the `nf-core pipelines lint` and markdown lint tests to ensure
 # that the code meets the nf-core guidelines.
@@ -27,7 +27,7 @@ jobs:
       - name: Run pre-commit
         run: pre-commit run --all-files
 
-  nf-core:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Check out pipeline code
@@ -52,7 +52,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install nf-core==${{ steps.read_yml.outputs['nf_core_version'] }}
 
-      - name: Run nf-core pipelines lint
+      - name: Run pipeline lint
         if: ${{ github.base_ref != 'master' }}
         env:
           GITHUB_COMMENTS_URL: ${{ github.event.pull_request.comments_url }}
@@ -60,7 +60,7 @@ jobs:
           GITHUB_PR_COMMIT: ${{ github.event.pull_request.head.sha }}
         run: nf-core -l lint_log.txt pipelines lint --dir ${GITHUB_WORKSPACE} --markdown lint_results.md
 
-      - name: Run nf-core pipelines lint --release
+      - name: Run pipeline lint --release
         if: ${{ github.base_ref == 'master' }}
         env:
           GITHUB_COMMENTS_URL: ${{ github.event.pull_request.comments_url }}
