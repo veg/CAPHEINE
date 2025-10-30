@@ -216,7 +216,7 @@ To use a different container from the default container or conda environment spe
 
 ### Custom Tool Arguments
 
-This pipeline may not expose every possible argument of each tool. Fortunately, nf-core-style pipelines provide some freedom to users to insert additional parameters that the pipeline does not include by default. Where needed, you can extend or override arguments in your own configuration using Nextflow's `withLabel:` selectors and module argument patterns. 
+This pipeline may not expose every possible argument of each tool. Fortunately, nf-core-style pipelines provide some freedom to users to insert additional parameters that the pipeline does not include by default. Where needed, you can extend or override arguments in your own configuration using Nextflow's `withLabel:` selectors and module argument patterns.
 
 To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/usage/configuration#customising-tool-arguments) section of the nf-core website.
 
