@@ -32,6 +32,15 @@
    - [RELAX](https://hyphy.org/methods/selection-methods/#RELAX)
 7. Collate and summarize results for all genes and analyses ([`DRHIP`](https://github.com/veg/drhip))
 
+While CAPHEINE is not an official nf-core pipeline, it benefits from the nf-core ecosystem in several ways:
+
+- **Development Standards**: Built using the nf-core template and follows nf-core best practices
+- **Modular Design**: Uses the nf-core module system for maintainability
+- **Containerization**: Leverages BioContainers for reproducible analyses
+- **Testing Framework**: Utilizes nf-test for pipeline validation
+
+This relationship allows CAPHEINE to maintain high standards of code quality and interoperability while allowing flexibility for the development roadmap and scope of the pipeline. Current scope is focused on viral non-recombinant data, but the pipeline is designed to be flexible and can be extended to other types of data.
+
 ## Usage
 
 First, ensure that you have Nextflow (version 24.04.2 or later) installed on your system. You can follow the [Nextflow installation guide](https://www.nextflow.io/docs/latest/getstarted.html#installation) to get started.
