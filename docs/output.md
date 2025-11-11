@@ -9,18 +9,15 @@ CAPHEINE (Comprehensive Automated Pipeline using HyPhy for Evolutionary Inferenc
 The CAPHEINE pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data through several key stages:
 
 1. **Sequence Preprocessing**
-
    - Input validation
    - Removal of sequences with ambiguous bases
    - Codon-aware sequence alignment to a reference gene sequence
 
 2. **Phylogenetic Analysis**
-
    - Phylogenetic tree construction
    - Tree annotation and labeling
 
 3. **Selection Pressure Analysis**
-
    - FEL (Fixed Effects Likelihood) analysis
    - MEME (Mixed Effects Model of Evolution) analysis
    - PRIME (PRoperty Informed Models of Evolution) analysis
@@ -97,23 +94,19 @@ The CAPHEINE pipeline is built using [Nextflow](https://www.nextflow.io/) and pr
 ### Selection Analysis Results
 
 1. **FEL Results**:
-
    - Look for sites with p-value < 0.05 (or your chosen significance threshold)
    - Negative beta values indicate purifying selection
    - Positive beta values indicate positive selection
 
 2. **MEME Results**:
-
    - Identifies sites under episodic positive selection
    - Look for sites with p-value < 0.05
 
 3. **BUSTED Results**:
-
    - Tests for gene-wide evidence of positive selection
    - Significant p-value indicates evidence of positive selection
 
 4. **Contrast-FEL Results**:
-
    - Identifies sites with different selection pressures between foreground and background branches
    - Look for sites with significant p-values
 
