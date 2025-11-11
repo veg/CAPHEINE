@@ -24,31 +24,25 @@ jobs:
     # Only run on push for merged PRs in this repository
     if: "${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'veg/CAPHEINE') }}"
     runs-on: ubuntu-latest
-    env:
-      NXF_HOME:           ${{ github.workspace }}/.nxf-home/${{ github.run_id }}-${{ matrix.NXF_VER }}-${{ matrix.test_name }}-${{ matrix.profile }}
-      NXF_WORK:           ${{ github.workspace }}/work/${{ github.run_id }}-${{ matrix.NXF_VER }}-${{ matrix.test_name }}-${{ matrix.profile }}
-      NXF_CONDA_CACHEDIR: ${{ github.workspace }}/.conda/${{ github.run_id }}-${{ matrix.NXF_VER }}-${{ matrix.test_name }}-${{ matrix.profile }}
-      CONDA_PKGS_DIRS:    ${{ github.workspace }}/.conda-pkgs/${{ github.run_id }}-${{ matrix.NXF_VER }}-${{ matrix.test_name }}-${{ matrix.profile }}
     strategy:
       matrix:
         NXF_VER:
-          - "24.04.2"
+          - "25.10.0"
           - "latest-everything"
         profile:
           - "conda"
           - "docker"
           - "singularity"
         test_name:
-          - "test"
           - "test_full"
         isMaster:
           - ${{ github.base_ref == 'main' }}
-        # # Exclude conda and singularity on dev
-        # exclude:
-        #   - isMaster: false
-        #     profile: "conda"
-        #   - isMaster: false
-        #     profile: "singularity"
+        # Exclude conda and singularity on dev
+        exclude:
+          - isMaster: false
+            profile: "conda"
+          - isMaster: false
+            profile: "singularity"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
