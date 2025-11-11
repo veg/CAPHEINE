@@ -9,7 +9,7 @@
 [![GitHub Actions Linting Status](https://github.com/veg/CAPHEINE/actions/workflows/linting.yml/badge.svg)](https://github.com/veg/CAPHEINE/actions/workflows/linting.yml)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
 
-[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A524.04.2-23aa62.svg)](https://www.nextflow.io/)
+[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A525.10.0-23aa62.svg)](https://www.nextflow.io/)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
@@ -43,7 +43,7 @@ This relationship allows CAPHEINE to maintain high standards of code quality and
 
 ## Usage
 
-First, ensure that you have Nextflow (version 24.04.2 or later) installed on your system. You can follow the [Nextflow installation guide](https://www.nextflow.io/docs/latest/getstarted.html#installation) to get started.
+First, ensure that you have Nextflow (version 25.10.0 or later) installed on your system. You can follow the [Nextflow installation guide](https://www.nextflow.io/docs/latest/getstarted.html#installation) to get started.
 
 You will also need to set up one of the following container environments:
 
