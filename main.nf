@@ -1,11 +1,9 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    nf-core/capheine
+    CAPHEINE
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/nf-core/capheine
-    Website: https://nf-co.re/capheine
-    Slack  : https://nfcore.slack.com/channels/capheine
+    Github : https://github.com/veg/CAPHEINE
 ----------------------------------------------------------------------------------------
 */
 
@@ -29,7 +27,7 @@ include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_caph
 // TODO nf-core: Remove this line if you don't need a FASTA file
 //   This is an example of how to use getGenomeAttribute() to fetch parameters
 //   from igenomes.config using `--genome`
-params.fasta = getGenomeAttribute('fasta')
+// params.fasta = getGenomeAttribute('fasta')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -40,21 +38,39 @@ params.fasta = getGenomeAttribute('fasta')
 //
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
-workflow NFCORE_CAPHEINE {
+workflow HYPHY_CAPHEINE {
 
     take:
-    samplesheet // channel: samplesheet read in from --input
+    //samplesheet // channel: samplesheet read in from --input
+    ch_reference // channel: path(reference_genes.fasta)
+    ch_unaligned // channel: path(unaligned_sequences.fasta)
+    foreground_list // channel: path(foreground_sequences.fasta)
+    foreground_regexp // channel: string
 
     main:
-
     //
     // WORKFLOW: Run pipeline
     //
+    // samplesheet was replaced with ch_reference and ch_unaligned
     CAPHEINE (
-        samplesheet
+        ch_reference,
+        ch_unaligned,
+        foreground_list,
+        foreground_regexp
     )
     emit:
     multiqc_report = CAPHEINE.out.multiqc_report // channel: /path/to/multiqc_report.html
+    fel_results      = CAPHEINE.out.fel_results
+    meme_results     = CAPHEINE.out.meme_results
+    prime_results    = CAPHEINE.out.prime_results
+    busted_results   = CAPHEINE.out.busted_results
+    contrastfel_results = CAPHEINE.out.contrastfel_results
+    relax_results    = CAPHEINE.out.relax_results
+    summary_csv            = CAPHEINE.out.summary_csv
+    sites_csv              = CAPHEINE.out.sites_csv
+    comparison_summary_csv = CAPHEINE.out.comparison_summary_csv
+    comparison_site_csv   = CAPHEINE.out.comparison_site_csv
+    versions       = CAPHEINE.out.versions
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -74,14 +90,19 @@ workflow {
         params.monochrome_logs,
         args,
         params.outdir,
-        params.input
+        params.reference_genes,
+        params.unaligned_seqs
     )
 
     //
     // WORKFLOW: Run main workflow
     //
-    NFCORE_CAPHEINE (
-        PIPELINE_INITIALISATION.out.samplesheet
+    //PIPELINE_INITIALISATION.out.samplesheet replaced with params.reference_genes and params.unaligned_seqs
+    HYPHY_CAPHEINE (
+        PIPELINE_INITIALISATION.out.ref_genes,
+        PIPELINE_INITIALISATION.out.unaligned,
+        PIPELINE_INITIALISATION.out.foreground_list,
+        PIPELINE_INITIALISATION.out.foreground_regexp
     )
     //
     // SUBWORKFLOW: Run completion tasks
@@ -93,7 +114,7 @@ workflow {
         params.outdir,
         params.monochrome_logs,
         params.hook_url,
-        NFCORE_CAPHEINE.out.multiqc_report
+        HYPHY_CAPHEINE.out.multiqc_report
     )
 }
 

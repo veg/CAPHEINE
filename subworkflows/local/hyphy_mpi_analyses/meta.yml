@@ -1,0 +1,84 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
+name: "hyphy_mpi_analyses"
+description: Run hyphy analyses on a set of alignment files and their corresponding gene trees using mpi
+keywords:
+  - hyphy
+  - mpi
+  - fel
+  - meme
+  - prime
+  - busted
+  - selection
+  - phylogenetics
+  - genomics
+## A list of the modules and/or subworkflows used in the subworkflow
+components:
+  - hyphympi/fel
+  - hyphympi/meme
+  - hyphympi/prime
+  - hyphympi/contrastfel
+  - hyphy/busted # BUSTED and RELAX are not trivially parallelizable and do not benefit from mpi
+  - hyphy/relax
+## List of all the channels used as input with a description and their structure
+input:
+  - ch_aln:
+      type: file
+      description: |
+        The input channel containing the alignment files
+        Structure: [ val(meta), path(aln) ]
+      pattern: "*.{msa/fasta/nex}"
+  - ch_tree:
+      type: file
+      description: |
+        The input channel containing the gene tree files
+        Structure: [ val(meta), path(tree) ]
+      pattern: "*.{nwk/bestTree/treefile}"
+## List of all the channels used as output with a descriptions and their structure
+output:
+  - fel_json:
+      type: file
+      description: |
+        Channel containing FEL (site-specific selection) analysis results
+        Structure: [ val(meta), path(json) ]
+      pattern: "*.FEL.json"
+  - meme_json:
+      type: file
+      description: |
+        Channel containing MEME (episodic selection) analysis results
+        Structure: [ val(meta), path(json) ]
+      pattern: "*.MEME.json"
+  - prime_json:
+      type: file
+      description: |
+        Channel containing PRIME (property-informed evolution) analysis results
+        Structure: [ val(meta), path(json) ]
+      pattern: "*.PRIME.json"
+  - busted_json:
+      type: file
+      description: |
+        Channel containing BUSTED (episodic diversifying selection) analysis results
+        Structure: [ val(meta), path(json) ]
+      pattern: "*.BUSTED.json"
+  - contrastfel_json:
+      type: file
+      description: |
+        Channel containing Contrast-FEL analysis results (emitted only when branch sets are provided)
+        Structure: [ val(meta), path(json) ]
+      pattern: "*.CONTRASTFEL.json"
+  - relax_json:
+      type: file
+      description: |
+        Channel containing RELAX analysis results (emitted only when branch sets are provided)
+        Structure: [ val(meta), path(json) ]
+      pattern: "*.RELAX.json"
+  - versions:
+      type: file
+      description: |
+        File containing software versions
+        Structure: [ path(versions.yml) ]
+      pattern: "versions.yml"
+authors:
+  - "@hverdonk"
+maintainers:
+  - "@hverdonk"
+  - "@d-callan"

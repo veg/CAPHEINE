@@ -1,0 +1,111 @@
+nextflow_workflow {
+
+    name "Test Workflow CAPHEINE"
+    script "workflows/capheine.nf"
+    workflow "CAPHEINE"
+
+    test("All hyphy methods") {
+
+        when {
+            params {
+                foreground_list = '${projectDir}/tests/test_data/pretend-foreground-seqs.txt'
+                foreground_regexp = null
+                test_branches = 'internal'
+            }
+            workflow {
+                """
+                input[0] = file(projectDir + '/tests/test_data/pretend_DENV1_ref.fasta', checkIfExists: true)
+                input[1] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
+                input[2] = []
+                input[3] = ['_2023_09_']
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                // Check FEL output exists
+                { assert path(workflow.out.fel_results[0][1]).exists() },
+                { assert path(workflow.out.fel_results[0][1]).text.contains('FEL') },
+                // Check MEME output exists
+                { assert path(workflow.out.meme_results[0][1]).exists() },
+                { assert path(workflow.out.meme_results[0][1]).text.contains('MEME') },
+                // Check PRIME output exists
+                { assert path(workflow.out.prime_results[0][1]).exists() },
+                { assert path(workflow.out.prime_results[0][1]).text.contains('PRIME') },
+                // Check BUSTED output exists
+                { assert path(workflow.out.busted_results[0][1]).exists() },
+                { assert path(workflow.out.busted_results[0][1]).text.contains('BUSTED') },
+                // Check Contrast-FEL output exists
+                { assert path(workflow.out.contrastfel_results[0][1]).exists() },
+                { assert path(workflow.out.contrastfel_results[0][1]).text.contains('Contrast-FEL') },
+                // Check RELAX output exists
+                { assert path(workflow.out.relax_results[0][1]).exists() },
+                { assert path(workflow.out.relax_results[0][1]).text.contains('RELAX') },
+                // Check DRHIP output exists
+                { assert path(workflow.out.summary_csv[0]).exists() },
+                { assert path(workflow.out.sites_csv[0]).exists() },
+                { assert path(workflow.out.comparison_summary_csv[0]).exists() },
+                { assert path(workflow.out.comparison_site_csv[0]).exists() },
+                // Check versions file
+                { assert path(workflow.out.versions[0]).exists() },
+                { assert workflow.out.versions.size() == 23 }
+            )
+        }
+
+    }
+
+    test("No RELAX, no contrast-FEL") {
+
+        when {
+            params {
+                foreground_list = null
+                foreground_regexp = null
+                test_branches = 'internal'
+            }
+            workflow {
+                // TODO: fix input format & ensure input format matches planned sample sheet format
+                """
+                input[0] = file(projectDir + '/tests/test_data/pretend_DENV1_ref.fasta', checkIfExists: true)
+                input[1] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
+                input[2] = []
+                input[3] = []
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                // Check FEL output exists
+                { assert path(workflow.out.fel_results[0][1]).exists() },
+                { assert path(workflow.out.fel_results[0][1]).text.contains('FEL') },
+                // Check MEME output exists
+                { assert path(workflow.out.meme_results[0][1]).exists() },
+                { assert path(workflow.out.meme_results[0][1]).text.contains('MEME') },
+                // Check PRIME output exists
+                { assert path(workflow.out.prime_results[0][1]).exists() },
+                { assert path(workflow.out.prime_results[0][1]).text.contains('PRIME') },
+                // Check BUSTED output exists
+                { assert path(workflow.out.busted_results[0][1]).exists() },
+                { assert path(workflow.out.busted_results[0][1]).text.contains('BUSTED') },
+                // Check Contrast-FEL output DOES NOT exist
+                { assert workflow.out.contrastfel_results[0].empty },
+                // Check RELAX output DOES NOT exist
+                { assert workflow.out.relax_results[0].empty },
+                // Check DRHIP output exists
+                { assert path(workflow.out.summary_csv[0]).exists() },
+                { assert path(workflow.out.sites_csv[0]).exists() },
+                { assert workflow.out.comparison_summary_csv.empty },
+                { assert workflow.out.comparison_site_csv.empty },
+                // Check versions file
+                { assert path(workflow.out.versions[0]).exists() },
+                { assert workflow.out.versions.size() == 17 }
+            )
+        }
+
+    }
+
+
+}

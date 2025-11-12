@@ -1,0 +1,62 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
+name: "cawlign"
+description: Aligns a FASTA file of unaligned sequences to a reference gene using cawlign, producing an aligned FASTA file.
+keywords:
+  - alignment
+  - fasta
+  - genomics
+  - reference-guided
+tools:
+  - "cawlign":
+      description: "A codon-aware aligner for mapping nucleotide or protein sequences to a reference."
+      homepage: "https://github.com/veg/cawlign"
+      documentation: "https://github.com/veg/cawlign#readme"
+      tool_dev_url: "https://github.com/veg/cawlign"
+      doi: ""
+      licence: ["MIT"]
+      identifier:
+
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. `[ id:'sample1' ]`
+  - reference:
+      type: file
+      description: Reference gene FASTA file
+      pattern: "*.fa,*.fasta,*.fna,*.ffn,*.faa,*.frn"
+      ontologies:
+        - edam: "http://edamontology.org/format_1929"
+  - unaligned:
+      type: file
+      description: FASTA file of unaligned sequences
+      pattern: "*.fa,*.fasta,*.fna,*.ffn,*.faa,*.frn"
+      ontologies:
+        - edam: "http://edamontology.org/format_1929"
+
+output:
+  - aligned:
+      - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
+      - "{id}-aligned.fasta":
+          type: file
+          description: Aligned FASTA file output from cawlign
+          pattern: "*-aligned.fasta"
+          ontologies:
+            - edam: "http://edamontology.org/format_1929"
+  - versions:
+      - "versions.yml":
+          type: file
+          description: File containing software version information
+          pattern: "versions.yml"
+
+authors:
+  - "@hverdonk"
+maintainers:
+  - "@hverdonk"
+  - "@d-callan"

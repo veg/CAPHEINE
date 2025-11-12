@@ -1,0 +1,55 @@
+// TODO nf-core: Once you have added the required tests, please run the following command to build this file:
+// nf-core modules test cawlign
+nextflow_process {
+
+    name "Test Process CAWLIGN"
+    script "modules/local/cawlign/main.nf"
+    process "CAWLIGN"
+
+    tag "modules"
+    tag "modules_"
+    tag "cawlign"
+
+    test("cawlign - capsid_protein_C - fasta") {
+        when {
+            process {
+                """
+                input[0] = file(projectDir + '/tests/test_data/capsid_protein_C_DENV1_ref.fasta', checkIfExists: true)
+                input[1] = file(projectDir + '/tests/test_data/DENV1_50seqs.fasta', checkIfExists: true)
+                """
+            }
+        }
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.aligned_seqs[0][1]).exists() },
+                { assert path(process.out.aligned_seqs[0][1]).size() > 0 },
+                { assert path(process.out.aligned_seqs[0][1]).getFileName().toString().startsWith(process.out.aligned_seqs[0][0].toString()) }
+            )
+        }
+    }
+
+    // TODO nf-core: Change the test name preferably indicating the test-data and file-format used but keep the " - stub" suffix.
+    test("cawlign - capsid_protein_C - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = file(projectDir + '/tests/test_data/capsid_protein_C_DENV1_ref.fasta', checkIfExists: true)
+                input[1] = file(projectDir + '/tests/test_data/DENV1_50seqs.fasta', checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+
+    }
+
+}

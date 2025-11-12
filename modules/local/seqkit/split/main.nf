@@ -1,0 +1,50 @@
+process SEQKIT_SPLIT {
+    tag '$ref_fasta'
+    label 'process_single'
+
+    conda "${moduleDir}/environment.yml"
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/seqkit:2.10.0--h9ee0642_0':
+        'biocontainers/seqkit:2.10.0--h9ee0642_0' }"
+
+    input:
+    path(ref_fasta)
+
+    output:
+    path "*.fasta"                , emit: gene_fastas
+    path "versions.yml"           , emit: versions
+
+    when:
+    task.ext.when == null || task.ext.when
+
+    script:
+    def args = task.ext.args ?: ''
+
+    """
+    seqkit split \\
+        --by-id \\
+        --two-pass \\
+        --out-dir . \\
+        $ref_fasta \\
+        $args
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        seqkit: \$(seqkit version |& sed '1!d ; s/seqkit v//')
+    END_VERSIONS
+    """
+
+    stub:
+    def args = task.ext.args ?: ''
+
+    """
+    touch gene1.fasta
+    touch gene2.fasta
+    touch gene3.fasta
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        seqkit: \$(seqkit version |& sed '1!d ; s/seqkit v//')
+    END_VERSIONS
+    """
+}

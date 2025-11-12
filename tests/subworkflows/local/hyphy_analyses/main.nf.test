@@ -1,0 +1,226 @@
+nextflow_workflow {
+
+    name "Test Workflow HYPHY_ANALYSES"
+    script "subworkflows/local/hyphy_analyses/main.nf"
+    workflow "HYPHY_ANALYSES"
+
+    test("Should run all hyphy analyses") {
+
+        when {
+            params {
+                // the list itself isn't used in this test, but it signals that there are pre-labeled foreground sequences present
+                foreground_list = '${projectDir}/tests/test_data/pretend-foreground-seqs.txt'
+                foreground_regexp = null
+                test_branches = 'internal'
+            }
+            workflow {
+                """
+                input[0] = Channel.of([
+                    'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups', \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true), \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ])
+                """
+            }
+
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                // Check FEL output
+                { assert path(workflow.out.fel_json[0][1]).exists() },
+                { assert path(workflow.out.fel_json[0][1]).text.contains('FEL') },
+                { assert path(workflow.out.fel_json[0][1]).toString().endsWith('.FEL.json') },
+                {
+                    def json = new groovy.json.JsonSlurper().parseText(path(workflow.out.fel_json[0][1]).text)
+
+                    // Check for correct FEL settings
+                    def settings = json.analysis["settings"]
+                    assert settings["ci"] == 0
+                    assert settings["srv"] == 1
+                    assert settings["multihit"] == "None"
+
+                    // Check that FEL only ran on internal branches
+                    def tested = json.tested["0"]
+
+                    // All test branches should contain 'node'
+                    assert tested.findAll { k, v -> v == "test" }.every { k, v -> k.toLowerCase().contains("node") }
+
+                    // No background branches should contain 'node'
+                    assert tested.findAll { k, v -> v == "background" }.every { k, v -> !k.toLowerCase().contains("node") }
+                },
+                // Check MEME output
+                { assert path(workflow.out.meme_json[0][1]).exists() },
+                { assert path(workflow.out.meme_json[0][1]).text.contains('MEME') },
+                { assert path(workflow.out.meme_json[0][1]).toString().endsWith('.MEME.json') },
+                {
+                    def json = new groovy.json.JsonSlurper().parseText(path(workflow.out.meme_json[0][1]).text)
+
+                    // Check for correct MEME settings
+                    def settings = json.analysis["settings"]
+                    assert settings["multihit"] == "None"
+
+                    // Check that MEME only ran on internal branches
+                    def tested = json.tested["0"]
+
+                    // All test branches should contain 'node'
+                    assert tested.findAll { k, v -> v == "test" }.every { k, v -> k.toLowerCase().contains("node") }
+
+                    // No background branches should contain 'node'
+                    assert tested.findAll { k, v -> v == "background" }.every { k, v -> !k.toLowerCase().contains("node") }
+                },
+                // Check PRIME output
+                { assert path(workflow.out.prime_json[0][1]).exists() },
+                { assert path(workflow.out.prime_json[0][1]).text.contains('PRIME') },
+                { assert path(workflow.out.prime_json[0][1]).toString().endsWith('.PRIME.json') },
+                {
+                    def json = new groovy.json.JsonSlurper().parseText(path(workflow.out.prime_json[0][1]).text)
+
+                    // Check for correct PRIME settings
+                    def residue_properties = json.model.residue_properties.keySet().toList()
+                    assert residue_properties[0] == "Factor I bipolar"
+
+                    // Check that PRIME only ran on internal branches
+                    def tested = json.tested["0"]
+
+                    // All test branches should contain 'node'
+                    assert tested.findAll { k, v -> v == "test" }.every { k, v -> k.toLowerCase().contains("node") }
+
+                    // No background branches should contain 'node'
+                    assert tested.findAll { k, v -> v == "background" }.every { k, v -> !k.toLowerCase().contains("node") }
+                },
+                // Check BUSTED output
+                { assert path(workflow.out.busted_json[0][1]).exists() },
+                { assert path(workflow.out.busted_json[0][1]).text.contains('BUSTED') },
+                { assert path(workflow.out.busted_json[0][1]).toString().endsWith('.BUSTED.json') },
+                {
+                    def json = new groovy.json.JsonSlurper().parseText(path(workflow.out.busted_json[0][1]).text)
+
+                    // Check if error sink rate class is included in entries
+                    def rateDistTest = json.fits["Unconstrained model"]["Rate Distributions"].Test
+                    assert rateDistTest.keySet().containsAll(["0", "1", "2", "3"])
+
+                    // Check for correct BUSTED settings
+                    def settings = json.analysis["settings"]
+                    assert settings["error-sink"] == 1
+                    assert settings["srv"] == "Yes"
+
+                    // Check that BUSTED only ran on internal branches
+                    def tested = json.tested["0"]
+
+                    // All test branches should contain 'node'
+                    assert tested.findAll { k, v -> v == "test" }.every { k, v -> k.toLowerCase().contains("node") }
+
+                    // No background branches should contain 'node'
+                    assert tested.findAll { k, v -> v == "background" }.every { k, v -> !k.toLowerCase().contains("node") }
+                },
+                // Check Contrast-FEL output
+                { assert path(workflow.out.contrastfel_json[0][1]).exists() },
+                { assert path(workflow.out.contrastfel_json[0][1]).text.contains('Contrast-FEL') },
+                { assert path(workflow.out.contrastfel_json[0][1]).toString().endsWith('.CONTRASTFEL.json') },
+                {
+                    def json = new groovy.json.JsonSlurper().parseText(path(workflow.out.contrastfel_json[0][1]).text)
+
+                    // Check for correct ContrastFEL settings
+                    def settings = json.analysis["settings"]
+                    assert settings["site-filter"]["site-filter"] == null
+
+                    // Check that ContrastFEL only ran on the selected internal branches
+                    def tested = json.tested["0"]
+
+                    assert tested["Node5"] == "Foreground"
+                    assert tested["Node6"] == "Foreground"
+                    // All test branches should contain 'node'
+                    assert tested.findAll { k, v -> v == "Foreground" }.every { k, v -> k.toLowerCase().contains("node") }
+                    assert tested.findAll { k, v -> v == "Reference" }.every { k, v -> k.toLowerCase().contains("node") }
+                },
+                // Check RELAX output
+                { assert path(workflow.out.relax_json[0][1]).exists() },
+                { assert path(workflow.out.relax_json[0][1]).text.contains('RELAX') },
+                { assert path(workflow.out.relax_json[0][1]).toString().endsWith('.RELAX.json') },
+                {
+                    def json = new groovy.json.JsonSlurper().parseText(path(workflow.out.relax_json[0][1]).text)
+
+                    // Check that RELAX only ran on the selected internal branches
+                    def tested = json.tested["0"]
+
+                    assert tested["Node5"] == "Test"
+                    assert tested["Node6"] == "Test"
+                    assert tested.findAll { k, v -> k.startsWith('Node') && k != 'Node5' && k != 'Node6' }.every { k, v -> v == "Reference" }
+                    assert tested.findAll { k, v -> !(k.startsWith('Node')) }.every { k, v -> v == "Unclassified" }
+                },
+                // Check versions file
+                { assert path(workflow.out.versions[0]).exists() },
+                { assert path(workflow.out.versions[0]).text.contains('hyphy:') }
+            )
+        }
+    }
+
+    test("No branch set provided, test_branches is unset (default to 'all')") {
+
+        when {
+            params {
+                // No specific parameters needed
+            }
+            workflow {
+                """
+                input[0] = Channel.of([
+                    'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups', \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true), \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ])
+                """
+            }
+
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                // Check FEL output
+                { assert path(workflow.out.fel_json[0][1]).exists() },
+                { assert path(workflow.out.fel_json[0][1]).text.contains('FEL') },
+                { assert path(workflow.out.fel_json[0][1]).toString().endsWith('.FEL.json') },
+                // Check MEME output
+                { assert path(workflow.out.meme_json[0][1]).exists() },
+                { assert path(workflow.out.meme_json[0][1]).text.contains('MEME') },
+                { assert path(workflow.out.meme_json[0][1]).toString().endsWith('.MEME.json') },
+                // Check PRIME output
+                { assert path(workflow.out.prime_json[0][1]).exists() },
+                { assert path(workflow.out.prime_json[0][1]).text.contains('PRIME') },
+                { assert path(workflow.out.prime_json[0][1]).toString().endsWith('.PRIME.json') },
+                // Check BUSTED output
+                { assert path(workflow.out.busted_json[0][1]).exists() },
+                { assert path(workflow.out.busted_json[0][1]).text.contains('BUSTED') },
+                { assert path(workflow.out.busted_json[0][1]).toString().endsWith('.BUSTED.json') },
+                {
+                    def json = new groovy.json.JsonSlurper().parseText(path(workflow.out.busted_json[0][1]).text)
+
+                    // Check if error sink rate class is included in entries
+                    def rateDistTest = json.fits["Unconstrained model"]["Rate Distributions"].Test
+                    assert rateDistTest.keySet().containsAll(["0", "1", "2", "3"])
+
+                    // Check for correct BUSTED settings
+                    def settings = json.analysis["settings"]
+                    assert settings["error-sink"] == 1
+                    assert settings["srv"] == "Yes"
+
+                    // Check that BUSTED only ran on internal branches
+                    def tested = json.tested["0"]
+
+                    // No background branches should exist; all branches should be tested
+                    assert tested.findAll { k, v -> v == "background" }.isEmpty()
+                },
+                // Check that Contrast-FEL output does not exist
+                { assert workflow.out.contrastfel_json.empty },
+                // Check that RELAX output does not exist
+                { assert workflow.out.relax_json.empty },
+                // Check versions file
+                { assert path(workflow.out.versions[0]).exists() },
+                { assert path(workflow.out.versions[0]).text.contains('hyphy:') }
+            )
+        }
+    }
+
+}

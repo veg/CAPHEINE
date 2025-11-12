@@ -1,4 +1,4 @@
-name: nf-core CI
+name: CI
 # This workflow runs the pipeline with the minimal test dataset to check that it completes without any syntax errors
 on:
   push:
@@ -21,22 +21,22 @@ concurrency:
 jobs:
   test:
     name: "Run pipeline with test data (${{ matrix.NXF_VER }} | ${{ matrix.test_name }} | ${{ matrix.profile }})"
-    # Only run on push if this is the nf-core dev branch (merged PRs)
-    if: "${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'nf-core/capheine') }}"
+    # Only run on push for merged PRs in this repository
+    if: "${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'veg/CAPHEINE') }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
         NXF_VER:
-          - "24.04.2"
+          - "25.10.0"
           - "latest-everything"
         profile:
           - "conda"
           - "docker"
           - "singularity"
         test_name:
-          - "test"
+          - "test_full"
         isMaster:
-          - ${{ github.base_ref == 'master' }}
+          - ${{ github.base_ref == 'main' }}
         # Exclude conda and singularity on dev
         exclude:
           - isMaster: false

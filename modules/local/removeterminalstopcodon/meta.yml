@@ -1,0 +1,45 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
+# # TODO nf-core: Add a description of the module and list keywords
+name: "removeterminalstopcodon"
+description: Removes terminal stop codons from a FASTA file.
+keywords:
+  - fasta
+  - stop codon
+  - sequence trimming
+  - bioinformatics
+tools:
+  ## TODO nf-core: Add a description and other details for the software below
+  - "remove-terminal-stop-codon.py":
+      description: "Custom Python script to trim terminal stop codons and fail on internal in-frame stop codons using a specified genetic code."
+      homepage: ""
+      documentation: ""
+      tool_dev_url: ""
+      doi: ""
+      licence: ""
+      identifier: ""
+
+input:
+  - ref_fasta:
+      type: file
+      description: Input coding sequences in FASTA/FA/FNA format
+      pattern: "*.{fasta,fa,fna}"
+      ontologies:
+        - edam: "http://edamontology.org/format_1929" # FASTA
+output:
+  - clean_ref_fasta:
+      type: file
+      description: Output FASTA with terminal stop codons removed; process fails if internal stops are present
+      pattern: "*-noStopCodons.*"
+      ontologies:
+        - edam: "http://edamontology.org/format_1929" # FASTA
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+      ontologies:
+        - edam: "http://edamontology.org/format_3750" # YAML
+authors:
+  - "@hverdonk"
+maintainers:
+  - "@hverdonk"
+  - "@d-callan"

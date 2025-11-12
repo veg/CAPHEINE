@@ -1,66 +1,93 @@
-# nf-core/capheine: Usage
-
-## :warning: Please read this documentation on the nf-core website: [https://nf-co.re/capheine/usage](https://nf-co.re/capheine/usage)
-
-> _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
+# CAPHEINE: Usage
 
 ## Introduction
 
-<!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
+## Input files and parameters
 
-## Samplesheet input
+The CAPHEINE pipeline requires you to provide input files directly via command line flags. There is no longer a samplesheet input.
 
-You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
+- `--reference_genes` (required): Path to a FASTA file containing reference gene sequences.
+- `--unaligned_seqs` (required): Path to a FASTA file containing unaligned DNA sequences.
+- `--outdir` (required): Output directory for results.
+- `--foreground_list` (optional): Path to a text file with a newline-separated list of foreground taxa.
+- `--foreground_regexp` (optional): Regular expression string to match foreground taxa.
+- `--test_branches` (optional): Branch selection for HyPhy site-wise analyses. Use `internal` to test only internal branches, or `all` to test all branches. If unset, no flag is passed and HyPhy defaults to all branches.
+- `--use_mpi` (optional): Run MPI-enabled HyPhy analyses (FEL, MEME, PRIME; Contrast-FEL when foreground branches are provided). BUSTED and RELAX run without MPI. Default: false.
 
-```bash
---input '[path to samplesheet file]'
-```
+Only one of `--foreground_list` or `--foreground_regexp` should be provided per run (if either is used).
 
-### Multiple runs of the same sample
+> [!NOTE]
+> Contrast-FEL and RELAX are run only if you provide either `--foreground_list` or `--foreground_regexp`. Otherwise, these analyses are skipped.
 
-The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis. Below is an example for the same sample sequenced across 3 lanes:
-
-```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz
-```
-
-### Full samplesheet
-
-The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first 3 columns to match those defined in the table below.
-
-A final samplesheet file consisting of both single- and paired-end data may look something like the one below. This is for 6 samples, where `TREATMENT_REP3` has been sequenced twice.
-
-```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP2,AEG588A2_S2_L002_R1_001.fastq.gz,AEG588A2_S2_L002_R2_001.fastq.gz
-CONTROL_REP3,AEG588A3_S3_L002_R1_001.fastq.gz,AEG588A3_S3_L002_R2_001.fastq.gz
-TREATMENT_REP1,AEG588A4_S4_L003_R1_001.fastq.gz,
-TREATMENT_REP2,AEG588A5_S5_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
-```
-
-| Column    | Description                                                                                                                                                                            |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`  | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-
-An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
-
-## Running the pipeline
-
-The typical command for running the pipeline is as follows:
+Example usage:
 
 ```bash
-nextflow run nf-core/capheine --input ./samplesheet.csv --outdir ./results --genome GRCh37 -profile docker
+nextflow run veg/CAPHEINE \
+  --reference_genes ./reference_genes.fasta \
+  --unaligned_seqs ./unaligned_seqs.fasta \
+  --outdir ./results \
+  -profile docker
 ```
 
-This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
+With a foreground taxa list:
+
+```bash
+nextflow run veg/CAPHEINE \
+  --reference_genes ./reference_genes.fasta \
+  --unaligned_seqs ./unaligned_seqs.fasta \
+  --foreground_list ./foreground_taxa.txt \
+  --outdir ./results \
+  -profile docker
+```
+
+With a foreground taxa regular expression:
+
+```bash
+nextflow run veg/CAPHEINE \
+  --reference_genes ./reference_genes.fasta \
+  --unaligned_seqs ./unaligned_seqs.fasta \
+  --foreground_regexp '^Homo.*' \
+  --outdir ./results \
+  -profile docker
+```
+
+Selecting HyPhy branches explicitly (internal branches only):
+
+```bash
+nextflow run veg/CAPHEINE \
+  --reference_genes ./reference_genes.fasta \
+  --unaligned_seqs ./unaligned_seqs.fasta \
+  --test_branches internal \
+  --outdir ./results \
+  -profile docker
+```
+
+Selecting HyPhy branches explicitly (all branches):
+
+```bash
+nextflow run veg/CAPHEINE \
+  --reference_genes ./reference_genes.fasta \
+  --unaligned_seqs ./unaligned_seqs.fasta \
+  --test_branches all \
+  --outdir ./results \
+  -profile docker
+```
+
+Running with MPI-enabled HyPhy:
+
+```bash
+nextflow run veg/CAPHEINE \
+  --reference_genes ./reference_genes.fasta \
+  --unaligned_seqs ./unaligned_seqs.fasta \
+  --use_mpi \
+  --outdir ./results \
+  -profile docker
+```
+
+> [!NOTE]
+> Using `--use_mpi` requires a container runtime or environment with MPI. The `HYPHYMPI` binary is bundled with the docker containers and the conda packages, and should be available by default. Each MPI job uses the number of CPUs configured for the process (`mpirun -np $task.cpus`).
+
+All of the above commands will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
 
 Note that the pipeline will create the following files in your working directory:
 
@@ -81,40 +108,44 @@ Pipeline settings can be provided in a `yaml` or `json` file via `-params-file <
 The above pipeline run specified with a params file in yaml format:
 
 ```bash
-nextflow run nf-core/capheine -profile docker -params-file params.yaml
+nextflow run veg/CAPHEINE -profile docker -params-file params.yaml
 ```
 
 with:
 
 ```yaml title="params.yaml"
-input: './samplesheet.csv'
-outdir: './results/'
-genome: 'GRCh37'
-<...>
+reference_genes: "./reference_genes.fasta"
+unaligned_seqs: "./unaligned_seqs.fasta"
+outdir: "./results/"
+# Optional (uncomment to use):
+# foreground_list: './foreground_taxa.txt'
+# foreground_regexp: '^Homo.*'
+# test_branches: internal   # or 'all'; if unset, HyPhy runs on all branches by default
+# use_mpi: true              # enable MPI-enabled HyPhy (default: false)
 ```
 
 You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
 
 ### Updating the pipeline
 
-When you run the above command, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version. When running the pipeline after this, it will always use the cached version if available - even if the pipeline has been updated since. To make sure that you're running the latest version of the pipeline, make sure that you regularly update the cached version of the pipeline:
+When you run the command below, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version. When running the pipeline after this, it will always use the cached version if available - even if the pipeline has been updated since. To make sure that you're running the latest version of the pipeline, make sure that you regularly update the cached version of the pipeline:
 
 ```bash
-nextflow pull nf-core/capheine
+nextflow pull veg/CAPHEINE
 ```
 
 ### Reproducibility
 
 It is a good idea to specify the pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since.
 
-First, go to the [nf-core/capheine releases page](https://github.com/nf-core/capheine/releases) and find the latest pipeline version - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`. Of course, you can switch to another version by changing the number after the `-r` flag.
+First, go to the [CAPHEINE releases page](https://github.com/veg/CAPHEINE/releases) and find the latest pipeline version - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`. Of course, you can switch to another version by changing the number after the `-r` flag.
 
 This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future. For example, at the bottom of the MultiQC reports.
 
 To further assist in reproducibility, you can use share and reuse [parameter files](#running-the-pipeline) to repeat pipeline runs with the same settings without having to write out a command with every single parameter.
 
 > [!TIP]
-> If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
+> If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster-specific paths to files, nor institutional-specific profiles.
 
 ## Core Nextflow arguments
 
@@ -128,9 +159,11 @@ Use this parameter to choose a configuration profile. Profiles can give configur
 Several generic profiles are bundled with the pipeline which instruct the pipeline to use software packaged using different methods (Docker, Singularity, Podman, Shifter, Charliecloud, Apptainer, Conda) - see below.
 
 > [!IMPORTANT]
-> We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility, however when this is not possible, Conda is also supported.
+> We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility. However, when this is not possible, Conda is also supported.
 
 The pipeline also dynamically loads configurations from [https://github.com/nf-core/configs](https://github.com/nf-core/configs) when it runs, making multiple config profiles for various institutional clusters available at run time. For more information and to check if your system is supported, please see the [nf-core/configs documentation](https://github.com/nf-core/configs#documentation).
+
+You may also load additional configuration profiles at run time if you supply custom configuration files (for example via `-c <file>` or profiles bundled in this repository). Consult the Nextflow documentation for configuration profiles.
 
 Note that multiple profiles can be loaded, for example: `-profile test,docker` - the order of arguments is important!
 They are loaded in sequence, so later profiles can overwrite earlier profiles.
@@ -171,19 +204,19 @@ Specify the path to a specific config file (this is a core Nextflow command). Se
 
 ### Resource requests
 
-Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the pipeline steps, if the job exits with any of the error codes specified [here](https://github.com/nf-core/rnaseq/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/conf/base.config#L18) it will automatically be resubmitted with higher resources request (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
+Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. You can use Nextflow's error and retry strategies to resubmit tasks with increased resources when appropriate.
 
 To change the resource requests, please see the [max resources](https://nf-co.re/docs/usage/configuration#max-resources) and [tuning workflow resources](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources) section of the nf-core website.
 
 ### Custom Containers
 
-In some cases, you may wish to change the container or conda environment used by a pipeline steps for a particular tool. By default, nf-core pipelines use containers and software from the [biocontainers](https://biocontainers.pro/) or [bioconda](https://bioconda.github.io/) projects. However, in some cases the pipeline specified version maybe out of date.
+In some cases, you may wish to change the container or conda environment used by a pipeline step for a particular tool. By default, this pipeline uses containers and software from the [BioContainers](https://biocontainers.pro/) or [Bioconda](https://bioconda.github.io/) projects. However, in some cases the pipeline specified version maybe out of date.
 
 To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/usage/configuration#updating-tool-versions) section of the nf-core website.
 
 ### Custom Tool Arguments
 
-A pipeline might not always support every possible argument or option of a particular tool used in pipeline. Fortunately, nf-core pipelines provide some freedom to users to insert additional parameters that the pipeline does not include by default.
+This pipeline may not expose every possible argument of each tool. Fortunately, nf-core-style pipelines provide some freedom to users to insert additional parameters that the pipeline does not include by default. Where needed, you can extend or override arguments in your own configuration using Nextflow's `withLabel:` selectors and module argument patterns.
 
 To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/usage/configuration#customising-tool-arguments) section of the nf-core website.
 
@@ -193,7 +226,7 @@ In most cases, you will only need to create a custom config as a one-off but if 
 
 See the main [Nextflow documentation](https://www.nextflow.io/docs/latest/config.html) for more information about creating your own configuration files.
 
-If you have any questions or issues please send us a message on [Slack](https://nf-co.re/join/slack) on the [`#configs` channel](https://nfcore.slack.com/channels/configs).
+If you have any questions or issues with custom configs, please send the nf-core team a message on [Slack](https://nf-co.re/join/slack) on the [`#configs` channel](https://nfcore.slack.com/channels/configs).
 
 ## Running in the background
 

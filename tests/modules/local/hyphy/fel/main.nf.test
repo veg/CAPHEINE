@@ -1,0 +1,87 @@
+nextflow_process {
+
+    name "Test Process HYPHY_FEL"
+    script "modules/local/hyphy/fel/main.nf"
+    process "HYPHY_FEL"
+
+    test("Testing if FEL generates results") {
+
+        when {
+            process {
+                """
+                input[0] = [
+                    'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups', \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true), \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.fel_json[0][1]).exists() },
+                { assert path(process.out.fel_json[0][1]).text.contains('FEL') },
+                // Check output json for correctness
+                {
+                    def json = new groovy.json.JsonSlurper().parseText(path(process.out.fel_json[0][1]).text)
+
+                    // Check for correct FEL settings
+                    def settings = json.analysis["settings"]
+                    assert settings["ci"] == 0
+                    assert settings["srv"] == 1
+                    assert settings["multihit"] == "None"
+
+                    // internal branch testing is now handled with ext.args, which can't be passed or tested here
+                    // // Check that FEL only ran on internal branches
+                    // def tested = json.tested["0"]
+
+                    // // All test branches should contain 'node'
+                    // assert tested.findAll { k, v -> v == "test" }.every { k, v -> k.toLowerCase().contains("node") }
+
+                    // // No background branches should contain 'node'
+                    // assert tested.findAll { k, v -> v == "background" }.every { k, v -> !k.toLowerCase().contains("node") }
+                },
+                // Verify metadata matches input
+                { assert process.out.fel_json[0][0] == 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups' },
+                // Check version file exists and has correct format
+                { assert path(process.out.versions[0]).exists() },
+                { assert path(process.out.versions[0]).text.contains('hyphy:') }
+            )
+        }
+
+    }
+
+    test("FEL stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups', \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta', checkIfExists: true), \
+                    file(projectDir + '/tests/test_data/FBgn0000055_NT_033779.5_10_species_12_seqs-nodups.fasta.treefile', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                // For stub test, just verify files exist with correct names
+                { assert path(process.out.fel_json[0][1]).exists() },
+                { assert path(process.out.fel_json[0][1]).toString().endsWith('.FEL.json') },
+                { assert process.out.fel_json[0][0] == 'FBgn0000055_NT_033779.5_10_species_12_seqs-nodups' },
+                { assert path(process.out.versions[0]).exists() },
+                { assert path(process.out.versions[0]).text.contains('hyphy:') }
+            )
+        }
+
+    }
+
+
+}

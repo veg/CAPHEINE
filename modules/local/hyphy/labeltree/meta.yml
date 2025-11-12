@@ -1,0 +1,60 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
+name: "hyphy_labeltree"
+description: |
+  Runs the `label-tree` subcommand from HyPhy, which is used to annotate or manipulate phylogenetic tree labels for downstream evolutionary analyses.
+keywords:
+  - phylogenetics
+  - tree
+  - labeling
+  - annotation
+  - hyphy
+  - evolutionary biology
+tools:
+  - "hyphy":
+      description: "An open-source software package for comparative sequence analysis using stochastic evolutionary models. This module uses the 'labeltree' subcommand to annotate or manipulate phylogenetic tree labels."
+      homepage: "https://hyphy.org"
+      documentation: "https://hyphy.org"
+      tool_dev_url: "https://github.com/veg/hyphy"
+      doi: "10.1093/molbev/msy022"
+      licence: ["MIT"]
+      identifier: biotools:HyPhy
+
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. `[ id:'sample1']`
+  - in_tree:
+      type: file
+      description: Input phylogenetic tree file (Newick or Nexus format)
+      pattern: "*.{nwk,newick,tree,treefile,nex,nexus}"
+      ontologies:
+        - edam: "http://edamontology.org/format_1910" # Newick format
+        - edam: "http://edamontology.org/format_2010" # Nexus format
+
+output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. `[ id:'sample1' ]`
+  - labeled_tree:
+      type: file
+      description: Output phylogenetic tree file with updated or annotated labels (Newick or Nexus format)
+      pattern: "*.{nwk,newick,tree,treefile,nex,nexus}"
+      ontologies:
+        - edam: "http://edamontology.org/format_1910"
+        - edam: "http://edamontology.org/format_2010"
+
+  - versions:
+      - "versions.yml":
+          type: file
+          description: File containing software versions
+          pattern: "versions.yml"
+
+authors:
+  - "@hverdonk"
+maintainers:
+  - "@hverdonk"

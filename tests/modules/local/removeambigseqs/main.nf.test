@@ -1,0 +1,60 @@
+// TODO nf-core: Once you have added the required tests, please run the following command to build this file:
+// nf-core modules test removeambigseqs
+nextflow_process {
+
+    name "Test Process REMOVEAMBIGSEQS"
+    script "modules/local/removeambigseqs/main.nf"
+    process "REMOVEAMBIGSEQS"
+
+    tag "modules"
+    tag "modules_"
+    tag "removeambigseqs"
+
+    test("denv1 - fasta") {
+
+        when {
+            process {
+                """
+                input[0] = [
+                    'DENV1_50seqs', // meta map
+                    file(projectDir + '/tests/test_data/DENV1_50seqs.fasta', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() },
+                { assert path(process.out.no_ambigs[0][1]).text.contains(">PP396094.1|2023-08-16") },
+                { assert path(process.out.no_ambigs[0][1]).text.count(">") == 1 }
+            )
+        }
+
+    }
+
+    test("denv1 - fasta - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    'DENV1_50seqs', // meta map
+                    file(projectDir + '/tests/test_data/DENV1_50seqs.fasta', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+
+}

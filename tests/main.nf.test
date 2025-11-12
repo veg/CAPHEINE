@@ -1,0 +1,74 @@
+nextflow_pipeline {
+
+    name "Test Workflow main.nf"
+    script "main.nf"
+
+    test("Simple test, no foreground provided") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
+                test_branches = 'internal'
+            }
+        }
+
+        then {
+            assert workflow.success
+        }
+    }
+
+    test("bad branches parameter (typo)") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
+                test_branches = 'inernal'
+            }
+        }
+
+        then {
+            assert !workflow.success
+        }
+    }
+
+    test("Forbid foreground_list AND foreground_regexp") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
+                foreground_list = "${projectDir}/tests/test_data/pretend-foreground-seqs.txt"
+                foreground_regexp = '_2023_09_'
+                test_branches = 'internal'
+            }
+        }
+
+        then {
+            assert !workflow.success
+        }
+    }
+
+    test("Foreground - regexp provided") {
+
+        when {
+            params {
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
+                foreground_regexp = '_2023_09_'
+                outdir = "$outputDir"
+                test_branches = 'internal'
+            }
+        }
+
+        then {
+            assert workflow.success
+        }
+
+    }
+
+}

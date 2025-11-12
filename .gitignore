@@ -7,3 +7,8 @@ testing/
 testing*
 *.pyc
 null/
+.nf-test/*
+.nf-test.log
+test_results/
+.windsurf/
+.secrets

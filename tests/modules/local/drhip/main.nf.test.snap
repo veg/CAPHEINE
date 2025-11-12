@@ -1,0 +1,43 @@
+{
+    "cawlign - capsid_protein_C - stub": {
+        "content": [
+            {
+                "0": [
+                    "combined_summary.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "1": [
+                    "combined_sites.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "2": [
+                    "combined_comparison_summary.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "3": [
+                    "combined_comparison_site.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "4": [
+                    "versions.yml:md5,258b78b6310bb61e2b6ba20fe4603ac6"
+                ],
+                "comparison_site_csv": [
+                    "combined_comparison_site.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "comparison_summary_csv": [
+                    "combined_comparison_summary.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "sites_csv": [
+                    "combined_sites.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "summary_csv": [
+                    "combined_summary.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "versions": [
+                    "versions.yml:md5,258b78b6310bb61e2b6ba20fe4603ac6"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-07-11T16:32:30.03255"
+    }
+}

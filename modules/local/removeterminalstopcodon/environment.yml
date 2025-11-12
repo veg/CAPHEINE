@@ -1,0 +1,9 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/environment-schema.json
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  # Software MUST be pinned to channel and version; exclude build strings.
+  - "conda-forge::python=3.14"
+  - "conda-forge::biopython=1.85"

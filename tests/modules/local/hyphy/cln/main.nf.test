@@ -1,0 +1,66 @@
+// TODO nf-core: Once you have added the required tests, please run the following command to build this file:
+// nf-core modules test hyphy/cln
+nextflow_process {
+
+    name "Test Process HYPHY_CLN"
+    script "modules/local/hyphy/cln/main.nf"
+    process "HYPHY_CLN"
+
+    tag "modules"
+    tag "modules_"
+    tag "hyphy"
+    tag "hyphy/cln"
+
+    test("denv1 - fasta") {
+        when {
+            process {
+                """
+                input[0] = [
+                    'DENV1_7seqs_withDups', // meta data
+                    file(projectDir + '/tests/test_data/DENV1_7seqs_withDups.fasta', checkIfExists: true),
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() },
+                { assert path(process.out.deduplicated_seqs[0][1]).exists() },
+                { assert path(process.out.deduplicated_seqs[0][1]).size() > 0 },
+                { assert path(process.out.deduplicated_seqs[0][1]).text.split("\n").count { it.startsWith('>') } == 7 },
+                { assert path(process.out.deduplicated_seqs[0][1]).text.split("\n").every { !it.startsWith('>') || !it.contains('.') && !it.contains('|') } },
+                { assert path(process.out.versions[0]).exists() },
+                { assert path(process.out.versions[0]).text.contains('hyphy:') },
+            )
+        }
+    }
+
+    // TODO nf-core: Change the test name preferably indicating the test-data and file-format used but keep the " - stub" suffix.
+    test("hyphy_cln - stub") {
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    'DENV1_7seqs_withDups', // meta data
+                    file(projectDir + '/tests/test_data/DENV1_7seqs_withDups.fasta', checkIfExists: true),
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+                //TODO nf-core: Add all required assertions to verify the test output.
+                // See https://nf-co.re/docs/contributing/tutorials/nf-test_assertions for more information and examples.
+            )
+        }
+
+    }
+
+}

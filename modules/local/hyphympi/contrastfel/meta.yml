@@ -1,0 +1,48 @@
+---
+name: "HYPHYMPI_CONTRASTFEL"
+description: Contrast-FEL investigates whether selective pressures differ between two or more branch sets at a site using MPI-enabled HyPhy.
+keywords:
+  - hyphy
+  - mpi
+  - selection
+  - phylogenetics
+  - genomics
+tools:
+  - "hyphy":
+      description: "An open-source software package for comparative sequence analysis using stochastic evolutionary models."
+      homepage: "https://veg.github.io/hyphy-site/"
+      documentation: "https://github.com/veg/hyphy/wiki"
+      tool_dev_url: "https://github.com/veg/hyphy"
+      doi: "10.1093/molbev/msu400"
+      licence: ["MIT"]
+      identifier: biotools:HyPhy
+input:
+  - alignment:
+      type: file
+      description: Multiple sequence alignment file in FASTA format.
+      pattern: "*.fasta$"
+  - tree:
+      type: file
+      description: Phylogenetic tree file in Newick format.
+      pattern: "*.treefile"
+  - foreground_tag:
+      type: string
+      description: Label used for foreground branch set in the tree file.
+  - reference_tag:
+      type: string
+      description: Label used for reference branch set in the tree file.
+output:
+  - contrastfel_json:
+      type: file
+      description: JSON file containing Contrast-FEL selection analysis results.
+      pattern: "CONTRASTFEL/*.CONTRASTFEL.json"
+  - versions:
+      - "versions.yml":
+          type: file
+          description: File containing software versions
+          pattern: "versions.yml"
+authors:
+  - "@hverdonk"
+maintainers:
+  - "@hverdonk"
+  - "@d-callan"
