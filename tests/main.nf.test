@@ -35,6 +35,90 @@ nextflow_pipeline {
         }
     }
 
+    test("bad code parameter (genetic code does not exist)") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
+                test_branches = 'internal'
+                code = 'not_a_real_code'
+            }
+        }
+
+        then {
+            assert !workflow.success
+        }
+    }
+
+    test("code parameter as numeric translation table") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
+                code = '1'
+                test_branches = 'internal'
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                // Check BUSTED output
+                { assert path(workflow.out.busted_json[0][1]).exists() },
+                { assert path(workflow.out.busted_json[0][1]).text.contains('BUSTED') },
+                { assert path(workflow.out.busted_json[0][1]).toString().endsWith('.BUSTED.json') },
+                {
+                    def json = new groovy.json.JsonSlurper().parseText(path(workflow.out.busted_json[0][1]).text)
+
+                    // Check for correct BUSTED settings
+                    def settings = json.analysis["settings"]
+                    assert settings["error-sink"] == 1
+                    assert settings["srv"] == "Yes"
+                    // TODO: add check for correct code
+
+                },
+            )
+        }
+    }
+
+    test("code parameter as 'standard' string") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
+                code = 'standard'
+                test_branches = 'internal'
+            }
+        }
+
+        then {
+            assert workflow.success
+        }
+    }
+
+    test("code parameter as mitochondrial string") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
+                code = 'mtDNA'
+                test_branches = 'internal'
+            }
+        }
+
+        then {
+            assert workflow.success
+        }
+    }
+
     test("Forbid foreground_list AND foreground_regexp") {
 
         when {
