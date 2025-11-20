@@ -1,0 +1,25 @@
+{
+    "remove stop codons - fasta - stub": {
+        "content": [
+            {
+                "0": [
+                    "GCF_000006765_1_cds_from_genomic-noStopCodons.fna:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "1": [
+                    "versions.yml:md5,792f09404431234c308cae6bceecaf33"
+                ],
+                "clean_ref_fasta": [
+                    "GCF_000006765_1_cds_from_genomic-noStopCodons.fna:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "versions": [
+                    "versions.yml:md5,792f09404431234c308cae6bceecaf33"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-11-20T14:13:22.328023"
+    }
+}
