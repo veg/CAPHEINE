@@ -84,7 +84,7 @@ nextflow_process {
 
     }
 
-    test("remove stop codons - should specify mitochondrial table but doesn't - fasta") {
+    test("remove stop codons - mitochondrial gene with no code specified - fasta") {
 
         when {
             process {
@@ -96,7 +96,7 @@ nextflow_process {
 
         then {
             assertAll(
-                { assert !process.success },  // because we're using Vertebrate Mitochondrial DNA, if the code uses the Universal table it will find internal stop codons and fail
+                { assert !process.success },  // because we're using Vertebrate Mitochondrial DNA, if the code defaults to the Universal table it will find internal stop codons and fail
                 { assert process.errorReport.contains("Hyphy does not permit internal stop codons") }
             )
         }
