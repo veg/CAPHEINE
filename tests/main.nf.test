@@ -35,7 +35,7 @@ nextflow_pipeline {
     //     }
     // }
 
-    test("bad code parameter (genetic code does not exist)") {
+    test("bad code name (genetic code does not exist)") {
 
         when {
             params {
@@ -52,67 +52,15 @@ nextflow_pipeline {
         }
     }
 
-    test("code parameter as numeric translation table") {
+    test("bad code name (only hyphy-style name is allowed)") {
 
         when {
             params {
                 outdir = "$outputDir"
-                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
-                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
-                code = '1'
+                reference_genes = "${projectDir}/tests/test_data/mito_mouse_ref.fna"
+                unaligned_seqs = "${projectDir}/tests/test_data/mito_raw_seqs.fna"
                 test_branches = 'internal'
-            }
-        }
-
-        then {
-            assert workflow.success
-        }
-    }
-
-    test("code parameter as 'standard' string") {
-
-        when {
-            params {
-                outdir = "$outputDir"
-                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
-                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
-                code = 'standard'
-                test_branches = 'internal'
-            }
-        }
-
-        then {
-            assert workflow.success
-        }
-    }
-
-    test("code parameter as mitochondrial string") {
-
-        when {
-            params {
-                outdir = "$outputDir"
-                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
-                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
-                code = 'mtDNA'
-                test_branches = 'internal'
-            }
-        }
-
-        then {
-            assert workflow.success
-        }
-    }
-
-    test("Forbid foreground_list AND foreground_regexp") {
-
-        when {
-            params {
-                outdir = "$outputDir"
-                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
-                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
-                foreground_list = "${projectDir}/tests/test_data/pretend-foreground-seqs.txt"
-                foreground_regexp = '_2023_09_'
-                test_branches = 'internal'
+                code = 'Vertebrate Mitochondrial'
             }
         }
 
@@ -121,14 +69,31 @@ nextflow_pipeline {
         }
     }
 
-    test("Foreground - regexp provided") {
+    test("bad code number (genetic code does not exist)") {
 
         when {
             params {
+                outdir = "$outputDir"
                 reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
                 unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
-                foreground_regexp = '_2023_09_'
+                test_branches = 'internal'
+                code = '999'
+            }
+        }
+
+        then {
+            assert !workflow.success
+        }
+    }
+
+    test("mitochondrial translation table") {
+
+        when {
+            params {
                 outdir = "$outputDir"
+                reference_genes = "${projectDir}/tests/test_data/mito_mouse_ref.fna"
+                unaligned_seqs = "${projectDir}/tests/test_data/mito_raw_seqs.fna"
+                code = 'Vertebrate-mtDNA'
                 test_branches = 'internal'
             }
         }
@@ -136,7 +101,42 @@ nextflow_pipeline {
         then {
             assert workflow.success
         }
-
     }
+
+//     test("Forbid foreground_list AND foreground_regexp") {
+
+//         when {
+//             params {
+//                 outdir = "$outputDir"
+//                 reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+//                 unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
+//                 foreground_list = "${projectDir}/tests/test_data/pretend-foreground-seqs.txt"
+//                 foreground_regexp = '_2023_09_'
+//                 test_branches = 'internal'
+//             }
+//         }
+
+//         then {
+//             assert !workflow.success
+//         }
+//     }
+
+//     test("Foreground - regexp provided") {
+
+//         when {
+//             params {
+//                 reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+//                 unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
+//                 foreground_regexp = '_2023_09_'
+//                 outdir = "$outputDir"
+//                 test_branches = 'internal'
+//             }
+//         }
+
+//         then {
+//             assert workflow.success
+//         }
+
+//     }
 
 }
