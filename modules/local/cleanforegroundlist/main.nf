@@ -3,10 +3,8 @@ process CLEAN_FOREGROUND_LIST {
     label 'process_single'
 
     // no required tool dependencies, but we'll pull biopython anyway so that the module runs if a container is requested
-    conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/biopython:1.79':
-        'biocontainers/biopython:1.79' }"
+    conda null
+    container null
 
     input:
     path taxa_list
