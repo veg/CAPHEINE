@@ -205,7 +205,7 @@ def foregroundError() {
         def regexp_is_empty = false
         if (params.foreground_regexp instanceof CharSequence) {
             regexp_is_empty = params.foreground_regexp.toString().trim().isEmpty()
-            
+
             if (regexp_is_empty) {
             def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
                 "  ERROR: --foreground_regexp was provided but is empty.\n" +
@@ -227,7 +227,7 @@ def foregroundError() {
         def list_is_empty = false
         if (params.foreground_list instanceof CharSequence) {
             def list_path = params.foreground_list.toString().trim()
-            
+
             if (list_path.isEmpty()) {
                 def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
                     "  ERROR: --foreground_list was set but no file path was provided.\n" +
@@ -235,7 +235,7 @@ def foregroundError() {
                     "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
                 error(error_string)
             }
-            
+
             def foreground_file = file(list_path)
             if (!foreground_file.exists()) {
                 def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
@@ -245,7 +245,7 @@ def foregroundError() {
                     "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
                 error(error_string)
             }
-            
+
             if (foreground_file.isEmpty()) {
                 def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
                     "  ERROR: The foreground list file is empty.\n" +

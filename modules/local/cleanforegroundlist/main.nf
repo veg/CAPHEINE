@@ -33,10 +33,10 @@ process CLEAN_FOREGROUND_LIST {
 
     stub:
     def args = task.ext.args ?: ''
-    
+
     """
     echo $args
-    
+
     touch ${taxa_list.baseName}-sanitized.txt
 
     cat <<-END_VERSIONS > versions.yml
