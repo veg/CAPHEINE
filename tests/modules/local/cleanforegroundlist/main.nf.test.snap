@@ -1,0 +1,58 @@
+{
+    "remove illegal hyphy characters - stub": {
+        "content": [
+            {
+                "0": [
+                    "pretend-foreground-list-sanitized.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "1": [
+                    "versions.yml:md5,7575363c52524ef9a9e581b23f30fb4d"
+                ],
+                "sanitized_list": [
+                    "pretend-foreground-list-sanitized.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "versions": [
+                    "versions.yml:md5,7575363c52524ef9a9e581b23f30fb4d"
+                ]
+            },
+            {
+                "CLEAN_FOREGROUND_LIST": {
+                    "python": "3.11.9"
+                }
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
+        },
+        "timestamp": "2025-12-19T17:45:57.984249"
+    },
+    "remove illegal hyphy characters": {
+        "content": [
+            {
+                "0": [
+                    "pretend-foreground-list-sanitized.txt:md5,66f51ea2c8f3c0119691593245126a16"
+                ],
+                "1": [
+                    "versions.yml:md5,7575363c52524ef9a9e581b23f30fb4d"
+                ],
+                "sanitized_list": [
+                    "pretend-foreground-list-sanitized.txt:md5,66f51ea2c8f3c0119691593245126a16"
+                ],
+                "versions": [
+                    "versions.yml:md5,7575363c52524ef9a9e581b23f30fb4d"
+                ]
+            },
+            {
+                "CLEAN_FOREGROUND_LIST": {
+                    "python": "3.11.9"
+                }
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
+        },
+        "timestamp": "2025-12-19T17:45:53.907065"
+    }
+}
