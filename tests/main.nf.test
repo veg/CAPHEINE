@@ -124,6 +124,24 @@ nextflow_pipeline {
         }
     }
 
+    test("Foreground - regexp not provided") {
+
+        when {
+            params {
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
+                foreground_regexp = ""
+                outdir = "$outputDir"
+                test_branches = 'internal'
+            }
+        }
+
+        then {
+            assert !workflow.success
+        }
+
+    }
+
     test("Foreground - regexp provided") {
 
         when {
@@ -131,6 +149,42 @@ nextflow_pipeline {
                 reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
                 unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
                 foreground_regexp = '_2023_09_'
+                outdir = "$outputDir"
+                test_branches = 'internal'
+            }
+        }
+
+        then {
+            assert workflow.success
+        }
+
+    }
+
+    test("Foreground - list not provided") {
+
+        when {
+            params {
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
+                foreground_list = ""
+                outdir = "$outputDir"
+                test_branches = 'internal'
+            }
+        }
+
+        then {
+            assert !workflow.success
+        }
+
+    }
+
+    test("Foreground - list provided") {
+
+        when {
+            params {
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
+                foreground_list = "${projectDir}/tests/test_data/pretend-foreground-list.txt"
                 outdir = "$outputDir"
                 test_branches = 'internal'
             }
