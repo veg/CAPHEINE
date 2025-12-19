@@ -150,8 +150,7 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
         // clean up fasta IDs in list to match how hyphy_cln cleans up sequence IDs
 
         CLEAN_FOREGROUND_LIST (
-            foreground_list=ch_foreground_list,
-            tree=ch_labeltree_in
+            taxa_list=ch_foreground_list
         )
         ch_foreground_list = CLEAN_FOREGROUND_LIST.out.sanitized_list
         ch_versions = ch_versions.mix(CLEAN_FOREGROUND_LIST.out.versions)

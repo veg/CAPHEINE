@@ -12,104 +12,104 @@ nextflow_workflow {
     tag "iqtree"
     tag "hyphy_labeltree_list"
 
-    // test("denv1 - fasta - no tree labeling") {
-    //     when {
-    //         params {
-    //             foreground_list = null
-    //             foreground_regexp = null
-    //             test_branches = "internal"
-    //         }
-    //         workflow {
-    //             """
-    //             input[0] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
-    //             input[1] = file(projectDir + '/tests/test_data/pretend_DENV1_ref.fasta', checkIfExists: true)
-    //             input[2] = []
-    //             input[3] = []
-    //             """
-    //         }
-    //     }
+    test("denv1 - fasta - no tree labeling") {
+        when {
+            params {
+                foreground_list = null
+                foreground_regexp = null
+                test_branches = "internal"
+            }
+            workflow {
+                """
+                input[0] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
+                input[1] = file(projectDir + '/tests/test_data/pretend_DENV1_ref.fasta', checkIfExists: true)
+                input[2] = []
+                input[3] = []
+                """
+            }
+        }
 
-    //     then {
-    //         assertAll(
-    //             { assert workflow.success },
-    //             { assert path(workflow.out.deduplicated[0][1]).exists() },
-    //             { assert path(workflow.out.deduplicated[0][1]).toString().endsWith('-nodups.fasta') },
-    //             { assert path(workflow.out.tree[0][1]).exists() },
-    //             { assert path(workflow.out.tree[0][1]).toString().endsWith('.treefile') },
-    //             // no labeled tree should be generated
-    //             { assert !path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
-    //             { assert workflow.out.versions.size() == 10 },
-    //             // hacky check, but this test should also generate a warning that no internal branches could be labeled
-    //         )
-    //     }
-    // }
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert path(workflow.out.deduplicated[0][1]).exists() },
+                { assert path(workflow.out.deduplicated[0][1]).toString().endsWith('-nodups.fasta') },
+                { assert path(workflow.out.tree[0][1]).exists() },
+                { assert path(workflow.out.tree[0][1]).toString().endsWith('.treefile') },
+                // no labeled tree should be generated
+                { assert !path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
+                { assert workflow.out.versions.size() == 10 },
+                // hacky check, but this test should also generate a warning that no internal branches could be labeled
+            )
+        }
+    }
 
-    // test("denv1 - fasta - nonmatching foreground regexp") {
-    //     when {
-    //         params {
-    //             foreground_list = null
-    //             foreground_regexp = ['dontmatch']
-    //             test_branches = "internal"
-    //         }
+    test("denv1 - fasta - nonmatching foreground regexp") {
+        when {
+            params {
+                foreground_list = null
+                foreground_regexp = ['dontmatch']
+                test_branches = "internal"
+            }
 
-    //         workflow {
-    //             """
-    //             input[0] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
-    //             input[1] = file(projectDir + '/tests/test_data/pretend_DENV1_ref.fasta', checkIfExists: true)
-    //             input[2] = []
-    //             input[3] = ['dontmatch']
-    //             """
-    //         }
-    //     }
+            workflow {
+                """
+                input[0] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
+                input[1] = file(projectDir + '/tests/test_data/pretend_DENV1_ref.fasta', checkIfExists: true)
+                input[2] = []
+                input[3] = ['dontmatch']
+                """
+            }
+        }
 
-    //     then {
-    //         assertAll(
-    //             { assert workflow.success },
-    //             { assert path(workflow.out.deduplicated[0][1]).exists() },
-    //             { assert path(workflow.out.deduplicated[0][1]).toString().endsWith('-nodups.fasta') },
-    //             { assert path(workflow.out.tree[0][1]).exists() },
-    //             { assert path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
-    //             { assert workflow.out.versions.size() == 12 },
-    //             // check that a warning was generated about no foreground branches
-    //             // this works irl, but not in nf-test for some reason
-    //             // { assert workflow.stdout.contains("No foreground branches were labeled in the tree file") },
-    //         )
-    //     }
-    // }
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert path(workflow.out.deduplicated[0][1]).exists() },
+                { assert path(workflow.out.deduplicated[0][1]).toString().endsWith('-nodups.fasta') },
+                { assert path(workflow.out.tree[0][1]).exists() },
+                { assert path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
+                { assert workflow.out.versions.size() == 12 },
+                // check that a warning was generated about no foreground branches
+                // this works irl, but not in nf-test for some reason
+                // { assert workflow.stdout.contains("No foreground branches were labeled in the tree file") },
+            )
+        }
+    }
 
-    // test("denv1 - fasta - foreground list") {
-    //     when {
-    //         params {
-    //             foreground_list = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-foreground-seqs.txt'
-    //             foreground_regexp = null
-    //             test_branches = "all"
-    //         }
+    test("denv1 - fasta - foreground list") {
+        when {
+            params {
+                foreground_list = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-foreground-seqs.txt'
+                foreground_regexp = null
+                test_branches = "all"
+            }
 
-    //         workflow {
-    //             """
-    //             input[0] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
-    //             input[1] = file(projectDir + '/tests/test_data/pretend_DENV1_ref.fasta', checkIfExists: true)
-    //             input[2] = file(projectDir + '/tests/test_data/pretend-foreground-seqs.txt', checkIfExists: true)
-    //             input[3] = []
-    //             """
-    //         }
-    //     }
+            workflow {
+                """
+                input[0] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
+                input[1] = file(projectDir + '/tests/test_data/pretend_DENV1_ref.fasta', checkIfExists: true)
+                input[2] = file(projectDir + '/tests/test_data/pretend-foreground-seqs.txt', checkIfExists: true)
+                input[3] = []
+                """
+            }
+        }
 
-    //     then {
-    //         assertAll(
-    //             { assert workflow.success },
-    //             { assert path(workflow.out.deduplicated[0][1]).exists() },
-    //             { assert path(workflow.out.deduplicated[0][1]).toString().endsWith('-nodups.fasta') },
-    //             { assert path(workflow.out.tree[0][1]).exists() },
-    //             { assert path(workflow.out.tree[0][1]).toString().endsWith('.treefile') },
-    //             // check if tree is labeled
-    //             { assert path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
-    //             // check that leaf branches were not labeled as nuisance
-    //             { assert path(workflow.out.tree[0][1]).text.contains('PP563826_1_2023_08_21{Foreground}') },
-    //             { assert workflow.out.versions.size() == 12 },
-    //         )
-    //     }
-    // }
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert path(workflow.out.deduplicated[0][1]).exists() },
+                { assert path(workflow.out.deduplicated[0][1]).toString().endsWith('-nodups.fasta') },
+                { assert path(workflow.out.tree[0][1]).exists() },
+                { assert path(workflow.out.tree[0][1]).toString().endsWith('.treefile') },
+                // check if tree is labeled
+                { assert path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
+                // check that leaf branches were not labeled as nuisance
+                { assert path(workflow.out.tree[0][1]).text.contains('PP563826_1_2023_08_21{Foreground}') },
+                { assert workflow.out.versions.size() == 13 },
+            )
+        }
+    }
 
     test("denv1 - fasta - messy foreground list") {
         when {
@@ -140,43 +140,43 @@ nextflow_workflow {
                 { assert path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
                 // check that leaf branches were not labeled as nuisance
                 { assert path(workflow.out.tree[0][1]).text.contains('PP563826_1_2023_08_21{Foreground}') },
-                { assert workflow.out.versions.size() == 12 },
+                { assert workflow.out.versions.size() == 13 },
             )
         }
     }
 
-    // test("denv1 - fasta - foreground regexp") {
-    //     when {
-    //         params {
-    //             foreground_list = null
-    //             foreground_regexp = ['*_2023_09_*']
-    //             test_branches = "internal"
-    //         }
-    //         workflow {
-    //             """
-    //             input[0] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
-    //             input[1] = file(projectDir + '/tests/test_data/pretend_DENV1_ref.fasta', checkIfExists: true)
-    //             input[2] = []
-    //             input[3] = ['*_2023_09_*']
-    //             """
-    //         }
-    //     }
+    test("denv1 - fasta - foreground regexp") {
+        when {
+            params {
+                foreground_list = null
+                foreground_regexp = ['*_2023_09_*']
+                test_branches = "internal"
+            }
+            workflow {
+                """
+                input[0] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
+                input[1] = file(projectDir + '/tests/test_data/pretend_DENV1_ref.fasta', checkIfExists: true)
+                input[2] = []
+                input[3] = ['*_2023_09_*']
+                """
+            }
+        }
 
-    //     then {
-    //         assertAll(
-    //             { assert workflow.success },
-    //             { assert path(workflow.out.deduplicated[0][1]).exists() },
-    //             { assert path(workflow.out.deduplicated[0][1]).toString().endsWith('-nodups.fasta') },
-    //             { assert path(workflow.out.tree[0][1]).exists() },
-    //             { assert path(workflow.out.tree[0][1]).toString().endsWith('.treefile') },
-    //             // check if tree is labeled
-    //             { assert path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
-    //             // check that leaf branches were not labeled as nuisance
-    //             { assert path(workflow.out.tree[0][1]).text.contains('PP563826_1_2023_08_21{Nuisance}') },
-    //             { assert workflow.out.versions.size() == 12 },
-    //             //{ assert path(workflow.out.versions[2]).text.contains('iqtree:') },
-    //             //{ assert path(workflow.out.versions[0]).text.contains('cawlign:') },
-    //         )
-    //     }
-    // }
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert path(workflow.out.deduplicated[0][1]).exists() },
+                { assert path(workflow.out.deduplicated[0][1]).toString().endsWith('-nodups.fasta') },
+                { assert path(workflow.out.tree[0][1]).exists() },
+                { assert path(workflow.out.tree[0][1]).toString().endsWith('.treefile') },
+                // check if tree is labeled
+                { assert path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
+                // check that leaf branches were not labeled as nuisance
+                { assert path(workflow.out.tree[0][1]).text.contains('PP563826_1_2023_08_21{Nuisance}') },
+                { assert workflow.out.versions.size() == 12 },
+                //{ assert path(workflow.out.versions[2]).text.contains('iqtree:') },
+                //{ assert path(workflow.out.versions[0]).text.contains('cawlign:') },
+            )
+        }
+    }
 }
