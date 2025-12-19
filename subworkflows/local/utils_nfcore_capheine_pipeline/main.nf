@@ -200,6 +200,62 @@ def foregroundError() {
             "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
         error(error_string)
     }
+
+    if (params.foreground_regexp != null) {
+        def regexp_is_empty = false
+        if (params.foreground_regexp instanceof CharSequence) {
+            regexp_is_empty = params.foreground_regexp.toString().trim().isEmpty()
+            
+            if (regexp_is_empty) {
+            def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                "  ERROR: --foreground_regexp was provided but is empty.\n" +
+                "  Please provide a non-empty regular expression (or omit the parameter entirely).\n" +
+                "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+            error(error_string)
+        }
+        } else if (params.foreground_regexp instanceof Collection) {
+            def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                "  ERROR: --foreground_regexp should be a single regular expression, not a collection.\n" +
+                "  Please provide a single regular expression string.\n" +
+                "  If your regular expression includes commas or spaces, wrap it in double quotes.\n" +
+                "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+            error(error_string)
+        }
+    }
+
+    if (params.foreground_list != null) {
+        def list_is_empty = false
+        if (params.foreground_list instanceof CharSequence) {
+            def list_path = params.foreground_list.toString().trim()
+            
+            if (list_path.isEmpty()) {
+                def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                    "  ERROR: --foreground_list was set but no file path was provided.\n" +
+                    "  Please provide a valid file path (or omit the parameter entirely).\n" +
+                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                error(error_string)
+            }
+            
+            def foreground_file = file(list_path)
+            if (!foreground_file.exists()) {
+                def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                    "  ERROR: The foreground list file could not be found or opened.\n" +
+                    "  File path: '${list_path}'\n" +
+                    "  Please ensure the file exists and is accessible.\n" +
+                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                error(error_string)
+            }
+            
+            if (foreground_file.isEmpty()) {
+                def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                    "  ERROR: The foreground list file is empty.\n" +
+                    "  File path: '${list_path}'\n" +
+                    "  Please provide a file containing foreground sequence identifiers.\n" +
+                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                error(error_string)
+            }
+        }
+    }
 }
 
 //
