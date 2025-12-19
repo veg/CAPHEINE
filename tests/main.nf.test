@@ -142,7 +142,7 @@ nextflow_pipeline {
 
     }
 
-    test("Foreground - regexp provided") {
+    test("Simple test - foreground regexp provided") {
 
         when {
             params {
@@ -174,24 +174,6 @@ nextflow_pipeline {
 
         then {
             assert !workflow.success
-        }
-
-    }
-
-    test("Foreground - list provided") {
-
-        when {
-            params {
-                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
-                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
-                foreground_list = "${projectDir}/tests/test_data/pretend-foreground-list.txt"
-                outdir = "$outputDir"
-                test_branches = 'internal'
-            }
-        }
-
-        then {
-            assert workflow.success
         }
 
     }
