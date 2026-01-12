@@ -106,7 +106,41 @@ nextflow_workflow {
                 { assert path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
                 // check that leaf branches were not labeled as nuisance
                 { assert path(workflow.out.tree[0][1]).text.contains('PP563826_1_2023_08_21{Foreground}') },
-                { assert workflow.out.versions.size() == 12 },
+                { assert workflow.out.versions.size() == 13 },
+            )
+        }
+    }
+
+    test("denv1 - fasta - messy foreground list") {
+        when {
+            params {
+                foreground_list = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-foreground-seqs.txt'
+                foreground_regexp = null
+                test_branches = "all"
+            }
+
+            workflow {
+                """
+                input[0] = file(projectDir + '/tests/test_data/pretend-raw-seqs.fasta', checkIfExists: true)
+                input[1] = file(projectDir + '/tests/test_data/pretend_DENV1_ref.fasta', checkIfExists: true)
+                input[2] = file(projectDir + '/tests/test_data/pretend-foreground-seqs-messy.txt', checkIfExists: true)
+                input[3] = []
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert path(workflow.out.deduplicated[0][1]).exists() },
+                { assert path(workflow.out.deduplicated[0][1]).toString().endsWith('-nodups.fasta') },
+                { assert path(workflow.out.tree[0][1]).exists() },
+                { assert path(workflow.out.tree[0][1]).toString().endsWith('.treefile') },
+                // check if tree is labeled
+                { assert path(workflow.out.tree[0][1]).toString().endsWith('-labeled.treefile') },
+                // check that leaf branches were not labeled as nuisance
+                { assert path(workflow.out.tree[0][1]).text.contains('PP563826_1_2023_08_21{Foreground}') },
+                { assert workflow.out.versions.size() == 13 },
             )
         }
     }

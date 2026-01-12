@@ -6,6 +6,7 @@ include { REMOVEAMBIGSEQS } from '../../../modules/local/removeambigseqs/main'
 include { CAWLIGN         } from '../../../modules/local/cawlign/main'
 include { HYPHY_CLN       } from '../../../modules/local/hyphy/cln/main'
 include { IQTREE          } from '../../../modules/nf-core/iqtree/main'
+include { CLEAN_FOREGROUND_LIST } from '../../../modules/local/cleanforegroundlist/main'
 include { HYPHY_LABELTREE_LIST as LABEL_FOREGROUND_LIST } from '../../../modules/local/hyphy/labeltree/main'
 include { HYPHY_LABELTREE_LIST as LABEL_BACKGROUND_LIST } from '../../../modules/local/hyphy/labeltree/main'
 include { HYPHY_LABELTREE_REGEXP as LABEL_FOREGROUND_REGEXP } from '../../../modules/local/hyphy/labeltree/main'
@@ -147,6 +148,12 @@ workflow PROCESS_VIRAL_NONRECOMBINANT {
     }
     if (params.foreground_list) {
         // clean up fasta IDs in list to match how hyphy_cln cleans up sequence IDs
+
+        CLEAN_FOREGROUND_LIST (
+            taxa_list=ch_foreground_list
+        )
+        ch_foreground_list = CLEAN_FOREGROUND_LIST.out.sanitized_list
+        ch_versions = ch_versions.mix(CLEAN_FOREGROUND_LIST.out.versions)
 
         // label foreground branches
         LABEL_FOREGROUND_LIST (

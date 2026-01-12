@@ -153,6 +153,12 @@
                     "fa_icon": "fas fa-code-branch",
                     "enum": ["internal", "all"]
                 },
+                "code": {
+                    "type": "string",
+                    "description": "Genetic code to use for all analyses (HyPhy `code` option). May be given as an NCBI translation table ID (e.g. 1, 2) or as one of the valid HyPhy code names.",
+                    "help_text": "Valid HyPhy code names include: Universal, Vertebrate-mtDNA, Yeast-mtDNA, Mold-Protozoan-mtDNA, Invertebrate-mtDNA, Ciliate-Nuclear, Echinoderm-mtDNA, Euplotid-Nuclear, Alt-Yeast-Nuclear, Ascidian-mtDNA, Flatworm-mtDNA, Blepharisma-Nuclear, Chlorophycean-mtDNA, Trematode-mtDNA, Scenedesmus-obliquus-mtDNA, Thraustochytrium-mtDNA, Pterobranchia-mtDNA, SR1-and-Gracilibacteria, Pachysolen-Nuclear, Mesodinium-Nuclear, Peritrich-Nuclear, Cephalodiscidae-mtDNA. You may also specify an NCBI translation table ID instead of a name, e.g. `--code 1`. If unset, the pipeline passes no flag and all analyses assume the Universal genetic code.",
+                    "fa_icon": "fas fa-dna"
+                },
                 "version": {
                     "type": "boolean",
                     "description": "Display version and exit.",

@@ -35,6 +35,77 @@ nextflow_pipeline {
         }
     }
 
+    test("bad code name (genetic code does not exist)") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
+                test_branches = 'internal'
+                code = 'not_a_real_code'
+            }
+        }
+
+        then {
+            assert !workflow.success
+        }
+    }
+
+    test("bad code name (only hyphy-style name is allowed)") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                reference_genes = "${projectDir}/tests/test_data/mito_mouse_ref.fna"
+                unaligned_seqs = "${projectDir}/tests/test_data/mito_raw_seqs.fna"
+                test_branches = 'internal'
+                code = 'Vertebrate Mitochondrial'
+            }
+        }
+
+        then {
+            assert !workflow.success
+        }
+    }
+
+    test("bad code number (genetic code does not exist)") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
+                test_branches = 'internal'
+                code = '999'
+            }
+        }
+
+        then {
+            assert !workflow.success
+        }
+    }
+
+    test("mitochondrial translation table") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+                reference_genes = "${projectDir}/tests/test_data/mito_mouse_ref.fna"
+                unaligned_seqs = "${projectDir}/tests/test_data/mito_raw_seqs.fna"
+                code = 'Vertebrate-mtDNA'
+                test_branches = 'internal'
+            }
+        }
+
+        then {
+            // note that vertebrate mitochondrial DNA appears to have internal stop codons for any analysis assuming the standard genetic code
+            // hyphy does not record which genetic code was used, so we can't check for that directly
+            // but the analysis success should indicate that the mitochondrial DNA was processed with the correct code
+            assert workflow.success
+        }
+    }
+
     test("Forbid foreground_list AND foreground_regexp") {
 
         when {
@@ -53,7 +124,25 @@ nextflow_pipeline {
         }
     }
 
-    test("Foreground - regexp provided") {
+    test("Foreground - regexp not provided") {
+
+        when {
+            params {
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
+                foreground_regexp = ""
+                outdir = "$outputDir"
+                test_branches = 'internal'
+            }
+        }
+
+        then {
+            assert !workflow.success
+        }
+
+    }
+
+    test("Simple test - foreground regexp provided") {
 
         when {
             params {
@@ -67,6 +156,24 @@ nextflow_pipeline {
 
         then {
             assert workflow.success
+        }
+
+    }
+
+    test("Foreground - list not provided") {
+
+        when {
+            params {
+                reference_genes = "${projectDir}/tests/test_data/pretend_DENV1_ref.fasta"
+                unaligned_seqs = "${projectDir}/tests/test_data/pretend-raw-seqs.fasta"
+                foreground_list = ""
+                outdir = "$outputDir"
+                test_branches = 'internal'
+            }
+        }
+
+        then {
+            assert !workflow.success
         }
 
     }

@@ -4,8 +4,8 @@ process CAWLIGN {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/cawlign:0.1.14--he91c24d_0':
-        'biocontainers/cawlign:0.1.14--he91c24d_0' }"
+        'https://depot.galaxyproject.org/singularity/cawlign:0.1.15--he91c24d_0':
+        'biocontainers/cawlign:0.1.15--he91c24d_0' }"
 
     input:
     path reference  // path to gene reference sequence in FASTA format
@@ -28,8 +28,8 @@ process CAWLIGN {
         -r ${reference} \\
         -f refmap \\
         -s BLOSUM62 \\
-        \"${unaligned}\" \\
         ${args} \\
+        \"${unaligned}\" \\
         > ${prefix}-aligned.fasta
 
     cat <<-END_VERSIONS > versions.yml

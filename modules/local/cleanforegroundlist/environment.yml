@@ -4,4 +4,5 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - "bioconda::cawlign=0.1.15"
+  # Software MUST be pinned to channel and version; exclude build strings.
+  - "conda-forge::python=3.14"

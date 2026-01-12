@@ -32,6 +32,77 @@ nextflow_process {
 
     }
 
+    test("remove stop codons - fasta with custom table id") {
+
+        config "./nextflow.config"
+
+        when {
+            params {
+                module_args = '--table 2'
+            }
+            process {
+                // Vertebrate mitochondrial gene with a different translation table
+                """
+                input[0] = file(projectDir + '/tests/test_data/COXI_mouse_ref.fna', checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },  // because we're using Vertebrate Mitochondrial DNA, if the code uses the Universal table it will find internal stop codons and fail
+                { assert path(process.out.clean_ref_fasta[0]).exists() },
+                { assert path(process.out.clean_ref_fasta[0]).size() > 0 }
+            )
+        }
+
+    }
+
+    test("remove stop codons - fasta with custom table name") {
+
+        config "./nextflow.config"
+
+        when {
+            params {
+                module_args = '--table Vertebrate-mtDNA'
+            }
+            process {
+                // Vertebrate mitochondrial gene with a different translation table
+                """
+                input[0] = file(projectDir + '/tests/test_data/COXI_mouse_ref.fna', checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },  // because we're using Vertebrate Mitochondrial DNA, if the code uses the Universal table it will find internal stop codons and fail
+                { assert path(process.out.clean_ref_fasta[0]).exists() },
+                { assert path(process.out.clean_ref_fasta[0]).size() > 0 }
+            )
+        }
+
+    }
+
+    test("remove stop codons - mitochondrial gene with no code specified - fasta") {
+
+        when {
+            process {
+                """
+                input[0] = file(projectDir + '/tests/test_data/COXI_mouse_ref.fna', checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert !process.success },  // because we're using Vertebrate Mitochondrial DNA, if the code defaults to the Universal table it will find internal stop codons and fail
+                { assert process.errorReport.contains("Hyphy does not permit internal stop codons") }
+            )
+        }
+
+    }
+
     test("internal stop codons - fasta") {
 
         when {
@@ -53,7 +124,6 @@ nextflow_process {
 
     }
 
-    // TODO nf-core: Change the test name preferably indicating the test-data and file-format used but keep the " - stub" suffix.
     test("remove stop codons - fasta - stub") {
 
         options "-stub"
