@@ -80,7 +80,7 @@ nextflow_workflow {
     test("denv1 - fasta - foreground list") {
         when {
             params {
-                foreground_list = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-foreground-seqs.txt'
+                foreground_list = projectDir + "/tests/test_data/pretend-foreground-seqs.txt"
                 foreground_regexp = null
                 test_branches = "all"
             }
@@ -112,9 +112,10 @@ nextflow_workflow {
     }
 
     test("denv1 - fasta - messy foreground list") {
+        // tests whether the workflow can handle a foreground list with hyphy-illegal characters in the fasta IDs
         when {
             params {
-                foreground_list = '/Users/hverdonk/nf-core-capheine/tests/test_data/pretend-foreground-seqs.txt'
+                foreground_list = projectDir + '/tests/test_data/pretend-foreground-seqs-messy.txt'
                 foreground_regexp = null
                 test_branches = "all"
             }
