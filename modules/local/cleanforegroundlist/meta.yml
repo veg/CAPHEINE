@@ -1,0 +1,43 @@
+name: "cleanforegroundlist"
+description: Sanitizes a newline-separated foreground list by replacing non-alphanumeric characters with underscores.
+keywords:
+  - hyphy
+  - sanitize
+  - text
+  - list
+tools:
+  - "python":
+      description: "Python is used here to run a small helper script for sanitizing IDs."
+      homepage: "https://www.python.org/"
+      documentation: "https://docs.python.org/"
+      tool_dev_url: "https://github.com/python/cpython"
+      doi: ""
+      licence: "PSF-2.0"
+      identifier: ""
+
+input:
+  - taxa_list:
+      type: file
+      description: Newline-separated list of taxa / sequence identifiers to sanitize.
+      pattern: "*.txt"
+      ontologies:
+        - edam: http://edamontology.org/format_2330 # Text
+output:
+  sanitized_list:
+    - "*-sanitized.txt":
+        type: file
+        description: Sanitized taxa list with non-alphanumeric characters replaced by underscores.
+        pattern: "*-sanitized.txt"
+        ontologies:
+          - edam: http://edamontology.org/format_2330 # Text
+  versions:
+    - versions.yml:
+        type: file
+        description: File containing software versions
+        pattern: versions.yml
+        ontologies:
+          - edam: http://edamontology.org/format_3750 # YAML
+authors:
+  - "@hverdonk"
+maintainers:
+  - "@hverdonk"

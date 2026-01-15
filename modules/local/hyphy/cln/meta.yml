@@ -1,11 +1,12 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
 name: "hyphy_cln"
-## TODO nf-core: Add a description of the module and list keywords
 description: "Convert sequence names to HyPhy valid identifiers if needed and replace stop codons with gaps in codon data if any are present."
 keywords:
   - clean
   - genomics
+  - hyphy
+  - alignment
 tools:
   - "hyphy":
       description: "An open-source software package for comparative sequence analysis using stochastic evolutionary models."
@@ -16,43 +17,26 @@ tools:
       licence: ["MIT"]
       identifier: biotools:HyPhy
 
-## TODO nf-core: Add a description of all of the variables used as input
 input:
-  # Only when we have meta
-  - - meta:
-        type: map
-        description: |
-          Groovy Map containing sample information
-          e.g. `[ id:'sample1', single_end:false ]`
+  - meta:
+      type: map
+      description: Groovy Map containing sample information, e.g. `[ id:'sample1' ]`
+  - alignment:
+      type: file
+      description: Multiple sequence alignment file.
+      pattern: "*.*"
+      ontologies:
+        - edam: "http://edamontology.org/format_1929"
 
-    ## TODO nf-core: Delete / customise this example input
-    - bam:
-        type: file
-        description: Sorted BAM/CRAM/SAM file
-        pattern: "*.{bam,cram,sam}"
-        ontologies:
-          - edam: "http://edamontology.org/format_25722"
-          - edam: "http://edamontology.org/format_2573"
-          - edam: "http://edamontology.org/format_3462"
-
-## TODO nf-core: Add a description of all of the variables used as output
 output:
-  - bam:
-      #Only when we have meta
+  - deduplicated_seqs:
       - meta:
           type: map
-          description: |
-            Groovy Map containing sample information
-            e.g. `[ id:'sample1', single_end:false ]`
-      ## TODO nf-core: Delete / customise this example output
-      - "*.bam":
+          description: Groovy Map containing sample information, e.g. `[ id:'sample1' ]`
+      - "{id}-nodups.*":
           type: file
-          description: Sorted BAM/CRAM/SAM file
-          pattern: "*.{bam,cram,sam}"
-          ontologies:
-            - edam: "http://edamontology.org/format_25722"
-            - edam: "http://edamontology.org/format_2573"
-            - edam: "http://edamontology.org/format_3462"
+          description: Output alignment with HyPhy-valid identifiers and stop codons handled.
+          pattern: "CLN/*-nodups.*"
 
   - versions:
       - "versions.yml":

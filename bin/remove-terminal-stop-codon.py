@@ -22,16 +22,56 @@ from Bio.Seq import Seq
 from Bio.Data import CodonTable
 
 def load_table(table_arg: str):
-    """Return a DNA codon table from an NCBI table id (int) or name (str)."""
+    """Return a DNA codon table from an NCBI table id (int), NCBI name (str), or HyPhy-style name (str)."""
     if table_arg is None:
         return CodonTable.unambiguous_dna_by_id[1]  # Standard
-    # try as integer id
+
+    # First, try as an integer id (NCBI translation table number)
     try:
         tid = int(table_arg)
         return CodonTable.unambiguous_dna_by_id[tid]
     except (ValueError, KeyError):
         pass
-    # try as name
+
+    # Map HyPhy-style genetic code labels to the corresponding
+    # NCBI/Biopython "unambiguous_dna_by_name" keys.
+    hyphy_to_ncbi = {
+        # HyPhy "Universal" -> NCBI "Standard" (table 1)
+        "universal": "Standard",
+        # HyPhy mitochondrial / nuclear codes
+        "vertebrate-mtdna": "Vertebrate Mitochondrial",
+        "yeast-mtdna": "Yeast Mitochondrial",
+        # HyPhy "Mold-Protozoan-mtDNA" corresponds to NCBI table 4; we
+        # choose one of its canonical name variants here.
+        "mold-protozoan-mtdna": "Mold Mitochondrial",
+        "invertebrate-mtdna": "Invertebrate Mitochondrial",
+        "ciliate-nuclear": "Ciliate Nuclear",
+        "echinoderm-mtdna": "Echinoderm Mitochondrial",
+        "euplotid-nuclear": "Euplotid Nuclear",
+        "alt-yeast-nuclear": "Alternative Yeast Nuclear",
+        "ascidian-mtdna": "Ascidian Mitochondrial",
+        "flatworm-mtdna": "Flatworm Mitochondrial",
+        "blepharisma-nuclear": "Blepharisma Macronuclear",
+        "chlorophycean-mtdna": "Chlorophycean Mitochondrial",
+        "trematode-mtdna": "Trematode Mitochondrial",
+        "scenedesmus-obliquus-mtdna": "Scenedesmus obliquus Mitochondrial",
+        "thraustochytrium-mtdna": "Thraustochytrium Mitochondrial",
+        "pterobranchia-mtdna": "Pterobranchia Mitochondrial",
+        # HyPhy "SR1-and-Gracilibacteria" -> NCBI "Candidate Division SR1"
+        "sr1-and-gracilibacteria": "Candidate Division SR1",
+        "pachysolen-nuclear": "Pachysolen tannophilus Nuclear",
+        "mesodinium-nuclear": "Mesodinium Nuclear",
+        "peritrich-nuclear": "Peritrich Nuclear",
+        "cephalodiscidae-mtdna": "Cephalodiscidae Mitochondrial",
+    }
+
+    key = table_arg.strip().lower()
+    mapped_name = hyphy_to_ncbi.get(key)
+    if mapped_name is not None:
+        table_arg = mapped_name
+
+    # Finally, try as an NCBI/Biopython name (this will now include
+    # any mapped HyPhy-style names from above).
     try:
         return CodonTable.unambiguous_dna_by_name[table_arg]
     except KeyError:

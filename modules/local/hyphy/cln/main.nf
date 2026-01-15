@@ -5,8 +5,8 @@ process HYPHY_CLN {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/hyphy:2.5.84--hbee74ec_0' :
-        'biocontainers/hyphy:2.5.84--hbee74ec_0' }"
+        'https://depot.galaxyproject.org/singularity/hyphy:2.5.93--hbee74ec_0' :
+        'biocontainers/hyphy:2.5.93--hbee74ec_0' }"
 
     input:
     tuple val(meta), path(alignment)
@@ -21,10 +21,16 @@ process HYPHY_CLN {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta}"
-
+    def code = task.ext.hyphy_code ?: "Universal"
+    // TODO nf-core: If the tool supports multi-threading then you MUST provide the appropriate parameter
+    //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
     """
     mkdir -p CLN
-    hyphy cln Universal ${alignment} "Yes/No" CLN/${prefix}-nodups.${alignment.extension}
+    hyphy cln \\
+    --code ${code} \\
+    --alignment ${alignment} \\
+    --filtering-method "Yes/No" \\
+    --output CLN/${prefix}-nodups.${alignment.extension}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

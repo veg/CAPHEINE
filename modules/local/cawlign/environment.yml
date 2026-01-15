@@ -4,4 +4,4 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - "bioconda::cawlign=0.1.14"
+  - "bioconda::cawlign=0.1.15"
