@@ -4,4 +4,4 @@ channels:
   - bioconda
   - conda-forge
 dependencies:
-  - "bioconda::hyphy=2.5.84"
+  - "bioconda::hyphy=2.5.93"
