@@ -26,7 +26,11 @@ process HYPHY_CLN {
     //               using the Nextflow "task" variable e.g. "--threads $task.cpus"
     """
     mkdir -p CLN
-    hyphy cln "${code}" ${alignment} "Yes/No" CLN/${prefix}-nodups.${alignment.extension}
+    hyphy cln \\
+    --code ${code} \\
+    --alignment ${alignment} \\
+    --filtering-method "Yes/No" \\
+    --output CLN/${prefix}-nodups.${alignment.extension}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
