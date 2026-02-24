@@ -21,10 +21,12 @@ process HYPHYMPI_CONTRASTFEL {
 
     script:
     def args = task.ext.args ?: ''
+    def mpi_procs = task.ext.mpi_procs ?: task.cpus
+    def mpi_launcher = System.getenv('SLURM_JOB_ID') ? "srun -n ${mpi_procs}" : "mpirun -np ${mpi_procs}"
     """
     mkdir -p CONTRASTFEL
 
-    mpirun -np $task.cpus HYPHYMPI contrast-fel \
+    ${mpi_launcher} HYPHYMPI contrast-fel \
         --alignment $alignment \
         --tree $tree \
         --branch-set $foreground_tag \

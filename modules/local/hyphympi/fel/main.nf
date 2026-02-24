@@ -20,10 +20,12 @@ process HYPHYMPI_FEL {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta}"
+    def mpi_procs = task.ext.mpi_procs ?: task.cpus
+    def mpi_launcher = System.getenv('SLURM_JOB_ID') ? "srun -n ${mpi_procs}" : "mpirun -np ${mpi_procs}"
     """
     mkdir -p FEL
 
-    mpirun -np $task.cpus HYPHYMPI fel \
+    ${mpi_launcher} HYPHYMPI fel \
         --alignment $alignment \
         --tree $tree \
         --srv Yes \
