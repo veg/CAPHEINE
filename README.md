@@ -16,7 +16,7 @@
 
 ## Introduction
 
-**CAPHEINE** is a bioinformatics pipeline designed for comparative analysis of protein-coding genes using the HyPhy software suite. The pipeline ingests FASTA files containing raw DNA sequences along with FASTA files containing reference gene sequences, and performs multiple sequence alignment, phylogenetic tree construction, and various selection analyses. Key outputs include statistical tests for positive selection (BUSTED, FEL, MEME), branch-site models, and comprehensive quality control reports, all presented in an easy-to-interpret MultiQC report.
+**CAPHEINE** is a bioinformatics pipeline designed for comparative analysis of protein-coding genes using the HyPhy software suite. The pipeline ingests FASTA files containing raw DNA sequences along with FASTA files containing reference gene sequences, and performs multiple sequence alignment, phylogenetic tree construction, and various selection analyses. Key outputs include statistical tests for positive selection (BUSTED, FEL, MEME), branch-site models, and comparative analyses (Contrast-FEL, RELAX), all collated and summarized into easy-to-parse CSV format by DRHIP, alongside generic execution quality control statistics compiled in a MultiQC report.
 
 1. Multiple sequence alignment ([`cawlign`](https://github.com/evolbioinfo/cawlign))
 2. Post-alignment ambiguous sequence and gap filtering
