@@ -76,7 +76,15 @@ The CAPHEINE pipeline is built using [Nextflow](https://www.nextflow.io/) and pr
 - `relax/`
   - `*.RELAX.json`: JSON output with RELAX analysis
 
-### 4. Quality Control and Reports
+### 4. Collated Selection Summaries (DRHIP)
+
+- `drhip/`
+  - `combined_summary.csv`: Tabular summary containing gene-level selection rates ($\omega$), BUSTED likelihood ratio test statistics, and tree lengths.
+  - `combined_sites.csv`: Tabular compilation of site-specific selection statistics (FEL, MEME, and PRIME test outputs) across all processed genes.
+  - `combined_comparison_summary.csv`: Summarized comparison of selection metrics between predefined foreground and background clades (only generated when foreground clades are specified).
+  - `combined_comparison_site.csv`: Site-by-site selection comparison statistics (Contrast-FEL and RELAX test outputs) comparing the foreground and background clades (only generated when foreground clades are specified).
+
+### 5. Quality Control and Reports
 
 - `pipeline_info/`
   - `execution_report.html`: Nextflow execution report
