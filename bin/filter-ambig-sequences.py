@@ -9,11 +9,12 @@ arguments.add_argument('-t', '--threshold', help='Exclude sequences with equal t
 settings = arguments.parse_args()
 
 def filter_sequences(input_fasta, output_fasta, threshold):
+    ambig_and_gap = set("NRYSWKMBDHVX-.")
     with open(output_fasta, "w") as out:
         for record in SeqIO.parse(input_fasta, "fasta"):
             seq = str(record.seq)
-            gap_count = seq.count('-') + seq.count('N') + seq.count('.')
-            if gap_count / len(seq) <= threshold:
+            gap_count = sum(1 for char in seq.upper() if char in ambig_and_gap)
+            if gap_count / len(seq) < threshold:
                 SeqIO.write(record, out, "fasta")
 
 file_path = Path(settings.input_alignment)  # "path/to/my_alignment.fasta"
